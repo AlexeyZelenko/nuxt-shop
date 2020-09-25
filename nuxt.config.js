@@ -1,4 +1,7 @@
 module.exports = {
+  vuetify: {
+    customVariables: ['~/assets/variables.scss']
+  },
   /*
   ** Headers of the page
   */
