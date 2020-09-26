@@ -41,6 +41,35 @@ module.exports = {
   },
   buildModules: [
     // With options
-    ['@nuxtjs/vuetify', { /* module options */ }]
+    '@nuxtjs/vuetify',
+    [
+      '@nuxtjs/firebase',
+      {
+        config: {
+          apiKey: "AIzaSyC3-ZS8dG3MtrHboMzI_K7Yh4L6wHZugy0",
+          authDomain: "nuxt-shop-9842c.firebaseapp.com",
+          databaseURL: "https://nuxt-shop-9842c.firebaseio.com",
+          projectId: "nuxt-shop-9842c",
+          storageBucket: "nuxt-shop-9842c.appspot.com",
+          messagingSenderId: "49572454955",
+          appId: "1:49572454955:web:4938b9776db4f1a497806e",
+          measurementId: 'G-SD6MJEPBNL'
+        },
+        services: {
+          auth: {
+            ssr: true
+          },
+          firestore: true,
+          functions: true,
+          storage: true,
+          realtimeDb: true,
+          messaging: true,
+          performance: true,
+          analytics: true,
+          remoteConfig: true
+        }
+      },
+
+    ]
   ]
 }

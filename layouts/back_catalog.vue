@@ -9,6 +9,11 @@
         <v-icon dark left>mdi-arrow-left</v-icon>Каталог товаров
       </v-btn>
     </template>
+
+    <v-app>
+      <nuxt />
+    </v-app>
+
   </div>
 </template>
 

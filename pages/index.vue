@@ -56,59 +56,59 @@
 </template>
 
 <script>
-import AppLogo from '~/components/AppLogo.vue'
+  import AppLogo from '~/components/AppLogo.vue'
 
-export default {
-  components: {
-    AppLogo
+  export default {
+    components: {
+      AppLogo
+    }
   }
-}
 </script>
 
 <style lang="scss">
 
-#user-pic {
-  top: -3px;
-  position: relative;
-  display: inline-block;
-  background-repeat: no-repeat;
-  width: 40px;
-  height: 40px;
-  background-size: 40px;
-  border-radius: 20px;
-}
+  #user-pic {
+    top: -3px;
+    position: relative;
+    display: inline-block;
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 40px;
+    background-size: 40px;
+    border-radius: 20px;
+  }
 
-#user-name {
-  font-size: 15px;
-  line-height: normal;
-  padding-right: 5px;
-  padding-left: 5px;
-}
+  #user-name {
+    font-size: 15px;
+    line-height: normal;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
 
-.Change_categories {
-  padding-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.v-catalog {
-  &__list {
+  .Change_categories {
+    padding-bottom: 10px;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+    align-items: center;
+    justify-content: center;
   }
 
-  &__link_to_cart {
-    top: 5px;
-    right: 3px;
-  }
+  .v-catalog {
+    &__list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+    }
 
-  &__link_to_admin {
-    top: 5px;
-    left: 3px;
-    border: thick #0a4506;
+    &__link_to_cart {
+      top: 5px;
+      right: 3px;
+    }
+
+    &__link_to_admin {
+      top: 5px;
+      left: 3px;
+      border: thick #0a4506;
+    }
   }
-}
 </style>
 
