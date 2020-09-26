@@ -55,9 +55,7 @@ module.exports = {
           measurementId: 'G-SD6MJEPBNL'
         },
         services: {
-          auth: {
-            ssr: true
-          },
+          auth: true,
           firestore: true,
           functions: true,
           storage: true,
@@ -68,7 +66,6 @@ module.exports = {
           remoteConfig: true
         }
       },
-
     ]
   ]
 }

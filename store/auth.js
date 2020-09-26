@@ -1,11 +1,21 @@
 // import firebase from 'firebase/app'
 // import { db } from '~/plugins/firebase.js';
 // import Swal from 'sweetalert2'
-// import 'firebase/auth'
+import 'firebase/auth'
+
+
+export const state = () => ({
+
+})
+
+export const mutations = {
+
+}
 
 export default {
   actions: {
     async signInWithGoogle({commit, dispatch}) {
+      console.log('запуск')
       try {
         let provider = new firebase.auth.GoogleAuthProvider();
         await firebase.auth().signInWithPopup(provider)

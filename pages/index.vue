@@ -146,7 +146,7 @@
       async signInWithGoogle() {
         try {
           await this.$store.dispatch('signInWithGoogle')
-          this.VIEW_CART_USER()
+          // this.VIEW_CART_USER()
         } catch (e) {
           console.log('Ошибка входа Google')
         }
