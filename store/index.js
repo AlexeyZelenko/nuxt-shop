@@ -57,27 +57,29 @@ export const mutations = {
 
 export const actions = {
   getUid() {
-    const user = new this.$fireAuth().currentUser
+    const user = new this.$fireAuthObj().currentUser
     return user ? user.uid : null
   },
   async signInWithGoogle({commit, dispatch}) {
     try {
       const provider = new this.$fireAuthObj.GoogleAuthProvider()
-      await this.$fireAuthObj().signInWithRedirect(provider)
+      await this.$fireAuthObj().signInWithPopup(provider)
       const uid = await dispatch('getUid')
 
 
       // Получить информацию из Database текущего пользователя
-      const info = (await firebase.database().ref(`/users/${uid}/info`).once('value')).val()
+      const info = (await this.$fireDbObj().ref(`/users/${uid}/info`).once('value')).val()
       // Если нет инфо, создать
+      console.log('1',info)
       if(!info) {
-        const user = firebase.auth().currentUser;
+        const user = this.$fireAuthObj().currentUser;
+        console.log('2', user)
         let array = []
         await  user.providerData.forEach((profile) => {
           array = [profile.providerId, profile.uid, profile.displayName, profile.email, profile.photoURL]
           return array
         })
-        await firebase.database().ref(`/users/${uid}/info`).set({
+        await this.$fireDbObj().ref(`/users/${uid}/info`).set({
           SignInPprovider: array[0],
           Name: array[2],
           Email: array[3],
@@ -87,14 +89,14 @@ export const actions = {
       }
 
       // Получить корзину для ткущего пользователя
-      await db.collection('users')
+      await this.$fireStore.collection('users')
         .doc(uid)
         .get()
         .then(snapshot => {
           const document = snapshot.data()
           // Если нет никаких данных
           if(!document) {
-            db.collection('users')
+            this.$fireStore.collection('users')
               .doc(uid)
               .set({
                 cartInfo: [],
@@ -104,7 +106,7 @@ export const actions = {
           }
           // Если нет никаких данных-пользователь удалил
           if (document === {}) {
-            db.collection('users').doc(uid).set({
+            this.$fireStore.collection('users').doc(uid).set({
               cartInfo: [],
               orderInfo: []
             })
@@ -130,13 +132,20 @@ export const actions = {
       throw e
     }
 
-    const userEntrance = !!firebase.auth().currentUser
+    const userEntrance = !!this.$fireAuthObj().currentUser
     const USER_ID = await dispatch('getUid')
     if(userEntrance) {
       const adminEntrance =  await ["wH7hb4Zdh9Xqt2RZRMAnJa3Nko23", "hng6vLzPtTYo5xgiuYyjYpOnijB2","HInmvosDanObSDnC2csXiV3iR0A2"].includes(USER_ID)
       commit('ADMIN_ENTRANCE', adminEntrance)
     }
     commit('USER_ENTRANCE', userEntrance)
+  },
+  async logout({commit}) {
+    await this.$fireAuthObj().signOut()
+      .then(() => {
+        const userEntrance = !!this.$fireAuthObj().currentUser
+        commit('USER_ENTRANCE', userEntrance)
+      })
   },
   bindLocationsRef: firestoreAction(context => {
     // context contains all original properties like commit, state, etc

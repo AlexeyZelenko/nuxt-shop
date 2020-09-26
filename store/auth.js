@@ -144,12 +144,6 @@ export default {
         console.log('Незарегестрированый пользователь')
       }
     },
-    async logout({commit}) {
-      await firebase.auth().signOut()
-        .then(() => {
-          const userEntrance = !!firebase.auth().currentUser
-          commit('USER_ENTRANCE', userEntrance)
-        })
-    }
+
   }
 }
