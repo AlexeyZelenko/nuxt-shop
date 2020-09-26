@@ -56,11 +56,140 @@
 </template>
 
 <script>
-  import AppLogo from '~/components/AppLogo.vue'
+  import vCatalogItem from '~/components/vCatalogItem.vue'
+  // import {mapActions, mapGetters} from 'vuex'
 
   export default {
     components: {
-      AppLogo
+      vCatalogItem
+    },
+    data() {
+      return {
+        placeholder: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+        observer: null,
+        categories: [
+          {name: 'Все', value: 'All'},
+          {name: 'Ветровки', value: 'Windbreaker'},
+          {name: 'Пальто', value: 'Coat'},
+          {name: 'Плащи', value: 'Raincoats'},
+          {name: 'Джинсы', value: 'Jeans'},
+          {name: 'Брюки', value: 'Pants'},
+          {name: 'Кофты', value: 'Sweatshirts'},
+          {name: 'Футболки', value: 'T-shirts'},
+          {name: 'Рубашки', value: 'Shirts'},
+          {name: 'Блузки', value: 'Blouses'},
+          {name: 'Платья', value: 'Dresses'},
+          {name: 'Костюмы', value: 'Costumes'},
+          {name: 'Куртки', value: 'Jackets'},
+        ],
+        selected: 'Категории',
+        sortedProducts: [],
+        minPrice: 0,
+        maxPrice: 1000,
+        messages: []
+      }
+    },
+    methods: {
+      ...mapActions([
+        'ADD_TO_CART',
+        'VIEW_CART_USER',
+        'userEntrance',
+        'USER_ID_ACTIONS'
+      ]),
+      onElementObserved(entries) {
+        entries.forEach(({target, isIntersecting}) => {
+          if (!isIntersecting) {
+            return;
+          }
+          this.observer.unobserve(target);
+
+          setTimeout(() => {
+            const i = target.getAttribute("data-index");
+            this.filteredProducts[i].seen = true;
+            target.src = this.filteredProducts[i].arrayImages[0]
+
+            target.onload = () => {
+              target.parentNode.classList.remove('loading');
+            };
+          })
+        });
+      },
+      adminPlusLogin() {
+        if (this.GET_ADMIN_ENTRANCE) {
+          this.$router.push('/admin')
+        } else {
+          this.$router.push('/login')
+        }
+      },
+      async signInWithGoogle() {
+        try {
+          await this.$store.dispatch('signInWithGoogle')
+          this.VIEW_CART_USER()
+        } catch (e) {
+          console.log('Ошибка входа Google')
+        }
+      },
+      async logout() {
+        await this.$store.dispatch('logout')
+      },
+      productClick(article) {
+        this.$router.push({name: 'product', query: {'product': article}})
+      },
+      sortByCategories(category) {
+        this.sortedProducts = [];
+        this.PRODUCTS.map((item) => {
+          if (item.category === category.name) {
+            this.sortedProducts.push(item);
+          }
+        })
+        this.selected = category.name
+      },
+      addToCart(data) {
+        this.ADD_TO_CART(data)
+          .then(() => {
+            this.VIEW_CART_USER()
+          })
+      },
+    },
+    asyncComputed: {},
+    // created() {
+    //   this.userEntrance()
+    //   this.observer = new IntersectionObserver(
+    //     this.onElementObserved,
+    //     {
+    //       root: this.$el,
+    //       threshold: 0.5,
+    //     }
+    //   );
+    // },
+    beforeDestroy() {
+      this.observer.disconnect();
+    },
+    computed: {
+      ...mapGetters([
+        'PRODUCTS',
+        'GET_CART_USER',
+        'User_Entrance',
+        'USER_ID',
+        'GET_ADMIN_ENTRANCE'
+      ]),
+      getUserName() {
+        return firebase.auth().currentUser.displayName;
+      },
+      getProfilePicUrl() {
+        return firebase.auth().currentUser.photoURL || '@/assets/images/profile_placeholder.png';
+      },
+      filteredProducts() {
+        if (this.sortedProducts.length) {
+          return this.sortedProducts
+        } else {
+          return this.PRODUCTS
+        }
+      }
+    },
+    mounted() {
+      this.VIEW_CART_USER()
+      this.USER_ID_ACTIONS()
     }
   }
 </script>
