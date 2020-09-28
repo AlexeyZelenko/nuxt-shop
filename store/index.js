@@ -3,9 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { vuexfireMutations, firestoreAction } from 'vuexfire'
 import getters from '~/store/getters'
-// import myPlugin from 'myPlugin'
-//
-// export const plugins = [myPlugin]
+
 Vue.use(Vuex)
 
 
@@ -198,4 +196,8 @@ export const actions = {
       console.log('Незарегестрированый пользователь')
     }
   },
+}
+
+export default {
+  getters
 }
