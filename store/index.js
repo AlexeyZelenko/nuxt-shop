@@ -1,6 +1,12 @@
 // import { db } from '~/plugins/firebase.js'
+import Vue from 'vue'
+import Vuex from 'vuex'
 import { vuexfireMutations, firestoreAction } from 'vuexfire'
-import getters from '~/store/getters/getters'
+import getters from '~/store/getters'
+// import myPlugin from 'myPlugin'
+//
+// export const plugins = [myPlugin]
+Vue.use(Vuex)
 
 
 export const state = () => ({
@@ -158,7 +164,7 @@ export const actions = {
     return context.bindFirestoreRef('Users', db.collection('users'))
   }),
     async list_Users({commit}) {
-    const user = firebase.auth().currentUser;
+    const user = this.$fireAuthObj().currentUser;
     const userOnlain = user.providerData[0]
     commit('LIST_USERS', userOnlain)
   },
@@ -167,5 +173,29 @@ export const actions = {
   },
   FIREBASE({commit}, message) {
     commit('FIREBASE_MUTATIONS', message)
+  },
+  displayName() {
+    return this.$fireAuthObj().currentUser.displayName
+  },
+  getProfilePicUrl() {
+    return firebase.auth().currentUser.photoURL || '@/assets/images/profile-pic-placeholder.png';
+  },
+  async userEntrance({commit, dispatch}) {
+    const USER_ID = await dispatch('getUid')
+    const userEntrance =  !!firebase.auth().currentUser
+    if(userEntrance) {
+      const adminEntrance =  await ["8VcWFEfj1KYYs06GiR7dR6XpTLS2", "wH7hb4Zdh9Xqt2RZRMAnJa3Nko23", "hng6vLzPtTYo5xgiuYyjYpOnijB2", "HInmvosDanObSDnC2csXiV3iR0A2"].includes(USER_ID)
+      commit('ADMIN_ENTRANCE', adminEntrance)
+    }
+    commit('USER_ENTRANCE', userEntrance)
+  },
+  async USER_ID_ACTIONS({commit}) {
+    const user = firebase.auth().currentUser
+    const userID = user ? user.uid : null
+    if(userID) {
+      commit('USER_ID_ENTRANCE', userID)
+    } else {
+      console.log('Незарегестрированый пользователь')
+    }
   },
 }

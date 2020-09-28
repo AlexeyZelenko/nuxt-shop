@@ -72,6 +72,32 @@
             </v-btn>
           </div>
         </template>
+<!--Отображение пользователя-->
+        <div
+          class="v-carousel-item"
+          v-if="userEntrance">
+          <slot>
+            <img
+              :src="(getProfilePicUrl)"
+              alt=""
+              id="user-pic"
+            >
+          </slot>
+        </div>
+        <div
+          id="user-name"
+          v-if="userEntrance"
+        >{{getUserName}}
+        </div>
+<!--        Категории-->
+        <v-row class="Change_categories">
+          <v-select
+            :options="categories"
+            :selected="selected"
+            @select="sortByCategories"
+            style="z-index: 3"
+          />
+        </v-row>
       </div>
     </div>
   </section>
@@ -79,38 +105,40 @@
 
 <script>
   import vCatalogItem from '~/components/vCatalogItem.vue'
-  // import {mapActions, mapGetters} from 'vuex'
+  import vSelect from '~/components/vSelect.vue'
+  import {mapActions, mapGetters} from 'vuex'
 
   export default {
     components: {
-      vCatalogItem
+      vCatalogItem,
+      vSelect
     },
-    // data() {
-    //   return {
+    data() {
+      return {
     //     placeholder: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
     //     observer: null,
-    //     categories: [
-    //       {name: 'Все', value: 'All'},
-    //       {name: 'Ветровки', value: 'Windbreaker'},
-    //       {name: 'Пальто', value: 'Coat'},
-    //       {name: 'Плащи', value: 'Raincoats'},
-    //       {name: 'Джинсы', value: 'Jeans'},
-    //       {name: 'Брюки', value: 'Pants'},
-    //       {name: 'Кофты', value: 'Sweatshirts'},
-    //       {name: 'Футболки', value: 'T-shirts'},
-    //       {name: 'Рубашки', value: 'Shirts'},
-    //       {name: 'Блузки', value: 'Blouses'},
-    //       {name: 'Платья', value: 'Dresses'},
-    //       {name: 'Костюмы', value: 'Costumes'},
-    //       {name: 'Куртки', value: 'Jackets'},
-    //     ],
-    //     selected: 'Категории',
-    //     sortedProducts: [],
+        categories: [
+          {name: 'Все', value: 'All'},
+          {name: 'Ветровки', value: 'Windbreaker'},
+          {name: 'Пальто', value: 'Coat'},
+          {name: 'Плащи', value: 'Raincoats'},
+          {name: 'Джинсы', value: 'Jeans'},
+          {name: 'Брюки', value: 'Pants'},
+          {name: 'Кофты', value: 'Sweatshirts'},
+          {name: 'Футболки', value: 'T-shirts'},
+          {name: 'Рубашки', value: 'Shirts'},
+          {name: 'Блузки', value: 'Blouses'},
+          {name: 'Платья', value: 'Dresses'},
+          {name: 'Костюмы', value: 'Costumes'},
+          {name: 'Куртки', value: 'Jackets'},
+        ],
+        selected: 'Категории',
+        sortedProducts: [],
     //     minPrice: 0,
     //     maxPrice: 1000,
     //     messages: []
-    //   }
-    // },
+      }
+    },
     methods: {
     //   ...mapActions([
     //     'ADD_TO_CART',
@@ -154,18 +182,18 @@
       async logout() {
         await this.$store.dispatch('logout')
       },
-    //   productClick(article) {
-    //     this.$router.push({name: 'product', query: {'product': article}})
-    //   },
-    //   sortByCategories(category) {
-    //     this.sortedProducts = [];
-    //     this.PRODUCTS.map((item) => {
-    //       if (item.category === category.name) {
-    //         this.sortedProducts.push(item);
-    //       }
-    //     })
-    //     this.selected = category.name
-    //   },
+      // productClick(article) {
+      //   this.$router.push({name: 'product', query: {'product': article}})
+      // },
+      sortByCategories(category) {
+        this.sortedProducts = [];
+        this.PRODUCTS.map((item) => {
+          if (item.category === category.name) {
+            this.sortedProducts.push(item);
+          }
+        })
+        this.selected = category.name
+      },
     //   addToCart(data) {
     //     this.ADD_TO_CART(data)
     //       .then(() => {
@@ -187,29 +215,29 @@
     //   this.observer.disconnect();
     },
     computed: {
-      // ...mapGetters([
-    //     'PRODUCTS',
+      ...mapGetters([
+        'PRODUCTS',
     //     'GET_CART_USER',
     //     'User_Entrance',
     //     'USER_ID',
     //     'GET_ADMIN_ENTRANCE'
-    //   ]),
+      ]),
       userEntrance() {
         return this.$store.state.userEntrance
+      },
+      getUserName() {
+        return this.$fireAuthObj().currentUser.displayName;
+      },
+      getProfilePicUrl() {
+        return this.$fireAuthObj().currentUser.photoURL || '@/assets/images/profile_placeholder.png';
+      },
+      filteredProducts() {
+        if (this.sortedProducts.length) {
+          return this.sortedProducts
+        } else {
+          return this.PRODUCTS
+        }
       }
-    //   getUserName() {
-    //     return firebase.auth().currentUser.displayName;
-    //   },
-    //   getProfilePicUrl() {
-    //     return firebase.auth().currentUser.photoURL || '@/assets/images/profile_placeholder.png';
-    //   },
-    //   filteredProducts() {
-    //     if (this.sortedProducts.length) {
-    //       return this.sortedProducts
-    //     } else {
-    //       return this.PRODUCTS
-    //     }
-    //   }
     },
     // mounted() {
     //   this.VIEW_CART_USER()
