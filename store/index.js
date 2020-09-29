@@ -5,7 +5,7 @@ import { vuexfireMutations, firestoreAction } from 'vuexfire'
 export const state = () => ({
   locale: 'ru-RU',
   error: null,
-  Products: [{name:321}, {arrayImages: ['https://www.rosphoto.com/images/u/articles/1510/7_5.jpg']} ],
+  Products: [],
   cartUser: [],
   userEntrance: false,
   userId: null,
@@ -58,7 +58,7 @@ export const mutations = {
 
 export const actions = {
   async readFromFirestore({commit}) {
-    const promice = []
+    const promises = []
     await this.$fireStore.collection("products")
       .get()
       .then(function(querySnapshot) {
@@ -66,11 +66,14 @@ export const actions = {
         // doc.data() is never undefined for query doc snapshots
         // console.log(doc.id, " => ", doc.data());
         const data = doc.data()
-        console.log('Products', data)
-        commit('FIREBASE_PRODUCTS', data)
-      });
-    });
 
+        promises.push(
+          data
+        )
+      })
+    })
+    const ProductsAll = await Promise.all(promises)
+    commit('FIREBASE_PRODUCTS', ProductsAll)
 
 
     // this.$fireStore.collection("cities").where("capital", "==", true)
