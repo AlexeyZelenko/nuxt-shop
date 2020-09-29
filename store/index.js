@@ -1,16 +1,11 @@
 // import { db } from '~/plugins/firebase.js'
-import Vue from 'vue'
-import Vuex from 'vuex'
 import { vuexfireMutations, firestoreAction } from 'vuexfire'
-import getters from '~/store/getters'
-
-Vue.use(Vuex)
 
 
 export const state = () => ({
   locale: 'ru-RU',
   error: null,
-  Products: [],
+  Products: [{name:321}, {arrayImages: ['https://www.rosphoto.com/images/u/articles/1510/7_5.jpg']} ],
   cartUser: [],
   userEntrance: false,
   userId: null,
@@ -23,7 +18,9 @@ export const state = () => ({
 })
 
 export const mutations = {
-  ...vuexfireMutations,
+  FIREBASE_PRODUCTS: (state, data) => {
+    state.Products = data
+  },
   CHANGE_LOCALE: (state, loc) => {
     state.locale = loc;
   },
@@ -60,6 +57,56 @@ export const mutations = {
 }
 
 export const actions = {
+  async readFromFirestore({commit}) {
+    const promice = []
+    await this.$fireStore.collection("products")
+      .get()
+      .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        // console.log(doc.id, " => ", doc.data());
+        const data = doc.data()
+        console.log('Products', data)
+        commit('FIREBASE_PRODUCTS', data)
+      });
+    });
+
+
+
+    // this.$fireStore.collection("cities").where("capital", "==", true)
+    //   .get()
+    //   .then(function(querySnapshot) {
+    //     querySnapshot.forEach(function(doc) {
+    //       // doc.data() is never undefined for query doc snapshots
+    //       console.log(doc.id, " => ", doc.data());
+    //     });
+    //   })
+    //   .catch(function(error) {
+    //     console.log("Error getting documents: ", error);
+    //   });
+
+
+    // const productRef = this.$fireStore.collection('products').doc('stanki')
+    // const productRef = this.$fireStore.doc('products/stanki')
+    // try {
+    //   await productRef.set({
+    //     message: 'Nuxt-Fire with Firestore rocks!'
+    //   })
+    // } catch (e) {
+    //   alert(e)
+    //   return
+    // }
+    // alert('Success.')
+    // try {
+    //   const productDoc = await productRef.get()
+    //   console.log('productDoc.data()', productDoc.data())
+      // alert(productDoc.data())
+      // commit('LIST_USERS', userOnlain)
+    // } catch (e) {
+    //   alert(e)
+    //   return
+    // }
+  },
   getUid() {
     const user = new this.$fireAuthObj().currentUser
     return user ? user.uid : null
@@ -151,16 +198,6 @@ export const actions = {
         commit('USER_ENTRANCE', userEntrance)
       })
   },
-  bindLocationsRef: firestoreAction(context => {
-    // context contains all original properties like commit, state, etc
-    // and adds `bindFirestoreRef` and `unbindFirestoreRef`
-    // we return the promise returned by `bindFirestoreRef` that will
-    // resolve once data is ready
-    return context.bindFirestoreRef('Products', db.collection('products'))
-  }),
-    userbindLocationsRef: firestoreAction(context => {
-    return context.bindFirestoreRef('Users', db.collection('users'))
-  }),
     async list_Users({commit}) {
     const user = this.$fireAuthObj().currentUser;
     const userOnlain = user.providerData[0]
@@ -198,6 +235,20 @@ export const actions = {
   },
 }
 
-export default {
-  getters
+export const getters = {
+  GET_CART_USER: state => state.cartUser,
+  GET_PRODUCT_FROM_DB: state => state.Products,
+  PRODUCTS: state => state.Products,
+  USER_ID: state => state.userId,
+  LOCALE_CHANGE: state => state.locale,
+  User_Entrance: state => state.userEntrance,
+  GET_LIST_USERS: state => state.listUsers,
+  GET_ORDER_USERS: state => state.listAdminUser,
+  GET_LIST_ORDER_USERS: state => state.ordersUSERS,
+  GET_ADMIN_ENTRANCE: state => state.adminEntrance,
+  GET_InfoUser: state => state.InfoUser,
+  locale: s => s.locale,
+  error: s => s.error
 }
+
+

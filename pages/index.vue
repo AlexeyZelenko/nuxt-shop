@@ -50,8 +50,8 @@
       </div>
     </template>
     <div>
-      <!--		ВХОД ЧЕРЕЗ ГУГЛ АККАУНТ-->
       <div>
+<!--		ВХОД ЧЕРЕЗ ГУГЛ АККАУНТ-->
         <template>
           <div
             class="text-center"
@@ -98,6 +98,15 @@
             style="z-index: 3"
           />
         </v-row>
+<!--Отображение каталога-->
+        <div class="v-catalog__list">
+          <vCatalogItem
+            v-for="product in filteredProducts"
+            :key="product.article"
+            :product_data="product"
+            @productClick="productClick"
+          />
+        </div>
       </div>
     </div>
   </section>
@@ -115,8 +124,6 @@
     },
     data() {
       return {
-    //     placeholder: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
-    //     observer: null,
         categories: [
           {name: 'Все', value: 'All'},
           {name: 'Ветровки', value: 'Windbreaker'},
@@ -136,45 +143,16 @@
         sortedProducts: [],
     //     minPrice: 0,
     //     maxPrice: 1000,
-    //     messages: []
       }
     },
     methods: {
-    //   ...mapActions([
-    //     'ADD_TO_CART',
-    //     'VIEW_CART_USER',
+      ...mapActions([
+        'readFromFirestore'
     //     'userEntrance',
-    //     'USER_ID_ACTIONS'
-    //   ]),
-    //   onElementObserved(entries) {
-    //     entries.forEach(({target, isIntersecting}) => {
-    //       if (!isIntersecting) {
-    //         return;
-    //       }
-    //       this.observer.unobserve(target);
-    //
-    //       setTimeout(() => {
-    //         const i = target.getAttribute("data-index");
-    //         this.filteredProducts[i].seen = true;
-    //         target.src = this.filteredProducts[i].arrayImages[0]
-    //
-    //         target.onload = () => {
-    //           target.parentNode.classList.remove('loading');
-    //         };
-    //       })
-    //     });
-    //   },
-    //   adminPlusLogin() {
-    //     if (this.GET_ADMIN_ENTRANCE) {
-    //       this.$router.push('/admin')
-    //     } else {
-    //       this.$router.push('/login')
-    //     }
-    //   },
+      ]),
       async signInWithGoogle() {
         try {
           await this.$store.dispatch('signInWithGoogle')
-          // this.VIEW_CART_USER()
         } catch (e) {
           console.log('Ошибка входа Google')
         }
@@ -182,9 +160,9 @@
       async logout() {
         await this.$store.dispatch('logout')
       },
-      // productClick(article) {
-      //   this.$router.push({name: 'product', query: {'product': article}})
-      // },
+      productClick(article) {
+        // this.$router.push({name: 'product', query: {'product': article}})
+      },
       sortByCategories(category) {
         this.sortedProducts = [];
         this.PRODUCTS.map((item) => {
@@ -194,33 +172,13 @@
         })
         this.selected = category.name
       },
-    //   addToCart(data) {
-    //     this.ADD_TO_CART(data)
-    //       .then(() => {
-    //         this.VIEW_CART_USER()
-    //       })
-    //   },
-    // },
-    // created() {
-    //   this.userEntrance()
-    //   this.observer = new IntersectionObserver(
-    //     this.onElementObserved,
-    //     {
-    //       root: this.$el,
-    //       threshold: 0.5,
-    //     }
-    //   );
-    // },
-    // beforeDestroy() {
-    //   this.observer.disconnect();
+    },
+    mounted() {
+      this.readFromFirestore()
     },
     computed: {
       ...mapGetters([
         'PRODUCTS',
-    //     'GET_CART_USER',
-    //     'User_Entrance',
-    //     'USER_ID',
-    //     'GET_ADMIN_ENTRANCE'
       ]),
       userEntrance() {
         return this.$store.state.userEntrance
@@ -235,14 +193,11 @@
         if (this.sortedProducts.length) {
           return this.sortedProducts
         } else {
+          console.log(this.PRODUCTS)
           return this.PRODUCTS
         }
       }
     },
-    // mounted() {
-    //   this.VIEW_CART_USER()
-    //   this.USER_ID_ACTIONS()
-    // }
   }
 </script>
 
