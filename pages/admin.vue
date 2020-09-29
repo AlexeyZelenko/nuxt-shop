@@ -1,230 +1,89 @@
 <template>
   <v-app id="inspire">
-    <div>
-      <template>
-        <div class="vld-parent">
-          <loading
-            :active.sync="isLoading"
-            :can-cancel="true"
-            :is-full-page="fullPage"
-            :on-cancel="onCancel"
-          >
-
-          </loading>
-
-          <label><input type="checkbox" v-model="fullPage">Full page?</label>
-          <button @click.prevent="doAjax">fetch Data</button>
-        </div>
-      </template>
-      <!--ВЕРХНЯЯ ПАНЕЛЬ-->
-      <div>
         <v-card>
-          <v-app-bar
-            app
-            color="green darken-3"
-            dark
-            flat
+          <!--		ПОИСК-->
+          <v-text-field
+            append-icon="mdi-magnify"
+            hide-details
+            label="Поиск"
+            single-line
+            style="margin: 10px 0 5px 0"
+            v-model="search"
+          ></v-text-field>
+          <v-row align="center">
+            <v-col cols="12">
+              <v-select
+                :items="categories"
+                label="Выбери категорию"
+                v-model="search"
+              ></v-select>
+            </v-col>
+          </v-row>
+          <!--		ТАБЛИЦА-->
+          <v-data-table
+            :headers="headers"
+            :items="PRODUCTS"
+            :items-per-page="itemsPerPage"
+            :page.sync="page"
+            :search="search"
+            @page-count="pageCount = $event"
+            class="elevation-1"
+            disable-sort
+            hide-default-footer
+            item-key="article"
           >
-            <!--НАЗАД К КАТАЛОГУ-->
-            <v-toolbar-title class="ml-0">
-              <div>
-                <v-btn :to="{name: 'catalog'}" icon>
-                  <i class="material-icons">reply</i>
-                </v-btn>
-              </div>
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
+            <template
+              style="height:190px;"
+              v-slot:item.arrayImages="{ item }">
 
-
-            <!--правое МЕНЮ-->
-            <template v-slot:extension>
-              <v-tabs
-                fixed-tabs
-                slider-color="white"
-                v-model="currentItem"
+              <img
+                :src="(item.arrayImages[0])"
+                alt=""
+                loading="lazy"
+                style="max-width: 100px; max-height: 100px; margin: 5px"
+                v-if="item.arrayImages"
               >
-                <v-tab
-                  :href="'#tab-' + item"
-                  :key="item"
-                  v-for="item in items"
-                >
-                  {{ item }}
-                </v-tab>
-
-                <v-menu
-                  bottom
-                  left
-                  v-if="more.length"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      class="align-self-center mr-4"
-                      text
-                      v-bind="attrs"
-                      v-on="on"
-                    >
-                      Больше
-                      <v-icon right>mdi-menu-down</v-icon>
-                    </v-btn>
-                  </template>
-
-                  <v-list class="grey lighten-3">
-                    <v-list-item
-                      :key="item"
-                      @click="addItem(item)"
-                      v-for="item in more"
-                    >
-                      {{ item }}
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </v-tabs>
             </template>
-          </v-app-bar>
-        </v-card>
-      </div>
 
-      <!--			МЕНЮ-->
-      <v-tabs-items v-model="currentItem">
-        <v-tab-item
-          :key="item"
-          :value="'tab-' + item"
-          v-for="item in items.concat(more)"
-        >
-          <v-card flat>
-            <v-card-text>
-              <h2>{{ item }}</h2>
-              <div v-if="item === 'Товары'">
-                <v-card>
-                  <!--Pagination-->
-                  <template>
-                    <v-card flat>
-                      <v-container fluid>
-                        <v-row class="child-flex">
-                          <div>
-                            <v-toolbar dark>
-                              <v-pagination
-                                :length="pageCount"
-                                v-model="page"
-                              ></v-pagination>
-                            </v-toolbar>
-                          </div>
-                          <div style="flex-basis: 20%">
-                            <v-toolbar dark>
-                              <v-text-field
-                                :value="itemsPerPage"
-                                @input="itemsPerPage = parseInt($event, 10)"
-                                label="Товаров на странице"
-                                max="15"
-                                min="-1"
-                                style="margin-top: 25px"
-                                type="number"
-                              ></v-text-field>
-                            </v-toolbar>
-                          </div>
-                        </v-row>
-                      </v-container>
-                    </v-card>
-                  </template>
+            <template v-slot:item.price="{ item }">
+              <v-chip :color="getColor(item.price)" dark>{{ item.price }}</v-chip>
+            </template>
 
-                  <!--		ПОИСК-->
-                  <v-text-field
-                    append-icon="mdi-magnify"
-                    hide-details
-                    label="Поиск"
-                    single-line
-                    style="margin: 10px 0 5px 0"
-                    v-model="search"
-                  ></v-text-field>
-                  <v-row align="center">
-                    <v-col cols="12">
-                      <v-select
-                        :items="categories"
-                        label="Выбери категорию"
-                        v-model="search"
-                      ></v-select>
-                    </v-col>
-                  </v-row>
-                  <!--		ТАБЛИЦА-->
-                  <v-data-table
-                    :headers="headers"
-                    :items="PRODUCTS"
-                    :items-per-page="itemsPerPage"
-                    :page.sync="page"
-                    :search="search"
-                    @page-count="pageCount = $event"
-                    class="elevation-1"
-                    disable-sort
-                    hide-default-footer
-                    item-key="article"
+            <template v-slot:item.clothingSize="{ item }">
+              <v-chip :color="getColor2(item.clothingSize)" dark>{{ item.clothingSize }}</v-chip>
+            </template>
+
+            <template v-slot:item.description="{ item }">
+              <span v-html="item.description"/>
+            </template>
+
+            <template v-slot:item.actions="{ item }">
+              <v-row justify="space-around">
+
+                <v-avatar color="indigo" size="48">
+                  <v-icon
+                    @click="editItem(item)"
                   >
-                    <template
-                      style="height:190px;"
-                      v-slot:item.arrayImages="{ item }">
+                    mdi-pencil
+                  </v-icon>
+                </v-avatar>
 
-                      <img
-                        :src="(item.arrayImages[0])"
-                        alt=""
-                        loading="lazy"
-                        style="max-width: 100px; max-height: 100px; margin: 5px"
-                        v-if="item.arrayImages"
-                      >
-                    </template>
+                <v-avatar
+                  color="teal"
+                  size="48"
+                  style="margin-left: 10px"
+                >
+                  <v-icon
+                    @click="deleteLocation(item)"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </v-avatar>
+              </v-row>
+            </template>
 
-                    <template v-slot:item.price="{ item }">
-                      <v-chip :color="getColor(item.price)" dark>{{ item.price }}</v-chip>
-                    </template>
-
-                    <template v-slot:item.clothingSize="{ item }">
-                      <v-chip :color="getColor2(item.clothingSize)" dark>{{ item.clothingSize }}</v-chip>
-                    </template>
-
-                    <template v-slot:item.description="{ item }">
-                      <span v-html="item.description"/>
-                    </template>
-
-                    <template v-slot:item.actions="{ item }">
-                      <v-row justify="space-around">
-
-                        <v-avatar color="indigo" size="48">
-                          <v-icon
-                            @click="editItem(item)"
-                          >
-                            mdi-pencil
-                          </v-icon>
-                        </v-avatar>
-
-                        <v-avatar
-                          color="teal"
-                          size="48"
-                          style="margin-left: 10px"
-                        >
-                          <v-icon
-                            @click="deleteLocation(item)"
-                          >
-                            mdi-delete
-                          </v-icon>
-                        </v-avatar>
-                      </v-row>
-                    </template>
-
-                  </v-data-table>
-                </v-card>
-              </div>
-            </v-card-text>
-          </v-card>
-          <template v-if="item === 'Клиенты'">
-            <z-users/>
-          </template>
-          <template v-if="item === 'Заказы'">
-            <z-orders/>
-          </template>
-          <template v-if="item === 'Размеры'">
-            <z-size/>
-          </template>
-        </v-tab-item>
-      </v-tabs-items>
-
+          </v-data-table>
+        </v-card>
       <!--		ВСПЛЫВАЮЩАЯ ПАНЕЛЬ-->
       <div>
         <v-dialog
@@ -439,7 +298,6 @@
           </form>
         </v-dialog>
       </div>
-    </div>
   </v-app>
 </template>
 
@@ -490,13 +348,13 @@
   }
 
   export default {
+    layout: 'admin',
     name: "zAdmin",
     components: {
-      Loading,
       TiptapVuetify,
-      zUsers,
-      zOrders,
-      zSize
+      // zUsers,
+      // zOrders,
+      // zSize
     },
     data: () => ({
       isLoading: false,

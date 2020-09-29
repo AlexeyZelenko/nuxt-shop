@@ -9,11 +9,13 @@
           flat
         >
           <v-btn
+            @click="adminPlusLogin"
             class="ma-2"
             fab
             outlined
             small
-            style="color: #3e9538">
+            style="color: #3e9538"
+          >
             <v-icon>mdi-format-list-bulleted-square</v-icon>
           </v-btn>
           <v-btn
@@ -171,6 +173,13 @@
           }
         })
         this.selected = category.name
+      },
+      adminPlusLogin() {
+        // if (this.GET_ADMIN_ENTRANCE) {
+          this.$router.push('/admin')
+        // } else {
+        //   this.$router.push('/')
+        // }
       },
     },
     mounted() {
