@@ -6,9 +6,14 @@
 
     <p>Цена: {{product.price}} грн</p>
     <p>Описание:</p>
-    <p v-html="product.Description"></p>
+    <p v-html="product.description"></p>
 
     <p>Артикль товара: {{product.article}}</p>
+
+    <p>Контактное лицо: {{product.name_contact}}</p>
+    <p>Контакты: {{product.telephone_contact}}</p>
+
+
 
   </div>
 </template>
