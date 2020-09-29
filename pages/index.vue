@@ -161,7 +161,7 @@
         await this.$store.dispatch('logout')
       },
       productClick(article) {
-        // this.$router.push({name: 'product', query: {'product': article}})
+        this.$router.push({name: 'product', query: {'product': article}})
       },
       sortByCategories(category) {
         this.sortedProducts = [];
