@@ -64,9 +64,66 @@ export const actions = {
       .collection('products')
     await bindFirestoreRef('Products', ref, { wait: true })
   }),
+  async editPRODUCT({}, editProduct) {
+    this.isLoading = true
+    const File = editProduct.File
+    const promises = []
+    if (File) {
+      for (let i = 0; i < File.length; i++) {
+
+        // Создайте метаданные файла
+        let metadata = {
+          contentType: 'image/jpeg',
+        };
+        let nameTime = +new Date()
+
+
+        const uploadTask = await this.$fireStorage.ref().child('assets/images/' + nameTime + '.jpg').put(File[i], metadata);
+
+        promises.push(
+          uploadTask
+            .then(snapshot =>
+              snapshot.ref.getDownloadURL()
+            )
+        )
+      }
+    }
+    const URLs = await Promise.all(promises)
+    const ArrayOld = await editProduct.arrayImages
+    const ArrayFile = [...URLs, ...ArrayOld]
+    const id = await editProduct.id
+
+    try {
+      await this.$fireStore.doc('products/' + `${id}`)
+        .update({
+          name: editProduct.name,
+          id: editProduct.id,
+          seen: editProduct.seen,
+          arrayImages: ArrayFile,
+          category: editProduct.category,
+          article: editProduct.article,
+          price: editProduct.price,
+          description: editProduct.description,
+          adress: editProduct.adress,
+          name_contact: editProduct.name_contact,
+          telephone_contact: editProduct.telephone_contact,
+          })
+        .then(() => {
+          this.isLoading = false
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Ваша работа была сохранена',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        })
+    } catch (err) {
+      console.log(err)
+    }
+  },
   async deleteRRODUCT({}, item) {
-    console.log(item.item.article)
-    const a = item.item.article
+    const a = item.article
     Swal.fire({
       title: 'Вы уверенны?',
       text: "Вы не сможете восстановить это!",
@@ -94,19 +151,11 @@ export const actions = {
           }
 
           const id = item.item.id
-          console.log(id)
           this.$fireStore.collection("products").doc(`${id}`).delete().then(function() {
             console.log("Документ успешно удален!");
           }).catch(function(error) {
             console.error("Ошибка при удалении документа: ", error);
           });
-
-
-          // const article = item.item.article
-          // this.$fireStore
-          //   .collection('products')
-          //   .doc('doc.article', '==', `1601470503043`)
-          //   .delete()
 
           Swal.fire(
             'Удаленно!',
@@ -310,5 +359,7 @@ export const getters = {
   locale: s => s.locale,
   error: s => s.error
 }
+
+export const strict = false
 
 

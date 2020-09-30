@@ -227,12 +227,12 @@
                 <template v-if="editedItem.arrayImages.length > 0">
                   <v-carousel>
                     <v-carousel-item
-                      :key="article"
                       :src="(item)"
                       reverse-transition="fade-transition"
                       style="max-width: 400px; max-height: 600px"
                       transition="fade-transition"
-                      v-for="(item,article) in editedItem.arrayImages"
+                      v-for="(item, article) in editedItem.arrayImages"
+                      :key="article"
                     >
                       <v-btn
                         @click="deleteFoto(editedItem, item)"
@@ -450,7 +450,8 @@
         {text: 'Цена', value: 'price', width: "1%", align: 'left'},
         {text: 'Редактировать/Удалить', value: 'actions', sortable: false, width: "1%", align: 'left'},
       ],
-      locations: []
+      locations: [],
+      isLoading: false
     }),
     methods: {
       ...mapActions([]),
@@ -513,56 +514,11 @@
         this.dialog = true
       },
       async editThisProduct(editProduct) {
-        this.isLoading = true
-        const File = editProduct.File
-        const promises = []
-        if (File) {
-          for (let i = 0; i < File.length; i++) {
-
-            // Создайте метаданные файла
-            let metadata = {
-              contentType: 'image/jpeg',
-            };
-            let nameTime = +new Date()
-
-
-            const uploadTask = await this.$fireStorage.ref().child('assets/images/' + nameTime + '.jpg').put(File[i], metadata);
-
-            promises.push(
-              uploadTask
-                .then(snapshot =>
-                  snapshot.ref.getDownloadURL()
-                )
-            )
-          }
+        try {
+          await this.$store.dispatch('editPRODUCT', editProduct)
+        } catch (e) {
+          console.log('Ошибка редактирования')
         }
-        const URLs = await Promise.all(promises)
-        const ArrayOld = await editProduct.arrayImages
-        const ArrayFile = [...URLs, ...ArrayOld]
-        let id = await editProduct.id
-        console.log('id', id)
-
-        await this.$fireStore.collection('products')
-          .doc(id)
-          .update({
-            seen: editProduct.seen,
-            arrayImages: ArrayFile,
-            category: editProduct.category,
-            createdAt: editProduct.createdAt,
-            article: editProduct.article,
-            price: editProduct.price,
-            description: editProduct.description,
-          })
-          .then(() => {
-            this.isLoading = false
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: 'Ваша работа была сохранена',
-              showConfirmButton: false,
-              timer: 1500
-            })
-          })
       },
       async addLocation(addProduct, seen, arrayImages, File, article, available, category, name, price, description) {
 
@@ -578,6 +534,11 @@
         price = addProduct.price
         description = addProduct.description
         arrayImages = addProduct.arrayImages
+        name = addProduct.name
+        const adress = 'Украина, Черкасская обл, Черкассы, Громова 142, 18018'
+        const name_contact = 'Василий Станиславович'
+        const telephone_contact = '+38(096)651-10-52,  Viber:+38(098)804-15-81,   +38(094)985-32-91,   (0472)50-12-91'
+
 // ЗАГРУЗКА ФОТО
         const promises = []
         const promisesName = []
@@ -629,6 +590,7 @@
           return err;
         }
 
+        this.isLoading = true
 
         Swal.fire({
           position: 'top-end',
@@ -650,7 +612,7 @@
       },
       async deleteLocation(item) {
         try {
-          await this.$store.dispatch('deleteRRODUCT', {item})
+          await this.$store.dispatch('deleteRRODUCT', item)
         } catch (e) {
           console.log('Ошибка')
         }
