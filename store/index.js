@@ -124,10 +124,8 @@ export const actions = {
       // Получить информацию из Database текущего пользователя
       const info = (await this.$fireDbObj().ref(`/users/${uid}/info`).once('value')).val()
       // Если нет инфо, создать
-      console.log('1',info)
       if(!info) {
         const user = this.$fireAuthObj().currentUser;
-        console.log('2', user)
         let array = []
         await  user.providerData.forEach((profile) => {
           array = [profile.providerId, profile.uid, profile.displayName, profile.email, profile.photoURL]

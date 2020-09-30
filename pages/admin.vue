@@ -1,5 +1,32 @@
 <template>
   <v-app id="inspire">
+
+    <v-data-table
+      :headers="headers"
+      :items="desserts"
+      class="elevation-1"
+    >
+      <template slot="headerCell" slot-scope="props">
+        <v-tooltip bottom>
+          <span slot="activator">
+            {{ props.header.text }}
+          </span>
+          <span>
+            {{ props.header.text }}
+          </span>
+        </v-tooltip>
+      </template>
+      <template slot="items" slot-scope="props">
+        <td>{{ props.item.name }}</td>
+        <td class="text-xs-right">{{ props.item.calories }}</td>
+        <td class="text-xs-right">{{ props.item.fat }}</td>
+        <td class="text-xs-right">{{ props.item.carbs }}</td>
+        <td class="text-xs-right">{{ props.item.protein }}</td>
+        <td class="text-xs-right">{{ props.item.iron }}</td>
+        <td class="text-xs-right"></td>
+      </template>
+    </v-data-table>
+
         <v-card>
           <!--		ПОИСК-->
           <v-text-field
@@ -22,6 +49,7 @@
           <!--		ТАБЛИЦА-->
           <v-data-table
             :headers="headers"
+            calculate-widths: true
             :items="PRODUCTS"
             :items-per-page="itemsPerPage"
             :page.sync="page"
@@ -39,7 +67,6 @@
               <img
                 :src="(item.arrayImages[0])"
                 alt=""
-                loading="lazy"
                 style="max-width: 100px; max-height: 100px; margin: 5px"
                 v-if="item.arrayImages"
               >
@@ -89,7 +116,7 @@
         <v-dialog
           style="z-index: 100"
           v-model="dialog"
-          width="400px"
+          width="85%"
         >
           <template v-slot:activator="{ on, attrs }">
             <!--		КНОПКА +-->
@@ -122,30 +149,46 @@
                       align="center"
                       class="mr-0"
                     >
-                      <!--								НАЗВАНИЕ-->
-                      <v-text-field
+<!--                      								НАЗВАНИЕ-->
+                      <v-textarea
+                        auto-grow
+                        name="input-7-1"
+                        outlined
+                        rows="1"
+                        row-height="15"
                         :rules="[rules.counter]"
-                        label="Наименование одежды"
-                        placeholder="Name"
-                        prepend-icon="create"
+                        label="Оглавление"
+                        placeholder="Название товара"
+                        prepend-icon="mdi-pencil"
                         v-model="editedItem.name"
-                      ></v-text-field>
+                        background-color="grey lighten-2"
+                        color="cyan"
+                      ></v-textarea>
                     </v-row>
                   </v-col>
                   <!--						ОПИСАНИЕ ТОВАРА-->
                   <v-col cols="12">
-                    <tiptap-vuetify
-                      :extensions="extensions"
-                      placeholder="Описание товара"
-                      prepend-icon="edit"
-                      v-model="editedItem.description"
-                    />
+<!--                    <tiptap-vuetify-->
+<!--                      :extensions="extensions"-->
+<!--                      placeholder="Описание товара"-->
+<!--                      prepend-icon="mdi-pencil"-->
+<!--                      v-model="editedItem.description"-->
+<!--                    />-->
+                      <v-textarea
+                        placeholder="Опишите подробно товар"
+                        name="input-7-1"
+                        filled
+                        outlined
+                        label="Описание товара"
+                        auto-grow
+                        rows="2"
+                        row-height="15"
+                      ></v-textarea>
                   </v-col>
                   <!--						АРТИКЛЬ-->
                   <v-col cols="12">
                     <v-text-field
                       placeholder="article"
-                      prepend-icon="local_offer"
                       required
                       v-model="editedItem.article"
                     ></v-text-field>
@@ -156,32 +199,13 @@
                       :rules="[v => (v !== Number.NaN) || 'Введите число!']"
                       label="Цена товара"
                       placeholder="ОБЯЗАТЕЛЬНО"
-                      prepend-icon="monetization_on"
+                      prepend-icon="mdi-pencil"
                       required
                       type="Number"
                       v-model="editedItem.price"
                     ></v-text-field>
                   </v-col>
                   <!--						Размер-->
-                  <v-col cols="12">
-                    <v-text-field
-                      label="Размер одежды"
-                      placeholder="36-60"
-                      prepend-icon="create"
-                      v-model="editedItem.clothingSize"
-                    ></v-text-field>
-
-
-                  </v-col>
-                  <!--						Бренд-->
-                  <v-col cols="12">
-                    <v-text-field
-                      label="Брэнд"
-                      placeholder="Пьер Кардэн"
-                      prepend-icon="create"
-                      v-model="editedItem.BrandName"
-                    ></v-text-field>
-                  </v-col>
                   <!--						КАТЕГОРИИ-->
                   <v-col cols="12">
                     <v-select
@@ -189,18 +213,8 @@
                       :rules="[v => !!v || 'Пункт требуется']"
                       label="Выберите категорию"
                       placeholder="Категория"
-                      prepend-icon="create"
+                      prepend-icon="mdi-pencil"
                       v-model="editedItem.category"
-                    ></v-select>
-                  </v-col>
-                  <!--							ПРОИЗВОДИТЕЛЬ-->
-                  <v-col cols="12">
-                    <v-select
-                      :items="itemsclothingManufacturer"
-                      label="Выберите производителя"
-                      placeholder="Производитель"
-                      prepend-icon="create"
-                      v-model="editedItem.clothingManufacturer"
                     ></v-select>
                   </v-col>
                   <!--						ОТОБРАЖЕНИЕ-->
@@ -210,18 +224,6 @@
                       hide-details
                       label="Отображать в каталоге"
                       v-model="editedItem.available"
-                    ></v-checkbox>
-                    <v-checkbox
-                      color="orange"
-                      hide-details
-                      label="Новинка"
-                      v-model="editedItem.newClothes"
-                    ></v-checkbox>
-                    <v-checkbox
-                      color="indigo darken-3"
-                      hide-details
-                      label="Товар со скидкой"
-                      v-model="editedItem.promotionalPrice"
                     ></v-checkbox>
                   </div>
                   <!--ФОТО-->
@@ -251,7 +253,6 @@
                   </template>
                   <v-col cols="12">
                     <v-file-input
-                      :rules2="rules"
                       accept="image/png, image/jpeg, image/bmp"
                       color="deep-purple accent-4"
                       counter
@@ -357,6 +358,113 @@
       // zSize
     },
     data: () => ({
+      headers: [
+        {
+          text: 'Dessert (100g serving)',
+          align: 'left',
+          sortable: false,
+          value: 'name',
+          width: "1%"
+        },
+        { align: 'left', sortable: false, text: 'Calories', value: 'description', width: "70%" },
+        { align: 'left', sortable: false,text: 'Fat (g)', value: 'fat',width: "1%" },
+        { align: 'left', sortable: false,text: 'Carbs (g)', value: 'carbs',width: "1%" },
+        { align: 'left', sortable: false,text: 'Protein (g)', value: 'protein',width: "1%" },
+        { align: 'left', sortable: false,text: 'Iron (%)', value: 'iron', width: "1%" },
+        { align: 'left', sortable: false,text: '', value: 'name' }
+      ],
+      desserts: [
+        {
+          value: true,
+          name: 'Frozen Yogurt',
+          calories: 159,
+          fat: 6.0,
+          carbs: 24,
+          protein: 4.0,
+          iron: '1%'
+        },
+        {
+          value: false,
+          name: 'Ice cream sandwich',
+          calories: 237,
+          fat: 9.0,
+          carbs: 37,
+          protein: 4.3,
+          iron: '1%'
+        },
+        {
+          value: false,
+          name: 'Eclair',
+          calories: 262,
+          fat: 16.0,
+          carbs: 23,
+          protein: 6.0,
+          iron: '7%'
+        },
+        {
+          value: false,
+          name: 'Cupcake',
+          calories: 305,
+          fat: 3.7,
+          carbs: 67,
+          protein: 4.3,
+          iron: '8%'
+        },
+        {
+          value: false,
+          name: 'Gingerbread',
+          calories: 356,
+          fat: 16.0,
+          carbs: 49,
+          protein: 3.9,
+          iron: '16%'
+        },
+        {
+          value: false,
+          name: 'Jelly bean',
+          calories: 375,
+          fat: 0.0,
+          carbs: 94,
+          protein: 0.0,
+          iron: '0%'
+        },
+        {
+          value: false,
+          name: 'Lollipop',
+          calories: 392,
+          fat: 0.2,
+          carbs: 98,
+          protein: 0,
+          iron: '2%'
+        },
+        {
+          value: false,
+          name: 'Honeycomb',
+          calories: 408,
+          fat: 3.2,
+          carbs: 87,
+          protein: 6.5,
+          iron: '45%'
+        },
+        {
+          value: false,
+          name: 'Donut',
+          calories: 452,
+          fat: 25.0,
+          carbs: 51,
+          protein: 4.9,
+          iron: '22%'
+        },
+        {
+          value: false,
+          name: 'KitKat',
+          calories: 518,
+          fat: 26.0,
+          carbs: 65,
+          protein: 7,
+          iron: '6%'
+        }
+      ],
       isLoading: false,
       fullPage: true,
       categories: [
@@ -374,13 +482,13 @@
         'Костюмы',
         'Куртки',
       ],
-      currentItem: 'tab-Web',
-      items: [
-        'Товары', 'Заказы'
-      ],
-      more: [
-        'Клиенты', 'Размеры',
-      ],
+      // currentItem: 'tab-Web',
+      // items: [
+      //   'Товары', 'Заказы'
+      // ],
+      // more: [
+      //   'Клиенты', 'Размеры',
+      // ],
       page: 1,
       pageCount: 0,
       itemsPerPage: 15,
@@ -479,28 +587,25 @@
         'Китай',
         '',
       ],
-      headers: [
-        {
-          text: 'Артикль',
-          value: 'article',
-          align: 'start',
-          sortable: false,
-        },
-        {text: '', value: '1'},
-        {text: 'Фото одежды', value: 'arrayImages'},
-        {text: '', value: '2'},
-        {text: '', value: '3'},
-        {text: 'Категория', value: 'category'},
-        {text: '', value: '4'},
-        {text: 'Описание', value: 'description'},
-        {text: '', value: '5'},
-        {text: 'Цена', value: 'price'},
-        {text: 'Размер', value: 'clothingSize'},
-        {text: 'Бренд', value: 'BrandName'},
-        {text: 'Производитель', value: 'clothingManufacturer'},
-        {text: 'Редактировать/Удалить', value: 'actions', sortable: false},
-        {text: '===============================', value: ''},
-      ],
+      // headers: [
+      //   {
+      //     text: 'Артикль',
+      //     value: 'article',
+      //     align: 'start',
+      //     sortable: false,
+      //   },
+      //   {text: '', value: '1'},
+      //   {text: 'Фото', value: 'arrayImages'},
+      //   {text: '', value: '2'},
+      //   {text: '', value: '3'},
+      //   {text: 'Категория', value: 'category'},
+      //   {text: '', value: '4'},
+      //   {text: 'Описание', value: 'description', width: "50%"},
+      //   {text: '', value: '5'},
+      //   {text: 'Цена', value: 'price'},
+      //   {text: 'Редактировать/Удалить', value: 'actions', sortable: false},
+      //   {text: '===============================', value: ''},
+      // ],
       locations: []
     }),
     methods: {
@@ -784,6 +889,9 @@
 </script>
 
 <style lang="sass">
+  .text-xs-right
+    padding: 50px 50px
+    margin: 50px 50px
   .z-table-button
     position: fixed
     right: 10%
