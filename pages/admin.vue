@@ -1,6 +1,5 @@
 <template>
-  <v-app
-    id="inspire"
+  <div
     style="padding: 5px"
   >
     <v-card>
@@ -296,7 +295,7 @@
         </form>
       </v-dialog>
     </div>
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -454,7 +453,7 @@
       isLoading: false
     }),
     methods: {
-      ...mapActions([]),
+      ...mapActions(['readFromFirestore']),
       doAjax() {
         this.isLoading = true;
         // simulate AJAX
@@ -613,6 +612,7 @@
       async deleteLocation(item) {
         try {
           await this.$store.dispatch('deleteRRODUCT', item)
+          this.initialize()
         } catch (e) {
           console.log('Ошибка')
         }

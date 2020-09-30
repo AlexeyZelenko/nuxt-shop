@@ -123,7 +123,6 @@ export const actions = {
     }
   },
   async deleteRRODUCT({}, item) {
-    const a = item.article
     Swal.fire({
       title: 'Вы уверенны?',
       text: "Вы не сможете восстановить это!",
@@ -150,7 +149,7 @@ export const actions = {
             }
           }
 
-          const id = item.item.id
+          const id = item.id
           this.$fireStore.collection("products").doc(`${id}`).delete().then(function() {
             console.log("Документ успешно удален!");
           }).catch(function(error) {
@@ -163,6 +162,7 @@ export const actions = {
             'success'
           )
         }
+        window.location.reload()
       })
   },
   async readFromFirestore({commit}) {
