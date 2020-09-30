@@ -2,6 +2,7 @@
   <section class="v-catalog">
     <template>
       <div
+        v-if="GET_ADMIN_ENTRANCE"
         class="v-catalog__link_to_cart"
         style="justify-content: center;"
       >
@@ -14,8 +15,7 @@
             fab
             outlined
             small
-            style="color: #3e9538"
-          >
+            style="color: #3e9538">
             <v-icon>mdi-format-list-bulleted-square</v-icon>
           </v-btn>
           <v-btn
@@ -159,6 +159,14 @@
           console.log('Ошибка входа Google')
         }
       },
+      adminPlusLogin() {
+        console.log(this.GET_ADMIN_ENTRANCE)
+        if (this.GET_ADMIN_ENTRANCE) {
+          this.$router.push('admin')
+        } else {
+          this.$router.push('index')
+        }
+      },
       async logout() {
         await this.$store.dispatch('logout')
       },
@@ -174,13 +182,6 @@
         })
         this.selected = category.name
       },
-      adminPlusLogin() {
-        // if (this.GET_ADMIN_ENTRANCE) {
-          this.$router.push('/admin')
-        // } else {
-        //   this.$router.push('/')
-        // }
-      },
     },
     mounted() {
       this.readFromFirestore()
@@ -188,6 +189,7 @@
     computed: {
       ...mapGetters([
         'PRODUCTS',
+        'GET_ADMIN_ENTRANCE'
       ]),
       userEntrance() {
         return this.$store.state.userEntrance

@@ -1,5 +1,6 @@
 // import { db } from '~/plugins/firebase.js'
 import { vuexfireMutations, firestoreAction } from 'vuexfire'
+import Swal from 'sweetalert2'
 
 
 export const state = () => ({
@@ -18,6 +19,7 @@ export const state = () => ({
 })
 
 export const mutations = {
+  ...vuexfireMutations,
   FIREBASE_PRODUCTS: (state, data) => {
     state.Products = data
   },
@@ -39,8 +41,8 @@ export const mutations = {
   USER_ID_ENTRANCE: (state, userID) => {
     state.userId = userID;
   },
-  LIST_USERS: (state, listUsers) => {
-    state.listUsers = listUsers;
+  LIST_USERS: (state, userOnlain) => {
+    state.listUsers = userOnlain;
   },
   ORDER_USER: (state, orderUser) => {
     state.orderUser = orderUser;
@@ -57,6 +59,63 @@ export const mutations = {
 }
 
 export const actions = {
+  bindCountDocument: firestoreAction(async function ({ bindFirestoreRef }) {
+    const ref = this.$fireStore
+      .collection('products')
+    await bindFirestoreRef('Products', ref, { wait: true })
+  }),
+  async deleteRRODUCT({}, item) {
+    console.log(item.item.article)
+    const a = item.item.article
+    Swal.fire({
+      title: 'Вы уверенны?',
+      text: "Вы не сможете восстановить это!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Да, удалить это!'
+    })
+      .then((result) => {
+        if (result.value) {
+
+          const File = item.arrayImages
+
+          if (File) {
+            for (let i = 0; i < File.length; i++) {
+              let storageRef = this.$fireStorage.ref()
+              let nameTime = item.NameImages[i]
+              const Ref = storageRef.child('assets/images/' + nameTime)
+              Ref.delete().then(function () {
+              }).catch(function (error) {
+                console.log('удаление фото с всем объявлением' + error)
+              })
+            }
+          }
+
+          const id = item.item.id
+          console.log(id)
+          this.$fireStore.collection("products").doc(`${id}`).delete().then(function() {
+            console.log("Документ успешно удален!");
+          }).catch(function(error) {
+            console.error("Ошибка при удалении документа: ", error);
+          });
+
+
+          // const article = item.item.article
+          // this.$fireStore
+          //   .collection('products')
+          //   .doc('doc.article', '==', `1601470503043`)
+          //   .delete()
+
+          Swal.fire(
+            'Удаленно!',
+            'Ваш продукт удален.',
+            'success'
+          )
+        }
+      })
+  },
   async readFromFirestore({commit}) {
     const promises = []
     await this.$fireStore.collection("products")
@@ -167,7 +226,7 @@ export const actions = {
           return document.cartInfo
         })
       // Проверка администратора
-      if(['wH7hb4Zdh9Xqt2RZRMAnJa3Nko23', 'hng6vLzPtTYo5xgiuYyjYpOnijB2', 'HInmvosDanObSDnC2csXiV3iR0A2']
+      if(['6XUeVk6rJKcsFvkgIRHcKhWqx523']
         .some(elem => elem === `${uid}`)) {
 
         // Получение ТОКЕНА администратора
@@ -187,7 +246,7 @@ export const actions = {
     const userEntrance = !!this.$fireAuthObj().currentUser
     const USER_ID = await dispatch('getUid')
     if(userEntrance) {
-      const adminEntrance =  await ["wH7hb4Zdh9Xqt2RZRMAnJa3Nko23", "hng6vLzPtTYo5xgiuYyjYpOnijB2","HInmvosDanObSDnC2csXiV3iR0A2"].includes(USER_ID)
+      const adminEntrance =  await ["6XUeVk6rJKcsFvkgIRHcKhWqx523"].includes(USER_ID)
       commit('ADMIN_ENTRANCE', adminEntrance)
     }
     commit('USER_ENTRANCE', userEntrance)
@@ -199,7 +258,7 @@ export const actions = {
         commit('USER_ENTRANCE', userEntrance)
       })
   },
-    async list_Users({commit}) {
+  async list_Users({commit}) {
     const user = this.$fireAuthObj().currentUser;
     const userOnlain = user.providerData[0]
     commit('LIST_USERS', userOnlain)
@@ -214,19 +273,19 @@ export const actions = {
     return this.$fireAuthObj().currentUser.displayName
   },
   getProfilePicUrl() {
-    return firebase.auth().currentUser.photoURL || '@/assets/images/profile-pic-placeholder.png';
+    return this.$fireAuthObj().currentUser.photoURL || '@/assets/images/profile-pic-placeholder.png';
   },
   async userEntrance({commit, dispatch}) {
     const USER_ID = await dispatch('getUid')
-    const userEntrance =  !!firebase.auth().currentUser
+    const userEntrance =  !!this.$fireAuthObj().currentUser
     if(userEntrance) {
-      const adminEntrance =  await ["8VcWFEfj1KYYs06GiR7dR6XpTLS2", "wH7hb4Zdh9Xqt2RZRMAnJa3Nko23", "hng6vLzPtTYo5xgiuYyjYpOnijB2", "HInmvosDanObSDnC2csXiV3iR0A2"].includes(USER_ID)
+      const adminEntrance =  await ["6XUeVk6rJKcsFvkgIRHcKhWqx523"].includes(USER_ID)
       commit('ADMIN_ENTRANCE', adminEntrance)
     }
     commit('USER_ENTRANCE', userEntrance)
   },
   async USER_ID_ACTIONS({commit}) {
-    const user = firebase.auth().currentUser
+    const user = this.$fireAuthObj().currentUser
     const userID = user ? user.uid : null
     if(userID) {
       commit('USER_ID_ENTRANCE', userID)

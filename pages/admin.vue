@@ -3,342 +3,324 @@
     id="inspire"
     style="padding: 5px"
   >
-        <v-card>
-          <!--		ПОИСК-->
-          <v-text-field
-            append-icon="mdi-magnify"
-            hide-details
-            label="Поиск"
-            single-line
-            style="margin: 10px 0 5px 0"
+    <v-card>
+      <!--		ПОИСК-->
+      <v-text-field
+        append-icon="mdi-magnify"
+        hide-details
+        label="Поиск"
+        single-line
+        style="margin: 10px 0 5px 0"
+        v-model="search"
+      ></v-text-field>
+      <!--          Категории-->
+      <v-row align="center">
+        <v-col cols="12">
+          <v-select
+            :items="categories"
+            label="Выбери категорию"
             v-model="search"
-          ></v-text-field>
-<!--          Категории-->
-          <v-row align="center">
-            <v-col cols="12">
-              <v-select
-                :items="categories"
-                label="Выбери категорию"
-                v-model="search"
-              ></v-select>
-            </v-col>
-          </v-row>
-<!--          Пагинация-->
-          <div class="text-center pt-2">
-            <v-pagination
-              v-model="page"
-              :length="pageCount"
-            ></v-pagination>
-            <v-text-field
-              :value="itemsPerPage"
-              label="Items per page"
-              type="number"
-              min="-1"
-              max="15"
-              @input="itemsPerPage = parseInt($event, 10)"
-            ></v-text-field>
-          </div>
-          <!--		ТАБЛИЦА-->
-          <v-data-table
-            :headers="headers"
-            :items="PRODUCTS"
-            :items-per-page="itemsPerPage"
-            :page.sync="page"
-            :search="search"
-            @page-count="pageCount = $event"
-            class="elevation-1"
-            disable-sort
-            hide-default-footer
-            item-key="article"
-          >
-            <template v-slot:item.name="{ item }">
-              <v-chip
-                color="blue"
-                dark
-              >
-                {{ item.name }}
-              </v-chip>
-            </template>
-
-            <template
-              style="height:190px;"
-              v-slot:item.arrayImages="{ item }">
-
-              <img
-                :src="(item.arrayImages[0])"
-                alt=""
-                style="max-width: 100px; max-height: 100px; margin: 5px"
-                v-if="item.arrayImages"
-              >
-            </template>
-
-            <template v-slot:item.price="{ item }">
-              <v-chip :color="getColor(item.price)" dark>{{ item.price }}</v-chip>
-            </template>
-
-            <template v-slot:item.description="{ item }">
-              <span v-html="item.description"/>
-            </template>
-
-            <template v-slot:item.actions="{ item }">
-              <v-row justify="space-around">
-
-                <v-avatar color="indigo" size="48">
-                  <v-icon
-                    @click="editItem(item)"
-                  >
-                    mdi-pencil
-                  </v-icon>
-                </v-avatar>
-
-                <v-avatar
-                  color="teal"
-                  size="48"
-                  style="margin-left: 10px"
-                >
-                  <v-icon
-                    @click="deleteLocation(item)"
-                  >
-                    mdi-delete
-                  </v-icon>
-                </v-avatar>
-              </v-row>
-            </template>
-
-          </v-data-table>
-        </v-card>
-      <!--		ВСПЛЫВАЮЩАЯ ПАНЕЛЬ-->
-      <div>
-        <v-dialog
-          style="z-index: 100"
-          v-model="dialog"
-          width="85%"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <!--		КНОПКА +-->
-            <v-btn
-              @click="dialog = !dialog"
-              bottom
-              color="pink"
-              dark
-              fab
-              fixed
-              left
-              v-bind="attrs"
-              v-on="on"
-            >
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </template>
-          <form>
-            <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
-              </v-card-title>
-              <v-container>
-                <v-row class="mx-2">
-                  <v-col
-                    class="align-center justify-space-between"
-                    cols="12"
-                  >
-                    <v-row
-                      align="center"
-                      class="mr-0"
-                    >
-<!--                      								НАЗВАНИЕ-->
-                      <v-textarea
-                        auto-grow
-                        name="input-7-1"
-                        outlined
-                        rows="1"
-                        row-height="15"
-                        :rules="[rules.counter]"
-                        label="Оглавление"
-                        placeholder="Название товара"
-                        prepend-icon="mdi-pencil"
-                        v-model="editedItem.name"
-                        background-color="grey lighten-2"
-                        color="cyan"
-                      ></v-textarea>
-                    </v-row>
-                  </v-col>
-                  <!--						ОПИСАНИЕ ТОВАРА-->
-                  <v-col cols="12">
-<!--                    <tiptap-vuetify-->
-<!--                      :extensions="extensions"-->
-<!--                      placeholder="Описание товара"-->
-<!--                      prepend-icon="mdi-pencil"-->
-<!--                      v-model="editedItem.description"-->
-<!--                    />-->
-                      <v-textarea
-                        placeholder="Опишите подробно товар"
-                        name="input-7-1"
-                        filled
-                        outlined
-                        label="Описание товара"
-                        auto-grow
-                        rows="2"
-                        row-height="5"
-                        v-model="editedItem.description"
-                      ></v-textarea>
-                  </v-col>
-                  <!--						АРТИКЛЬ-->
-                  <v-col cols="12">
-                    <v-text-field
-                      placeholder="article"
-                      required
-                      v-model="editedItem.article"
-                    ></v-text-field>
-                  </v-col>
-                  <!--						ЦЕНА-->
-                  <v-col cols="12">
-                    <v-text-field
-                      :rules="[v => (v !== Number.NaN) || 'Введите число!']"
-                      label="Цена товара"
-                      placeholder="ОБЯЗАТЕЛЬНО"
-                      prepend-icon="mdi-pencil"
-                      required
-                      type="Number"
-                      v-model="editedItem.price"
-                    ></v-text-field>
-                  </v-col>
-                  <!--						Размер-->
-                  <!--						КАТЕГОРИИ-->
-                  <v-col cols="12">
-                    <v-select
-                      :items="itemsCategories"
-                      :rules="[v => !!v || 'Пункт требуется']"
-                      label="Выберите категорию"
-                      placeholder="Категория"
-                      prepend-icon="mdi-pencil"
-                      v-model="editedItem.category"
-                    ></v-select>
-                  </v-col>
-                  <!--						ОТОБРАЖЕНИЕ-->
-                  <div class="check_box">
-                    <v-checkbox
-                      color="success"
-                      hide-details
-                      label="Отображать в каталоге"
-                      v-model="editedItem.available"
-                    ></v-checkbox>
-                  </div>
-                  <!--ФОТО-->
-                  <template v-if="editedItem.arrayImages.length > 0">
-                    <v-carousel>
-                      <v-carousel-item
-                        :key="article"
-                        :src="(item)"
-                        reverse-transition="fade-transition"
-                        style="max-width: 400px; max-height: 600px"
-                        transition="fade-transition"
-                        v-for="(item,article) in editedItem.arrayImages"
-                      >
-                        <v-btn
-                          @click="deleteFoto(editedItem, item)"
-                          class="mx-2"
-                          color="pink"
-                          dark
-                          fab
-                          small
-                          style="float: right; top: 1em;"
-                        >
-                          <v-icon dark>mdi-delete</v-icon>
-                        </v-btn>
-                      </v-carousel-item>
-                    </v-carousel>
-                  </template>
-                  <v-col cols="12">
-                    <v-file-input
-                      accept="image/png, image/jpeg, image/bmp"
-                      color="deep-purple accent-4"
-                      counter
-                      label="Загрузка фотографий"
-                      multiple
-                      placeholder="Выберите фото"
-                      prepend-icon="mdi-camera"
-                      v-model="editedItem.File"
-
-                    >
-                      <template>
-                        <v-file-input
-                          counter
-                          label="File input"
-                          multiple
-                          show-size
-                        ></v-file-input>
-                      </template>
-
-                    </v-file-input>
-                  </v-col>
-
-                </v-row>
-              </v-container>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  @click="close"
-                  color="blue darken-1"
-                  text
-                >
-                  Отмена
-                </v-btn>
-                <v-btn
-                  @click="save"
-                  color="blue darken-1"
-                  text
-                  type="submit"
-                >
-                  Сохранить
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </form>
-        </v-dialog>
+          ></v-select>
+        </v-col>
+      </v-row>
+      <!--          Пагинация-->
+      <div class="text-center pt-2">
+        <v-pagination
+          :length="pageCount"
+          v-model="page"
+        ></v-pagination>
+        <v-text-field
+          :value="itemsPerPage"
+          @input="itemsPerPage = parseInt($event, 10)"
+          label="Items per page"
+          max="15"
+          min="-1"
+          type="number"
+        ></v-text-field>
       </div>
+      <!--		ТАБЛИЦА-->
+      <v-data-table
+        :headers="headers"
+        :items="PRODUCTS"
+        :items-per-page="itemsPerPage"
+        :page.sync="page"
+        :search="search"
+        @page-count="pageCount = $event"
+        class="elevation-1"
+        disable-sort
+        hide-default-footer
+        item-key="article"
+      >
+        <template v-slot:item.name="{ item }">
+          <v-chip
+            color="blue"
+            dark
+          >
+            {{ item.name }}
+          </v-chip>
+        </template>
+
+        <template
+          style="height:190px;"
+          v-slot:item.arrayImages="{ item }">
+
+          <img
+            :src="(item.arrayImages[0])"
+            alt=""
+            style="max-width: 100px; max-height: 100px; margin: 5px"
+            v-if="item.arrayImages"
+          >
+        </template>
+
+        <template v-slot:item.price="{ item }">
+          <v-chip :color="getColor(item.price)" dark>{{ item.price }}</v-chip>
+        </template>
+
+        <template v-slot:item.description="{ item }">
+          <span v-html="item.description"/>
+        </template>
+
+        <template v-slot:item.actions="{ item }">
+          <v-row justify="space-around">
+
+            <v-avatar color="indigo" size="48">
+              <v-icon
+                @click="editItem(item)"
+              >
+                mdi-pencil
+              </v-icon>
+            </v-avatar>
+
+            <v-avatar
+              color="teal"
+              size="48"
+              style="margin-left: 10px"
+            >
+              <v-icon
+                @click="deleteLocation(item)"
+              >
+                mdi-delete
+              </v-icon>
+            </v-avatar>
+          </v-row>
+        </template>
+
+      </v-data-table>
+    </v-card>
+    <!--		ВСПЛЫВАЮЩАЯ ПАНЕЛЬ-->
+    <div>
+      <v-dialog
+        style="z-index: 100"
+        v-model="dialog"
+        width="85%"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <!--		КНОПКА +-->
+          <v-btn
+            @click="dialog = !dialog"
+            bottom
+            color="pink"
+            dark
+            fab
+            fixed
+            left
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </template>
+        <form>
+          <v-card>
+            <v-card-title>
+              <span class="headline">{{ formTitle }}</span>
+            </v-card-title>
+            <v-container>
+              <v-row class="mx-2">
+                <v-col
+                  class="align-center justify-space-between"
+                  cols="12"
+                >
+                  <v-row
+                    align="center"
+                    class="mr-0"
+                  >
+                    <!--                      								НАЗВАНИЕ-->
+                    <v-textarea
+                      :rules="[rules.counter]"
+                      auto-grow
+                      background-color="grey lighten-2"
+                      color="cyan"
+                      label="Оглавление"
+                      name="input-7-1"
+                      outlined
+                      placeholder="Название товара"
+                      prepend-icon="mdi-pencil"
+                      row-height="15"
+                      rows="1"
+                      v-model="editedItem.name"
+                    ></v-textarea>
+                  </v-row>
+                </v-col>
+                <!--						ОПИСАНИЕ ТОВАРА-->
+                <v-col cols="12">
+                  <!--                    <tiptap-vuetify-->
+                  <!--                      :extensions="extensions"-->
+                  <!--                      placeholder="Описание товара"-->
+                  <!--                      prepend-icon="mdi-pencil"-->
+                  <!--                      v-model="editedItem.description"-->
+                  <!--                    />-->
+                  <v-textarea
+                    auto-grow
+                    filled
+                    label="Описание товара"
+                    name="input-7-1"
+                    outlined
+                    placeholder="Опишите подробно товар"
+                    row-height="5"
+                    rows="2"
+                    v-model="editedItem.description"
+                  ></v-textarea>
+                </v-col>
+                <!--						АРТИКЛЬ-->
+                <v-col cols="12">
+                  <v-text-field
+                    placeholder="article"
+                    required
+                    v-model="editedItem.article"
+                  ></v-text-field>
+                </v-col>
+                <!--						ЦЕНА-->
+                <v-col cols="12">
+                  <v-text-field
+                    :rules="[v => (v !== Number.NaN) || 'Введите число!']"
+                    label="Цена товара"
+                    placeholder="ОБЯЗАТЕЛЬНО"
+                    prepend-icon="mdi-pencil"
+                    required
+                    type="Number"
+                    v-model="editedItem.price"
+                  ></v-text-field>
+                </v-col>
+                <!--						Размер-->
+                <!--						КАТЕГОРИИ-->
+                <v-col cols="12">
+                  <v-select
+                    :items="itemsCategories"
+                    :rules="[v => !!v || 'Пункт требуется']"
+                    label="Выберите категорию"
+                    placeholder="Категория"
+                    prepend-icon="mdi-pencil"
+                    v-model="editedItem.category"
+                  ></v-select>
+                </v-col>
+                <!--						ОТОБРАЖЕНИЕ-->
+                <div class="check_box">
+                  <v-checkbox
+                    color="success"
+                    hide-details
+                    label="Отображать в каталоге"
+                    v-model="editedItem.available"
+                  ></v-checkbox>
+                </div>
+                <!--ФОТО-->
+                <template v-if="editedItem.arrayImages.length > 0">
+                  <v-carousel>
+                    <v-carousel-item
+                      :key="article"
+                      :src="(item)"
+                      reverse-transition="fade-transition"
+                      style="max-width: 400px; max-height: 600px"
+                      transition="fade-transition"
+                      v-for="(item,article) in editedItem.arrayImages"
+                    >
+                      <v-btn
+                        @click="deleteFoto(editedItem, item)"
+                        class="mx-2"
+                        color="pink"
+                        dark
+                        fab
+                        small
+                        style="float: right; top: 1em;"
+                      >
+                        <v-icon dark>mdi-delete</v-icon>
+                      </v-btn>
+                    </v-carousel-item>
+                  </v-carousel>
+                </template>
+                <v-col cols="12">
+                  <v-file-input
+                    accept="image/png, image/jpeg, image/bmp"
+                    color="deep-purple accent-4"
+                    counter
+                    label="Загрузка фотографий"
+                    multiple
+                    placeholder="Выберите фото"
+                    prepend-icon="mdi-camera"
+                    v-model="editedItem.File"
+
+                  >
+                    <template>
+                      <v-file-input
+                        counter
+                        label="File input"
+                        multiple
+                        show-size
+                      ></v-file-input>
+                    </template>
+
+                  </v-file-input>
+                </v-col>
+
+              </v-row>
+            </v-container>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                @click="close"
+                color="blue darken-1"
+                text
+              >
+                Отмена
+              </v-btn>
+              <v-btn
+                @click="save"
+                color="blue darken-1"
+                text
+                type="submit"
+              >
+                Сохранить
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </form>
+      </v-dialog>
+    </div>
   </v-app>
 </template>
 
 <script>
-  import {mapGetters, mapActions} from 'vuex'
+  import {mapActions, mapGetters} from 'vuex'
   import Swal from 'sweetalert2'
-  import firebase from 'firebase/app'
-  import {
-    TiptapVuetify,
-    Heading,
-    Bold,
-    Italic,
-    Strike,
-    Underline,
-    Code,
-    Paragraph,
-    BulletList,
-    OrderedList,
-    ListItem,
-    Link,
-    Blockquote,
-    HardBreak,
-    HorizontalRule,
-    History
-  } from 'tiptap-vuetify'
 
-  const formDefault = {
-    NameImages: [],
-    File: [],
-    name: '',
-    article: +new Date(),
-    description: '',
-    available: null,
-    category: '',
-    price: '',
-    clothingSize: 42,
-    promotionalPrice: false,
-    clothingManufacturer: '',
-    VideoClothings: false,
-    BrandName: '',
-    FotoClothes: '',
-    newClothes: true,
-  }
+  import {
+    Blockquote,
+    Bold,
+    BulletList,
+    Code,
+    HardBreak,
+    Heading,
+    History,
+    HorizontalRule,
+    Italic,
+    Link,
+    ListItem,
+    OrderedList,
+    Paragraph,
+    Strike,
+    TiptapVuetify,
+    Underline
+  } from 'tiptap-vuetify'
 
   export default {
     layout: 'admin',
@@ -347,8 +329,6 @@
       TiptapVuetify,
     },
     data: () => ({
-      isLoading: false,
-      fullPage: true,
       categories: [
         '',
         'Ветровки',
@@ -388,7 +368,6 @@
         Paragraph,
         HardBreak
       ],
-      ...formDefault, // ...formTest или ...formDefault
       rules: {
         required: value => !!value || 'Обязательно.',
         counter: value => value.length >= 5 || 'Min 5 знаков',
@@ -456,19 +435,13 @@
         'Платья',
         'Костюмы',
       ],
-      itemsclothingManufacturer: [
-        'Турция',
-        'Италия',
-        'Китай',
-        '',
-      ],
       headers: [
         {
           text: '',
           value: 'name',
           align: 'left',
           sortable: false,
-           width: "1%",
+          width: "1%",
         },
         {text: 'Артикль', value: 'article', width: "1%", align: 'left'},
         {text: 'Фото', value: 'arrayImages', width: "1%", align: 'left'},
@@ -480,15 +453,13 @@
       locations: []
     }),
     methods: {
-      ...mapActions([
-        'list_Users',
-      ]),
+      ...mapActions([]),
       doAjax() {
         this.isLoading = true;
         // simulate AJAX
         setTimeout(() => {
           this.isLoading = false
-        },5000)
+        }, 5000)
       },
       onCancel() {
         console.log('User cancelled the loader.')
@@ -548,16 +519,14 @@
         if (File) {
           for (let i = 0; i < File.length; i++) {
 
-            const storageRef = firebase.storage().ref();
-            // Загрузить файл и метаданные в объект 'assets/images/***.jpg'
-
             // Создайте метаданные файла
             let metadata = {
               contentType: 'image/jpeg',
             };
             let nameTime = +new Date()
-            // ПРОВЕРКА ЗАГРУЗКИ ФОТО
-            const uploadTask = storageRef.child('assets/images/' + nameTime + '.jpg').put(File[i], metadata);
+
+
+            const uploadTask = await this.$fireStorage.ref().child('assets/images/' + nameTime + '.jpg').put(File[i], metadata);
 
             promises.push(
               uploadTask
@@ -568,25 +537,21 @@
           }
         }
         const URLs = await Promise.all(promises)
-        const ArrayOld = editProduct.arrayImages
+        const ArrayOld = await editProduct.arrayImages
         const ArrayFile = [...URLs, ...ArrayOld]
-        let id = editProduct.id
+        let id = await editProduct.id
+        console.log('id', id)
 
-        db.collection('products')
+        await this.$fireStore.collection('products')
           .doc(id)
           .update({
             seen: editProduct.seen,
             arrayImages: ArrayFile,
             category: editProduct.category,
             createdAt: editProduct.createdAt,
-            BrandName: editProduct.BrandName,
             article: editProduct.article,
             price: editProduct.price,
-            promotionalPrice: editProduct.promotionalPrice,
-            clothingSize: editProduct.clothingSize,
-            newClothes: editProduct.newClothes,
             description: editProduct.description,
-            clothingManufacturer: editProduct.clothingManufacturer,
           })
           .then(() => {
             this.isLoading = false
@@ -599,24 +564,19 @@
             })
           })
       },
-      async addLocation(addProduct, seen, arrayImages, File, article, available, category, name, promotionalPrice, newClothes, BrandName, clothingSize, clothingManufacturer, price, description) {
+      async addLocation(addProduct, seen, arrayImages, File, article, available, category, name, price, description) {
 
         this.isLoading = true
 
         const createdAt = new Date()
         seen = false
         File = addProduct.File
-        BrandName = addProduct.BrandName
         article = addProduct.article
         available = addProduct.available
         category = addProduct.category
         name = addProduct.name
         price = addProduct.price
-        promotionalPrice = addProduct.promotionalPrice
-        clothingSize = addProduct.clothingSize
-        newClothes = addProduct.newClothes
         description = addProduct.description
-        clothingManufacturer = addProduct.clothingManufacturer
         arrayImages = addProduct.arrayImages
 // ЗАГРУЗКА ФОТО
         const promises = []
@@ -625,16 +585,14 @@
         if (File) {
           for (let i = 0; i < File.length; i++) {
 
-            const storageRef = firebase.storage().ref();
-            // Загрузить файл и метаданные в объект 'assets/images/***.jpg'
-
             // Создайте метаданные файла
             let metadata = {
               contentType: 'image/jpeg',
             };
             const nameTime = +new Date() + '.jpg'
-            // ПРОВЕРКА ЗАГРУЗКИ ФОТО
-            const uploadTask = storageRef.child('assets/images/' + nameTime).put(File[i], metadata);
+
+            // Загрузить файл и метаданные в объект 'assets/images/***.jpg'
+            const uploadTask = this.$fireStorage.ref().child('assets/images/' + nameTime).put(File[i], metadata);
 
             promises.push(
               uploadTask
@@ -651,24 +609,26 @@
         const URLs = await Promise.all(promises)
         const NameImages = await Promise.all(promisesName)
 
-        await db.collection('products').add({
+        let docRef = await this.$fireStore.collection('products').add({
           NameImages: NameImages,
           seen,
           article,
           available,
-          BrandName,
-          newClothes,
-          clothingManufacturer,
-          clothingSize,
-          promotionalPrice,
           createdAt,
           category,
           arrayImages: URLs,
           name,
           price,
           description,
-        })
-        this.isLoading = false
+        });
+        try {
+          const docAdded = await docRef;
+          console.log(`${docAdded.id}`);
+          await this.$fireStore.doc('products/' + `${docAdded.id}`).update({id: `${docAdded.id}`});
+        } catch (err) {
+          return err;
+        }
+
 
         Swal.fire({
           position: 'top-end',
@@ -689,42 +649,11 @@
         else return 'green'
       },
       async deleteLocation(item) {
-        Swal.fire({
-          title: 'Вы уверенны?',
-          text: "Вы не сможете восстановить это!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Да, удалить это!'
-        })
-          .then((result) => {
-            if (result.value) {
-              this.isLoading = true
-              const File = item.arrayImages
-
-              if (File) {
-                for (let i = 0; i < File.length; i++) {
-                  let storageRef = firebase.storage().ref()
-                  let nameTime = item.NameImages[i]
-                  const Ref = storageRef.child('assets/images/' + nameTime)
-                  Ref.delete().then(function () {
-                  }).catch(function (error) {
-                    console.log('удаление фото с всем объявлением' + error)
-                  })
-                }
-              }
-              let id = item.id
-              db.collection('products').doc(id).delete()
-              this.isLoading = false
-              Swal.fire(
-                'Удаленно!',
-                'Ваш продукт удален.',
-                'success'
-              )
-            }
-          })
-
+        try {
+          await this.$store.dispatch('deleteRRODUCT', {item})
+        } catch (e) {
+          console.log('Ошибка')
+        }
       }
     },
     watch: {
@@ -735,7 +664,6 @@
     computed: {
       ...mapGetters([
         'PRODUCTS',
-        'GET_LIST_USERS'
       ]),
       formTitle() {
         return this.editedIndex === -1 ? 'Создание товара' : 'Форма редактирования'
@@ -746,7 +674,6 @@
     },
     created() {
       this.initialize()
-      this.list_Users()
     }
   }
 </script>
