@@ -99,6 +99,13 @@
   import {mapActions, mapGetters} from 'vuex'
 
   export default {
+    asyncData () {
+      return new Promise((resolve) => {
+        setTimeout(function () {
+          resolve({ name: 'world' })
+        }, 1000)
+      })
+    },
     components: {
       vCatalogItem: process.browser ? () => import('~/components/vCatalogItem.vue') : null,
       // vCatalogItem,

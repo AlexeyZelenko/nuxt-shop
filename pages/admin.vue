@@ -322,6 +322,13 @@
   // } from 'tiptap-vuetify'
 
   export default {
+    asyncData () {
+      return new Promise((resolve) => {
+        setTimeout(function () {
+          resolve({})
+        }, 1000)
+      })
+    },
     layout: 'admin',
     name: "zAdmin",
     components: {
@@ -454,26 +461,6 @@
     }),
     methods: {
       ...mapActions(['readFromFirestore']),
-      doAjax() {
-        this.isLoading = true;
-        // simulate AJAX
-        setTimeout(() => {
-          this.isLoading = false
-        }, 5000)
-      },
-      onCancel() {
-        console.log('User cancelled the loader.')
-      },
-      addItem(item) {
-        const removed = this.items.splice(0, 1)
-        this.items.push(
-          ...this.more.splice(this.more.indexOf(item), 1)
-        )
-        this.more.push(...removed)
-        this.$nextTick(() => {
-          this.currentItem = 'tab-' + item
-        })
-      },
       deleteFoto(editedItem, item) {
         const array = editedItem.arrayImages
         const arrayName = editedItem.NameImages
@@ -521,7 +508,7 @@
       },
       async addLocation(addProduct, seen, arrayImages, File, article, available, category, name, price, description) {
 
-        this.isLoading = true
+        this.loading = true
 
         const createdAt = new Date()
         seen = false
@@ -580,6 +567,9 @@
           name,
           price,
           description,
+          adress,
+          name_contact,
+          telephone_contact,
         });
         try {
           const docAdded = await docRef;
@@ -589,7 +579,7 @@
           return err;
         }
 
-        this.isLoading = true
+        this.loading = false
 
         Swal.fire({
           position: 'top-end',
