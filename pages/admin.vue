@@ -1,32 +1,8 @@
 <template>
-  <v-app id="inspire">
-
-    <v-data-table
-      :headers="headers"
-      :items="desserts"
-      class="elevation-1"
-    >
-      <template slot="headerCell" slot-scope="props">
-        <v-tooltip bottom>
-          <span slot="activator">
-            {{ props.header.text }}
-          </span>
-          <span>
-            {{ props.header.text }}
-          </span>
-        </v-tooltip>
-      </template>
-      <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.calories }}</td>
-        <td class="text-xs-right">{{ props.item.fat }}</td>
-        <td class="text-xs-right">{{ props.item.carbs }}</td>
-        <td class="text-xs-right">{{ props.item.protein }}</td>
-        <td class="text-xs-right">{{ props.item.iron }}</td>
-        <td class="text-xs-right"></td>
-      </template>
-    </v-data-table>
-
+  <v-app
+    id="inspire"
+    style="padding: 5px"
+  >
         <v-card>
           <!--		ПОИСК-->
           <v-text-field
@@ -37,6 +13,7 @@
             style="margin: 10px 0 5px 0"
             v-model="search"
           ></v-text-field>
+<!--          Категории-->
           <v-row align="center">
             <v-col cols="12">
               <v-select
@@ -46,10 +23,24 @@
               ></v-select>
             </v-col>
           </v-row>
+<!--          Пагинация-->
+          <div class="text-center pt-2">
+            <v-pagination
+              v-model="page"
+              :length="pageCount"
+            ></v-pagination>
+            <v-text-field
+              :value="itemsPerPage"
+              label="Items per page"
+              type="number"
+              min="-1"
+              max="15"
+              @input="itemsPerPage = parseInt($event, 10)"
+            ></v-text-field>
+          </div>
           <!--		ТАБЛИЦА-->
           <v-data-table
             :headers="headers"
-            calculate-widths: true
             :items="PRODUCTS"
             :items-per-page="itemsPerPage"
             :page.sync="page"
@@ -60,6 +51,15 @@
             hide-default-footer
             item-key="article"
           >
+            <template v-slot:item.name="{ item }">
+              <v-chip
+                color="blue"
+                dark
+              >
+                {{ item.name }}
+              </v-chip>
+            </template>
+
             <template
               style="height:190px;"
               v-slot:item.arrayImages="{ item }">
@@ -74,10 +74,6 @@
 
             <template v-slot:item.price="{ item }">
               <v-chip :color="getColor(item.price)" dark>{{ item.price }}</v-chip>
-            </template>
-
-            <template v-slot:item.clothingSize="{ item }">
-              <v-chip :color="getColor2(item.clothingSize)" dark>{{ item.clothingSize }}</v-chip>
             </template>
 
             <template v-slot:item.description="{ item }">
@@ -182,7 +178,8 @@
                         label="Описание товара"
                         auto-grow
                         rows="2"
-                        row-height="15"
+                        row-height="5"
+                        v-model="editedItem.description"
                       ></v-textarea>
                   </v-col>
                   <!--						АРТИКЛЬ-->
@@ -306,11 +303,6 @@
   import {mapGetters, mapActions} from 'vuex'
   import Swal from 'sweetalert2'
   import firebase from 'firebase/app'
-  // const zUsers = () => import('@/components/administration/z-users')
-  // const zOrders = () => import('@/components/administration/z-orders')
-  // const zSize = () => import('@/components/administration/z-size')
-  // const Loading = () => import('vue-loading-overlay')
-  // import 'vue-loading-overlay/dist/vue-loading.css'
   import {
     TiptapVuetify,
     Heading,
@@ -353,118 +345,8 @@
     name: "zAdmin",
     components: {
       TiptapVuetify,
-      // zUsers,
-      // zOrders,
-      // zSize
     },
     data: () => ({
-      headers: [
-        {
-          text: 'Dessert (100g serving)',
-          align: 'left',
-          sortable: false,
-          value: 'name',
-          width: "1%"
-        },
-        { align: 'left', sortable: false, text: 'Calories', value: 'description', width: "70%" },
-        { align: 'left', sortable: false,text: 'Fat (g)', value: 'fat',width: "1%" },
-        { align: 'left', sortable: false,text: 'Carbs (g)', value: 'carbs',width: "1%" },
-        { align: 'left', sortable: false,text: 'Protein (g)', value: 'protein',width: "1%" },
-        { align: 'left', sortable: false,text: 'Iron (%)', value: 'iron', width: "1%" },
-        { align: 'left', sortable: false,text: '', value: 'name' }
-      ],
-      desserts: [
-        {
-          value: true,
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: '1%'
-        },
-        {
-          value: false,
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: '1%'
-        },
-        {
-          value: false,
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: '7%'
-        },
-        {
-          value: false,
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: '8%'
-        },
-        {
-          value: false,
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: '16%'
-        },
-        {
-          value: false,
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: '0%'
-        },
-        {
-          value: false,
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: '2%'
-        },
-        {
-          value: false,
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: '45%'
-        },
-        {
-          value: false,
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: '22%'
-        },
-        {
-          value: false,
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: '6%'
-        }
-      ],
       isLoading: false,
       fullPage: true,
       categories: [
@@ -482,13 +364,6 @@
         'Костюмы',
         'Куртки',
       ],
-      // currentItem: 'tab-Web',
-      // items: [
-      //   'Товары', 'Заказы'
-      // ],
-      // more: [
-      //   'Клиенты', 'Размеры',
-      // ],
       page: 1,
       pageCount: 0,
       itemsPerPage: 15,
@@ -587,25 +462,21 @@
         'Китай',
         '',
       ],
-      // headers: [
-      //   {
-      //     text: 'Артикль',
-      //     value: 'article',
-      //     align: 'start',
-      //     sortable: false,
-      //   },
-      //   {text: '', value: '1'},
-      //   {text: 'Фото', value: 'arrayImages'},
-      //   {text: '', value: '2'},
-      //   {text: '', value: '3'},
-      //   {text: 'Категория', value: 'category'},
-      //   {text: '', value: '4'},
-      //   {text: 'Описание', value: 'description', width: "50%"},
-      //   {text: '', value: '5'},
-      //   {text: 'Цена', value: 'price'},
-      //   {text: 'Редактировать/Удалить', value: 'actions', sortable: false},
-      //   {text: '===============================', value: ''},
-      // ],
+      headers: [
+        {
+          text: '',
+          value: 'name',
+          align: 'left',
+          sortable: false,
+           width: "1%",
+        },
+        {text: 'Артикль', value: 'article', width: "1%", align: 'left'},
+        {text: 'Фото', value: 'arrayImages', width: "1%", align: 'left'},
+        {text: 'Категория', value: 'category', width: "1%", align: 'left'},
+        {align: 'left', sortable: false, text: 'Описание', value: 'description', width: "70%"},
+        {text: 'Цена', value: 'price', width: "1%", align: 'left'},
+        {text: 'Редактировать/Удалить', value: 'actions', sortable: false, width: "1%", align: 'left'},
+      ],
       locations: []
     }),
     methods: {
@@ -817,14 +688,6 @@
         else if (price > 3000) return 'grey'
         else return 'green'
       },
-      getColor2(clothingSize) {
-        if (clothingSize < 36) return 'red'
-        else if (clothingSize > 36 - 40) return 'orange'
-        else if (clothingSize > 42 - 44) return 'cyan'
-        else if (clothingSize > 45 - 46) return 'yellow'
-        else if (clothingSize > 47 - 50) return 'grey'
-        else return 'green'
-      },
       async deleteLocation(item) {
         Swal.fire({
           title: 'Вы уверенны?',
@@ -889,9 +752,6 @@
 </script>
 
 <style lang="sass">
-  .text-xs-right
-    padding: 50px 50px
-    margin: 50px 50px
   .z-table-button
     position: fixed
     right: 10%
