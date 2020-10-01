@@ -1,6 +1,6 @@
 <template>
   <div v-if="loading" class="loading-page">
-    <img style="position:absolute; z-index: 100; top: 50%; left: 0; margin-left: auto; margin-right: auto; right: 0; border: 0;"
+    <img style="position:absolute; top: 50%; left: 0; margin-left: auto; margin-right: auto; right: 0; border: 0;"
          src="@/assets/images/832.svg">
 
   </div>
@@ -34,5 +34,7 @@
     padding-top: 200px;
     font-size: 30px;
     font-family: sans-serif;
+    z-index: 100;
+    opacity: .8;
   }
 </style>
