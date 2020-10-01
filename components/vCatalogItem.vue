@@ -3,16 +3,22 @@
     class="v-catalog-item"
     @click="productClick"
   >
+    <div class="v-catalog-item_top">
+      <h4>
+        {{product_data.name}}
+      </h4>
+    </div>
+
     <div
       v-if="product_data.arrayImages"
     >
-      <transition name="fade">
-        <img
-          style="z-index: 7"
-          class="v-catalog-item_image"
-          :src="product_data.arrayImages[0]"
-          alt="">
-      </transition>
+    <transition name="fade">
+      <img
+        style="z-index: 7"
+        class="v-catalog-item_image"
+        :src="product_data.arrayImages[0]"
+        alt="">
+    </transition>
 
     </div>
     <p
@@ -23,12 +29,7 @@
         v-html="product_data.description"
       />
     </p>
-    <p
-      class="v_catalog_item_price"
-    >
-      Цена : {{product_data.price}} грн
-    </p>
-    <div class="v-catalog-item_button" style="margin-bottom: 1%;">
+    <div class="v-catalog-item_bottom">
       <button
         class="v-catalog-item_show-info"
       >
@@ -65,6 +66,13 @@
 </script>
 
 <style lang="scss">
+  *{
+    margin: 0;
+    padding: 0;
+  }
+  h4 {
+    padding: 5px;
+  }
   .emptyImage {
     width: 100px;
     height: 300px;
@@ -76,12 +84,27 @@
     padding: $padding*2;
     margin-bottom: $margin*2;
     z-index: 1;
-    justify-content: center;
+    text-align: center;
+    position: relative;
 
 
     &_image {
       width: 100px;
       justify-content: center;
+    }
+
+    &_top {
+      background: #999;
+      text-align: center;
+      margin-bottom: $margin*2;
+      padding: 0;
+    }
+
+    &_bottom {
+      text-align: center;
+      width: 100%;
+      bottom: -1px ;
+      margin-top: $margin*2;
     }
 
     &_show-info {
@@ -97,7 +120,8 @@
     }
 
     &_button {
-      margin-bottom: 10px;
+      bottom: 1px ;
+      position: absolute;
     }
 
     .v_catalog_item_new {
