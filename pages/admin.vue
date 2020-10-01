@@ -302,30 +302,30 @@
   import {mapActions, mapGetters} from 'vuex'
   import Swal from 'sweetalert2'
 
-  import {
-    Blockquote,
-    Bold,
-    BulletList,
-    Code,
-    HardBreak,
-    Heading,
-    History,
-    HorizontalRule,
-    Italic,
-    Link,
-    ListItem,
-    OrderedList,
-    Paragraph,
-    Strike,
-    TiptapVuetify,
-    Underline
-  } from 'tiptap-vuetify'
+  // import {
+  //   Blockquote,
+  //   Bold,
+  //   BulletList,
+  //   Code,
+  //   HardBreak,
+  //   Heading,
+  //   History,
+  //   HorizontalRule,
+  //   Italic,
+  //   Link,
+  //   ListItem,
+  //   OrderedList,
+  //   Paragraph,
+  //   Strike,
+  //   TiptapVuetify,
+  //   Underline
+  // } from 'tiptap-vuetify'
 
   export default {
     layout: 'admin',
     name: "zAdmin",
     components: {
-      TiptapVuetify,
+      // TiptapVuetify,
     },
     data: () => ({
       categories: [
@@ -346,27 +346,27 @@
       page: 1,
       pageCount: 0,
       itemsPerPage: 15,
-      extensions: [
-        History,
-        Blockquote,
-        Link,
-        Underline,
-        Strike,
-        Italic,
-        ListItem,
-        BulletList,
-        OrderedList,
-        [Heading, {
-          options: {
-            levels: [1, 2, 3]
-          }
-        }],
-        Bold,
-        Code,
-        HorizontalRule,
-        Paragraph,
-        HardBreak
-      ],
+      // extensions: [
+      //   History,
+      //   Blockquote,
+      //   Link,
+      //   Underline,
+      //   Strike,
+      //   Italic,
+      //   ListItem,
+      //   BulletList,
+      //   OrderedList,
+      //   [Heading, {
+      //     options: {
+      //       levels: [1, 2, 3]
+      //     }
+      //   }],
+      //   Bold,
+      //   Code,
+      //   HorizontalRule,
+      //   Paragraph,
+      //   HardBreak
+      // ],
       rules: {
         required: value => !!value || 'Обязательно.',
         counter: value => value.length >= 5 || 'Min 5 знаков',
@@ -641,6 +641,7 @@
 </script>
 
 <style lang="sass">
+  @import '~vuetify/src/styles/styles.sass'
   .z-table-button
     position: fixed
     right: 10%

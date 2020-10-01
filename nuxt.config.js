@@ -5,6 +5,7 @@ module.exports = {
   /*
   ** Headers of the page
   */
+  title: 'nuxt-shop',
   head: {
     titleTemplate: '%s | nuxt-shop',
     meta: [

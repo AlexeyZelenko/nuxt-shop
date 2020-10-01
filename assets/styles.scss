@@ -3,7 +3,6 @@
 @import '../node_modules/vuetify/src/styles/styles';
 
 
-
 .btn {
   padding: $padding $padding*2;
   background: $green-bg;
@@ -16,11 +15,3 @@
     background: $green-bg-hover;
   }
 }
-
-
-
-$data-table-mobile-row-min-height: 100px !default;
-
-
-
-

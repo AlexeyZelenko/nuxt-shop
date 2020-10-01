@@ -76,7 +76,8 @@
     padding: $padding*2;
     margin-bottom: $margin*2;
     z-index: 1;
-    margin-left: 1px;
+    justify-content: center;
+
 
     &_image {
       width: 100px;

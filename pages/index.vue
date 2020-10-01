@@ -1,63 +1,42 @@
 <template>
   <section class="v-catalog">
-    <template>
-      <div
-        v-if="GET_ADMIN_ENTRANCE"
-        class="v-catalog__link_to_cart"
-        style="justify-content: center;"
-      >
-        <v-card
-          flat
-        >
-          <v-btn
-            @click="adminPlusLogin"
-            class="ma-2"
-            fab
-            outlined
-            small
-            style="color: #3e9538">
-            <v-icon>mdi-format-list-bulleted-square</v-icon>
-          </v-btn>
-          <v-btn
-            :to="{name: 'cabinetUser'}"
-            class="my-2"
-            outlined
-            style="background-color: #3e9538; color: white; cursor: pointer"
-            tile
-          >
-            <v-icon left>mdi-account-circle</v-icon>
-            Кабинет
-          </v-btn>
-          <v-btn
-            :to="{name: 'cart'}"
-            class="ma-2"
-            outlined
-            style="background-color: #3e9538; color: white; cursor: pointer"
-            tile
-          >
-            <v-chip
-              close-icon="mdi-heart"
-              style="background-color: #3e9538; color: white; cursor: pointer"
-            >
-              <v-avatar
-                class="darken-4"
-                left
-                style="background-color: #0a4506;"
-              >
-              </v-avatar>
-              Корзина
-            </v-chip>
-          </v-btn>
-        </v-card>
-      </div>
-    </template>
     <div>
       <div>
 <!--		ВХОД ЧЕРЕЗ ГУГЛ АККАУНТ-->
         <template>
           <div
             class="text-center"
+            style="margin: 10px"
           >
+            <div
+              v-if="GET_ADMIN_ENTRANCE"
+              class="v-catalog__link_to_cart"
+              style="justify-content: center;"
+            >
+              <v-card
+                flat
+              >
+                <v-btn
+                  @click="adminPlusLogin"
+                  class="ma-2"
+                  fab
+                  outlined
+                  small
+                  style="color: #3e9538">
+                  <v-icon>mdi-format-list-bulleted-square</v-icon>
+                </v-btn>
+                <v-btn
+                  :to="{name: 'cabinetUser'}"
+                  class="my-2"
+                  outlined
+                  style="background-color: #3e9538; color: white; cursor: pointer"
+                  tile
+                >
+                  <v-icon left>mdi-account-circle</v-icon>
+                  Кабинет
+                </v-btn>
+              </v-card>
+            </div>
             <v-btn
               @click="signInWithGoogle"
               rounded
@@ -72,25 +51,25 @@
             >
               Выйти
             </v-btn>
+            <!--Отображение пользователя-->
+            <div
+              v-if="userEntrance">
+              <slot>
+                <img
+                  :src="(getProfilePicUrl)"
+                  alt=""
+                  id="user-pic"
+                >
+              </slot>
+            </div>
+            <div
+              id="user-name"
+              v-if="userEntrance"
+            >{{getUserName}}
+            </div>
           </div>
+
         </template>
-<!--Отображение пользователя-->
-        <div
-          class="v-carousel-item"
-          v-if="userEntrance">
-          <slot>
-            <img
-              :src="(getProfilePicUrl)"
-              alt=""
-              id="user-pic"
-            >
-          </slot>
-        </div>
-        <div
-          id="user-name"
-          v-if="userEntrance"
-        >{{getUserName}}
-        </div>
 <!--        Категории-->
         <v-row class="Change_categories">
           <v-select
@@ -121,7 +100,8 @@
 
   export default {
     components: {
-      vCatalogItem,
+      vCatalogItem: process.browser ? () => import('~/components/vCatalogItem.vue') : null,
+      // vCatalogItem,
       vSelect
     },
     data() {
