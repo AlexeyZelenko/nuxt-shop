@@ -1,4 +1,9 @@
 module.exports = {
+  /*
+   ** Rendering mode
+   ** Doc: https://nuxtjs.org/api/configuration-mode
+   */
+  mode: "universal",
   vuetify: {
     customVariables: ['~/assets/variables.scss']
   },
@@ -13,8 +18,15 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
+    plugins: [
+      { src: '~/plugins/TiptapVuetify', mode: 'client' }
+    ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      // Iconfonts for Vuetify. You need to leave only which one you use
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons' },
+      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css' },
+      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/4.4.95/css/materialdesignicons.min.css' }
     ]
   },
   /*
@@ -26,6 +38,7 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    transpile: ['vuetify/lib', 'tiptap-vuetify'],
     /*
     ** Run ESLint on save
     */
@@ -41,14 +54,14 @@ module.exports = {
     }
   },
   buildModules: [
-    [
+    ['@nuxtjs/vuetify'],
+      [
       'vue-sweetalert2/nuxt',
       {
         confirmButtonColor: '#41b882',
         cancelButtonColor: '#ff7674'
       }
     ],
-    '@nuxtjs/vuetify',
     [
       '@nuxtjs/firebase',
       {

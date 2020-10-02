@@ -50,14 +50,14 @@
         hide-default-footer
         item-key="article"
       >
-        <template v-slot:item.name="{ item }">
-          <v-chip
-            color="blue"
-            dark
-          >
-            {{ item.name }}
-          </v-chip>
-        </template>
+<!--        <template v-slot:item.name="{ item }">-->
+<!--          <v-chip-->
+<!--            color="blue"-->
+<!--            dark-->
+<!--          >-->
+<!--            {{ item.name }}-->
+<!--          </v-chip>-->
+<!--        </template>-->
 
         <template
           style="height:190px;"
@@ -108,6 +108,13 @@
     </v-card>
     <!--		ВСПЛЫВАЮЩАЯ ПАНЕЛЬ-->
     <div>
+<!--      <ClientOnly>-->
+<!--        <tiptap-vuetify-->
+<!--          :extensions="extensions"-->
+<!--          placeholder="Описание товара"-->
+<!--        />-->
+<!--      </ClientOnly>-->
+
       <v-dialog
         style="z-index: 100"
         v-model="dialog"
@@ -163,12 +170,6 @@
                 </v-col>
                 <!--						ОПИСАНИЕ ТОВАРА-->
                 <v-col cols="12">
-                  <!--                    <tiptap-vuetify-->
-                  <!--                      :extensions="extensions"-->
-                  <!--                      placeholder="Описание товара"-->
-                  <!--                      prepend-icon="mdi-pencil"-->
-                  <!--                      v-model="editedItem.description"-->
-                  <!--                    />-->
                   <v-textarea
                     auto-grow
                     filled
@@ -302,25 +303,25 @@
 <script>
   import {mapActions, mapGetters} from 'vuex'
   import Swal from 'sweetalert2'
-
-  // import {
-  //   Blockquote,
-  //   Bold,
-  //   BulletList,
-  //   Code,
-  //   HardBreak,
-  //   Heading,
-  //   History,
-  //   HorizontalRule,
-  //   Italic,
-  //   Link,
-  //   ListItem,
-  //   OrderedList,
-  //   Paragraph,
-  //   Strike,
-  //   TiptapVuetify,
-  //   Underline
-  // } from 'tiptap-vuetify'
+  // import the component and the necessary extensions
+  import {
+    TiptapVuetify,
+    Heading,
+    Bold,
+    Italic,
+    Strike,
+    Underline,
+    Code,
+    Paragraph,
+    BulletList,
+    OrderedList,
+    ListItem,
+    Link,
+    Blockquote,
+    HardBreak,
+    HorizontalRule,
+    History
+  } from 'tiptap-vuetify'
 
   export default {
     asyncData () {
@@ -333,48 +334,57 @@
     layout: 'admin',
     name: "zAdmin",
     components: {
-      // TiptapVuetify,
+      TiptapVuetify
     },
     data: () => ({
+      // declare extensions you want to use
+      extensions: [
+        History,
+        Blockquote,
+        Link,
+        Underline,
+        Strike,
+        Italic,
+        ListItem,
+        BulletList,
+        OrderedList,
+        [
+          Heading,
+          {
+            options: {
+              levels: [1, 2, 3]
+            }
+          }
+        ],
+        Bold,
+        Link,
+        Code,
+        HorizontalRule,
+        Paragraph,
+        HardBreak
+      ],
+      // starting editor's content
+      content: `
+      <h1>Yay Headlines!</h1>
+      <p>All these <strong>cool tags</strong> are working now.</p>
+    `,
       categories: [
         '',
-        'Ветровки',
-        'Пальто',
-        'Плащи',
-        'Джинсы',
-        'Брюки',
-        'Кофты',
-        'Футболки',
-        'Рубашки',
-        'Блузки',
-        'Платья',
-        'Костюмы',
-        'Куртки',
+        'Станки',
+        'Вибростанки',
+        'Котлы',
+        'Водонагреватели',
+        'Бойлеры',
+        'Теплые полы',
+        'Статьи',
+        'Услуги',
+        'Контакты',
+        'О нас',
       ],
       page: 1,
       pageCount: 0,
       itemsPerPage: 15,
-      // extensions: [
-      //   History,
-      //   Blockquote,
-      //   Link,
-      //   Underline,
-      //   Strike,
-      //   Italic,
-      //   ListItem,
-      //   BulletList,
-      //   OrderedList,
-      //   [Heading, {
-      //     options: {
-      //       levels: [1, 2, 3]
-      //     }
-      //   }],
-      //   Bold,
-      //   Code,
-      //   HorizontalRule,
-      //   Paragraph,
-      //   HardBreak
-      // ],
+
       rules: {
         required: value => !!value || 'Обязательно.',
         counter: value => value.length >= 5 || 'Min 5 знаков',
