@@ -182,6 +182,20 @@
                     v-model="editedItem.description"
                   ></v-textarea>
                 </v-col>
+<!--Видео-->
+                <v-col cols="12">
+                  <v-textarea
+                    auto-grow
+                    filled
+                    label="Добавить видео"
+                    name="input-7-1"
+                    outlined
+                    placeholder="Поделиться-Встроить-Копировать"
+                    row-height="5"
+                    rows="2"
+                    v-model="editedItem.video"
+                  ></v-textarea>
+                </v-col>
                 <!--						АРТИКЛЬ-->
                 <v-col cols="12">
                   <v-text-field
@@ -401,6 +415,7 @@
       arrayImages: [],
       editedIndex: -1,
       editedItem: {
+        video: '',
         NameImages: [],
         File: [],
         name: '',
@@ -420,6 +435,7 @@
         seen: false
       },
       defaultItem: {
+        video: '',
         seen: false,
         NameImages: [],
         File: [],
@@ -512,10 +528,18 @@
         try {
           await this.$store.dispatch('editPRODUCT', editProduct)
         } catch (e) {
+          Swal.close()
+          Swal.fire({
+            position: 'top-end',
+            type: 'error',
+            title: 'Ошибка при сохранении!',
+            showConfirmButton: false,
+            timer: 1500
+          })
           console.log('Ошибка редактирования')
         }
       },
-      async addLocation(addProduct, seen, arrayImages, File, article, available, category, name, price, description) {
+      async addLocation(addProduct, seen, arrayImages, File, article, available, category, name, price, description, video) {
 
         Swal.fire({
           title: "Идет загрузка...",
@@ -526,6 +550,7 @@
 
         const createdAt = new Date()
         seen = false
+        video = addProduct.video
         File = addProduct.File
         article = addProduct.article
         available = addProduct.available
@@ -573,6 +598,7 @@
         let docRef = await this.$fireStore.collection('products').add({
           NameImages: NameImages,
           seen,
+          video,
           article,
           available,
           createdAt,
@@ -597,7 +623,7 @@
 
         Swal.fire({
           position: 'top-end',
-          icon: 'success',
+          type: 'success',
           title: 'Ваша работа была сохранена',
           showConfirmButton: false,
           timer: 2000

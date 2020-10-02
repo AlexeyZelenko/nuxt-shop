@@ -69,13 +69,16 @@ export const actions = {
     Swal.fire({
       title: "Идет загрузка...",
       text: "",
-      imageUrl: "@/assets/images/352.gif",
+      // imageUrl: "@/assets/images/352.gif",
       showConfirmButton: false
-    });
+    })
+
+    console.log(editProduct)
 
     const File = editProduct.File
     const promises = []
     if (File) {
+      console.log('3',File)
       for (let i = 0; i < File.length; i++) {
 
         // Создайте метаданные файла
@@ -86,23 +89,29 @@ export const actions = {
 
 
         const uploadTask = await this.$fireStorage.ref().child('assets/images/' + nameTime + '.jpg').put(File[i], metadata);
-
+        console.log('uploadTask', uploadTask)
         promises.push(
           uploadTask
             .then(snapshot =>
               snapshot.ref.getDownloadURL()
+
             )
         )
       }
     }
+    console.log(promises)
     const URLs = await Promise.all(promises)
+    console.log('URLs', URLs)
     const ArrayOld = await editProduct.arrayImages
     const ArrayFile = [...URLs, ...ArrayOld]
     const id = await editProduct.id
 
+    console.log('id1',id)
     try {
-      await this.$fireStore.doc('products/' + `${id}`)
+      console.log('id2',id)
+      await this.$fireStore.doc('products/' + id)
         .update({
+          video: editProduct.video,
           name: editProduct.name,
           id: editProduct.id,
           seen: editProduct.seen,
@@ -121,13 +130,22 @@ export const actions = {
 
           Swal.fire({
             position: 'top-end',
-            icon: 'success',
+            type: 'success',
             title: 'Ваша работа была сохранена',
             showConfirmButton: false,
             timer: 1500
           })
         })
-    } catch (err) {
+    }
+    catch (err) {
+      Swal.close()
+      Swal.fire({
+        position: 'top-end',
+        type: 'error',
+        title: 'Ошибка при сохранении!',
+        showConfirmButton: false,
+        timer: 1500
+      })
       console.log(err)
     }
   },

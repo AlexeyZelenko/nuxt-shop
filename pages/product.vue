@@ -1,10 +1,20 @@
 <template>
   <div class="z-product-information">
+
+    <h2
+      style="margin: 10px 0; text-align: center">{{product.name}}</h2>
+
     <v-carousel
+      v-if="product.arrayImages"
       :carousel_data="product.arrayImages"
     />
 
-    <p>Цена: {{product.price}} грн</p>
+    <div class="video"
+      v-if="product.video"
+      v-html="product.video"
+    ></div>
+
+    <p v-if="product.price">Цена: {{product.price}} грн</p>
     <p>Описание:</p>
     <p v-html="product.description"></p>
 
@@ -63,9 +73,16 @@
     box-shadow: 0 0 8px 0 #e0e0e0;
     padding: $padding*2;
     margin-bottom: $margin*2;
+    text-align: center;
 
     &_image {
       width: 300px;
+    }
+
+    iframe {
+      max-width: 100%;
+      max-height: 400px;
+      margin: 0 auto;
     }
   }
 </style>
