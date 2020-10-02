@@ -305,6 +305,7 @@ export const actions = {
       .then(() => {
         const userEntrance = !!this.$fireAuthObj().currentUser
         commit('USER_ENTRANCE', userEntrance)
+        commit('ADMIN_ENTRANCE', userEntrance)
       })
   },
   async list_Users({commit}) {

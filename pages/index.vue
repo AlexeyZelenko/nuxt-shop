@@ -2,75 +2,7 @@
   <section class="v-catalog">
     <div>
       <div>
-<!--		ВХОД ЧЕРЕЗ ГУГЛ АККАУНТ-->
-        <template>
-          <div
-            class="text-center"
-            style="margin: 10px"
-          >
-            <div
-              v-if="GET_ADMIN_ENTRANCE"
-              class="v-catalog__link_to_cart"
-              style="justify-content: center;"
-            >
-              <v-card
-                flat
-              >
-                <v-btn
-                  @click="adminPlusLogin"
-                  class="ma-2"
-                  fab
-                  outlined
-                  small
-                  style="color: #3e9538">
-                  <v-icon>mdi-format-list-bulleted-square</v-icon>
-                </v-btn>
-                <v-btn
-                  :to="{name: 'cabinetUser'}"
-                  class="my-2"
-                  outlined
-                  style="background-color: #3e9538; color: white; cursor: pointer"
-                  tile
-                >
-                  <v-icon left>mdi-account-circle</v-icon>
-                  Кабинет
-                </v-btn>
-              </v-card>
-            </div>
-            <v-btn
-              @click="signInWithGoogle"
-              rounded
-              style="background-color: darkgreen; color: white"
-              v-if="!userEntrance"
-            >
-              Войти через Google
-            </v-btn>
-            <v-btn
-              @click="logout"
-              v-if="userEntrance"
-            >
-              Выйти
-            </v-btn>
-            <!--Отображение пользователя-->
-            <div
-              v-if="userEntrance">
-              <slot>
-                <img
-                  :src="(getProfilePicUrl)"
-                  alt=""
-                  id="user-pic"
-                >
-              </slot>
-            </div>
-            <div
-              id="user-name"
-              v-if="userEntrance"
-            >{{getUserName}}
-            </div>
-          </div>
-
-        </template>
-<!--        Категории-->
+        <!--        Категории-->
         <v-row class="Change_categories">
           <v-select
             :options="categories"
@@ -79,13 +11,13 @@
             style="z-index: 3"
           />
         </v-row>
-<!--Отображение каталога-->
+        <!--Отображение каталога-->
         <div class="v-catalog__list">
           <vCatalogItem
-            v-for="product in filteredProducts"
             :key="product.article"
             :product_data="product"
             @productClick="productClick"
+            v-for="product in filteredProducts"
           />
         </div>
       </div>
@@ -94,15 +26,14 @@
 </template>
 
 <script>
-  import vCatalogItem from '~/components/vCatalogItem.vue'
   import vSelect from '~/components/vSelect.vue'
   import {mapActions, mapGetters} from 'vuex'
 
   export default {
-    asyncData () {
+    asyncData() {
       return new Promise((resolve) => {
         setTimeout(function () {
-          resolve({ name: 'world' })
+          resolve({name: 'world'})
         }, 1000)
       })
     },
@@ -128,33 +59,15 @@
         ],
         selected: 'Категории',
         sortedProducts: [],
-    //     minPrice: 0,
-    //     maxPrice: 1000,
+        //     minPrice: 0,
+        //     maxPrice: 1000,
       }
     },
     methods: {
       ...mapActions([
         'readFromFirestore'
-    //     'userEntrance',
+        //     'userEntrance',
       ]),
-      async signInWithGoogle() {
-        try {
-          await this.$store.dispatch('signInWithGoogle')
-        } catch (e) {
-          console.log('Ошибка входа Google')
-        }
-      },
-      adminPlusLogin() {
-        console.log(this.GET_ADMIN_ENTRANCE)
-        if (this.GET_ADMIN_ENTRANCE) {
-          this.$router.push('admin')
-        } else {
-          this.$router.push('index')
-        }
-      },
-      async logout() {
-        await this.$store.dispatch('logout')
-      },
       productClick(article) {
         this.$router.push({name: 'product', query: {'product': article}})
       },
@@ -174,17 +87,7 @@
     computed: {
       ...mapGetters([
         'PRODUCTS',
-        'GET_ADMIN_ENTRANCE'
       ]),
-      userEntrance() {
-        return this.$store.state.userEntrance
-      },
-      getUserName() {
-        return this.$fireAuthObj().currentUser.displayName;
-      },
-      getProfilePicUrl() {
-        return this.$fireAuthObj().currentUser.photoURL || '@/assets/images/profile_placeholder.png';
-      },
       filteredProducts() {
         if (this.sortedProducts.length) {
           return this.sortedProducts
@@ -198,24 +101,6 @@
 </script>
 
 <style lang="scss">
-
-  #user-pic {
-    top: -3px;
-    position: relative;
-    display: inline-block;
-    background-repeat: no-repeat;
-    width: 40px;
-    height: 40px;
-    background-size: 40px;
-    border-radius: 20px;
-  }
-
-  #user-name {
-    font-size: 15px;
-    line-height: normal;
-    padding-right: 5px;
-    padding-left: 5px;
-  }
 
   .Change_categories {
     padding-bottom: 10px;
@@ -231,16 +116,6 @@
       justify-content: space-evenly;
     }
 
-    &__link_to_cart {
-      top: 5px;
-      right: 3px;
-    }
-
-    &__link_to_admin {
-      top: 5px;
-      left: 3px;
-      border: thick #0a4506;
-    }
   }
 </style>
 

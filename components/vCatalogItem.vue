@@ -94,7 +94,6 @@
     }
 
     &_top {
-      background: #999;
       text-align: center;
       margin-bottom: $margin*2;
       padding: 0;
