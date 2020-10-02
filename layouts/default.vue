@@ -176,7 +176,7 @@
     hight: 160px;
     width:100%;
     position: fixed;
-    z-index: 9999;
+    z-index: 99;
   }
 
   #content {
@@ -187,7 +187,7 @@
   #footer {
     margin-top: 100px;
     position: fixed;
-    z-index: 9999;
+    z-index: 99;
     hight: 100px;
   }
 

@@ -507,7 +507,12 @@
       },
       async addLocation(addProduct, seen, arrayImages, File, article, available, category, name, price, description) {
 
-        this.loading = true
+        Swal.fire({
+          title: "Идет загрузка...",
+          text: "",
+          imageUrl: "@/assets/images/352.gif",
+          showConfirmButton: false
+        });
 
         const createdAt = new Date()
         seen = false
@@ -578,7 +583,7 @@
           return err;
         }
 
-        this.loading = false
+        Swal.close()
 
         Swal.fire({
           position: 'top-end',

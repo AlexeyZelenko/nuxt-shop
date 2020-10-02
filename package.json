@@ -22,6 +22,7 @@
     "nuxt-sweetalert2": "^1.0.0",
     "tiptap-vuetify": "^2.24.0",
     "vue-focus": "^2.0.0-rc2",
+    "vue-sweetalert2": "^3.0.8",
     "vuetify": "^2.3.10",
     "vuexfire": "^3.2.4"
   },

@@ -65,7 +65,14 @@ export const actions = {
     await bindFirestoreRef('Products', ref, { wait: true })
   }),
   async editPRODUCT({}, editProduct) {
-    this.isLoading = true
+
+    Swal.fire({
+      title: "Идет загрузка...",
+      text: "",
+      imageUrl: "@/assets/images/352.gif",
+      showConfirmButton: false
+    });
+
     const File = editProduct.File
     const promises = []
     if (File) {
@@ -109,7 +116,9 @@ export const actions = {
           telephone_contact: editProduct.telephone_contact,
           })
         .then(() => {
-          this.isLoading = false
+
+          Swal.close()
+
           Swal.fire({
             position: 'top-end',
             icon: 'success',
@@ -135,6 +144,13 @@ export const actions = {
       .then((result) => {
         if (result.value) {
 
+          Swal.fire({
+            title: "Идет загрузка...",
+            text: "",
+            imageUrl: "@/assets/images/352.gif",
+            showConfirmButton: false
+          });
+
           const File = item.arrayImages
 
           if (File) {
@@ -152,6 +168,9 @@ export const actions = {
           const id = item.id
           this.$fireStore.collection("products").doc(`${id}`).delete().then(function() {
             console.log("Документ успешно удален!");
+
+            Swal.close()
+
           }).catch(function(error) {
             console.error("Ошибка при удалении документа: ", error);
           });
@@ -282,9 +301,24 @@ export const actions = {
         // await dispatch('saveMessagingDeviceToken')
 
         console.log('Администратор вошел!')
+
+        Swal.fire({
+          position: 'top-end',
+          type: 'success',
+          title: 'Администратор вошел!',
+          showConfirmButton: false,
+          timer: 1500
+        })
         // router.push('/admin')
       }else{
         console.log('Пользователь вошел!')
+        Swal.fire({
+          position: 'top-end',
+          type: 'success',
+          title: 'Вы успешно вошли!',
+          showConfirmButton: false,
+          timer: 1500
+        })
       }
     }
     catch (e) {
@@ -304,6 +338,15 @@ export const actions = {
     await this.$fireAuthObj().signOut()
       .then(() => {
         const userEntrance = !!this.$fireAuthObj().currentUser
+
+        Swal.fire({
+          position: 'top-end',
+          type: 'success',
+          title: 'Вы успешно вышли!',
+          showConfirmButton: false,
+          timer: 1500
+        })
+
         commit('USER_ENTRANCE', userEntrance)
         commit('ADMIN_ENTRANCE', userEntrance)
       })

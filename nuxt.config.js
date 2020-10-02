@@ -41,7 +41,13 @@ module.exports = {
     }
   },
   buildModules: [
-    'nuxt-sweetalert2',
+    [
+      'vue-sweetalert2/nuxt',
+      {
+        confirmButtonColor: '#41b882',
+        cancelButtonColor: '#ff7674'
+      }
+    ],
     '@nuxtjs/vuetify',
     [
       '@nuxtjs/firebase',
