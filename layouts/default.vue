@@ -38,13 +38,13 @@
                 @click="signInWithGoogle"
                 rounded
                 style="background-color: darkgreen; color: white"
-                v-if="!userEntrance"
+                v-if="!User_Entrance"
               >
                 Войти
               </v-btn>
               <v-btn
                 @click="logout"
-                v-if="userEntrance"
+                v-if="User_Entrance"
                 rounded
                 style="background-color: darkgreen; color: white"
               >
@@ -54,7 +54,7 @@
             <!--Отображение пользователя-->
             <div style="margin: 5px">
               <div
-                v-if="userEntrance">
+                v-if="User_Entrance">
                 <slot>
                   <img
                     :src="(getProfilePicUrl)"
@@ -65,7 +65,7 @@
               </div>
               <div
                 id="user-name"
-                v-if="userEntrance"
+                v-if="User_Entrance"
               >{{getUserName}}
               </div>
             </div>
@@ -150,11 +150,9 @@
     },
     computed: {
       ...mapGetters([
-        'GET_ADMIN_ENTRANCE'
+        'GET_ADMIN_ENTRANCE',
+        'User_Entrance',
       ]),
-      userEntrance() {
-        return this.$store.state.userEntrance
-      },
       getUserName() {
         return this.$fireAuthObj().currentUser.displayName;
       },

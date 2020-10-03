@@ -65,8 +65,9 @@
     },
     methods: {
       ...mapActions([
-        'readFromFirestore'
-        //     'userEntrance',
+        'readFromFirestore',
+        'userEntrance',
+        'USER_ID_ACTIONS'
       ]),
       productClick(article) {
         this.$router.push({name: 'product', query: {'product': article}})
@@ -82,11 +83,15 @@
       },
     },
     mounted() {
+      this.USER_ID_ACTIONS()
+      this.userEntrance()
       this.readFromFirestore()
     },
     computed: {
       ...mapGetters([
         'PRODUCTS',
+        'User_Entrance',
+        'USER_ID',
       ]),
       filteredProducts() {
         if (this.sortedProducts.length) {
