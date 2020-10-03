@@ -71,9 +71,6 @@
           >
         </template>
 
-        <template v-slot:item.price="{ item }">
-          <v-chip :color="getColor(item.price)" dark>{{ item.price }}</v-chip>
-        </template>
 
         <template v-slot:item.description="{ item }">
           <span v-html="item.description"/>
@@ -350,7 +347,8 @@
     components: {
       TiptapVuetify
     },
-    data: () => ({
+    data() {
+      return {
       // declare extensions you want to use
       extensions: [
         History,
@@ -409,7 +407,6 @@
       ],
       search: '',
       delete: '',
-      products: [],
       dialog: false,
       drawer: null,
       arrayImages: [],
@@ -483,9 +480,12 @@
       ],
       locations: [],
       isLoading: false
-    }),
+      }
+    },
     methods: {
-      ...mapActions(['readFromFirestore']),
+      ...mapActions([
+        'readFromFirestore'
+      ]),
       deleteFoto(editedItem, item) {
         const array = editedItem.arrayImages
         const arrayName = editedItem.NameImages
@@ -498,12 +498,9 @@
         editedItem.arrayImages = array
         editedItem.NameImages = arrayName
       },
-      initialize() {
-        this.products = this.PRODUCTS
-      },
       save() {
         if (this.editedIndex > -1) {
-          const editProduct = Object.assign(this.products[this.editedIndex], this.editedItem)
+          const editProduct = Object.assign(this.PRODUCTS[this.editedIndex], this.editedItem)
           this.editThisProduct(editProduct)
         } else {
           const addProduct = this.editedItem
@@ -520,13 +517,15 @@
         })
       },
       editItem(item) {
-        this.editedIndex = this.products.indexOf(item)
+        this.editedIndex = this.PRODUCTS.indexOf(item)
+        console.log('this.editedIndex', this.editedIndex)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
       async editThisProduct(editProduct) {
         try {
           await this.$store.dispatch('editPRODUCT', editProduct)
+          this.readFromFirestore()
         } catch (e) {
           Swal.close()
           Swal.fire({
@@ -669,9 +668,9 @@
     props: {
       source: String,
     },
-    created() {
-      this.initialize()
-    }
+    mounted() {
+      this.readFromFirestore()
+    },
   }
 </script>
 

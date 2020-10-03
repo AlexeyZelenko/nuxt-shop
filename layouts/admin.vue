@@ -63,11 +63,31 @@
 
 <script>
 
+  import {mapActions} from "vuex";
+
   export default {
     data: () => ({
       drawer: false,
       group: null,
     }),
+    methods: {
+      ...mapActions([
+        'readFromFirestore'
+        //     'userEntrance',
+      ]),
+      productClick(article) {
+        this.$router.push({name: 'product', query: {'product': article}})
+      },
+      sortByCategories(category) {
+        this.sortedProducts = [];
+        this.PRODUCTS.map((item) => {
+          if (item.category === category.name) {
+            this.sortedProducts.push(item);
+          }
+        })
+        this.selected = category.name
+      },
+    },
     watch: {
       group () {
         this.drawer = false

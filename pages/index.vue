@@ -92,7 +92,6 @@
         if (this.sortedProducts.length) {
           return this.sortedProducts
         } else {
-          console.log(this.PRODUCTS)
           return this.PRODUCTS
         }
       }

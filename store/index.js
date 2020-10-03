@@ -59,28 +59,25 @@ export const mutations = {
 }
 
 export const actions = {
+  AlertMessageLoading() {
+    Swal.fire({
+      title: 'Идет загрузка...',
+      showConfirmButton: false,
+    })
+  },
   bindCountDocument: firestoreAction(async function ({ bindFirestoreRef }) {
     const ref = this.$fireStore
       .collection('products')
     await bindFirestoreRef('Products', ref, { wait: true })
   }),
-  async editPRODUCT({}, editProduct) {
+  async editPRODUCT({dispatch}, editProduct) {
 
-    Swal.fire({
-      title: "Идет загрузка...",
-      text: "",
-      // imageUrl: "@/assets/images/352.gif",
-      showConfirmButton: false
-    })
-
-    console.log(editProduct)
-
+    await dispatch('AlertMessageLoading')
     const File = editProduct.File
     const promises = []
     const promisesName = []
 
     if (File) {
-      console.log('3',File)
       for (let i = 0; i < File.length; i++) {
 
         // Создайте метаданные файла
@@ -94,46 +91,33 @@ export const actions = {
         const storageRef  = await this.$fireStorage.ref().child('assets/images/' + nameTime)
         try {
           const snapshot = await storageRef.put(File[i], metadata)
-          alert('File uploaded.')
         } catch (e) {
-          alert(e.message)
+          console.log(e.message)
         }
-        console.log('storageRef', storageRef)
 
         try {
           const url = await storageRef.getDownloadURL()
-          alert(`The file can be found here: ${url}`)
           promises.push(
             storageRef.getDownloadURL()
-              // .then(snapshot =>
-              //   snapshot.ref.getDownloadURL()
-              // )
           )
           promisesName.push(
             nameTime
           )
-          alert('!!!')
         } catch (e) {
-          alert(e.message)
+          console.log(e.message)
         }
 
       }
     }
 
     const NameImages = await Promise.all(promisesName)
-    console.log('NameImages',NameImages)
-    console.log('promises',promises)
     const URLs = await Promise.all(promises)
     const ArrayOld = await editProduct.arrayImages
     const NameImagesOld = await editProduct.NameImages
     const ArrayFile = [...URLs, ...ArrayOld]
     const ArrayNameImages = [...NameImages, ...NameImagesOld]
-    const id = await editProduct.id
-
-    console.log('id1',id)
     try {
-      console.log('id2',id)
-      await this.$fireStore.doc('products/' + id)
+      await this.$fireStore.doc('products/' + editProduct.id)
         .update({
           NameImages: ArrayNameImages,
           video: editProduct.video,
