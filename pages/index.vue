@@ -6,6 +6,7 @@
         <v-row class="Change_categories">
           <v-select
             :options="categories"
+            :key="name"
             :selected="selected"
             @select="sortByCategories"
             style="z-index: 3"
@@ -14,7 +15,7 @@
         <!--Отображение каталога-->
         <div class="v-catalog__list">
           <vCatalogItem
-            :key="product.article"
+            :key="product.id"
             :product_data="product"
             @productClick="productClick"
             v-for="product in filteredProducts"
@@ -67,7 +68,7 @@
       ...mapActions([
         'readFromFirestore',
         'userEntrance',
-        'USER_ID_ACTIONS'
+        'USER_ID_ACTIONS',
       ]),
       productClick(article) {
         this.$router.push({name: 'product', query: {'product': article}})

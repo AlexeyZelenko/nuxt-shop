@@ -18,7 +18,7 @@
     <p>Описание:</p>
     <p v-html="product.description"></p>
 
-    <p>Артикль товара: {{product.article}}</p>
+<!--    <p>Артикль товара: {{product.article}}</p>-->
 
     <p>Контактное лицо: {{product.name_contact}}</p>
     <p>Контакты: {{product.telephone_contact}}</p>
@@ -55,7 +55,6 @@
       ]),
       product() {
         let result = {}
-        console.log('this.PRODUCTS', this.PRODUCTS)
         this.PRODUCTS.map((item) =>  {
           if (item.article === +this.$route.query.product) {
             result = item;

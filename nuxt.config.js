@@ -1,4 +1,12 @@
 module.exports = {
+  auth: {
+    persistence: 'local', // default
+    initialize: {
+      onAuthStateChangedMutation: 'ON_AUTH_STATE_CHANGED_MUTATION',
+      onAuthStateChangedAction: 'onAuthStateChangedAction'
+    },
+    ssr: false // default
+  },
   /*
    ** Rendering mode
    ** Doc: https://nuxtjs.org/api/configuration-mode

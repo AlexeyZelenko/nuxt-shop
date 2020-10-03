@@ -16,6 +16,8 @@ export const state = () => ({
   ordersUSERS: [],
   adminEntrance: false,
   InfoUser: [],
+  user: null,
+  authUser: null
 })
 
 export const mutations = {
@@ -274,6 +276,9 @@ export const actions = {
       await this.$fireAuthObj().signInWithPopup(provider)
       const uid = await dispatch('getUid')
 
+      await this.$fireAuth.setPersistence(
+        this.$fireAuthObj.Auth.Persistence.LOCAL
+      )
 
       // Получить информацию из Database текущего пользователя
       const info = (await this.$fireDbObj().ref(`/users/${uid}/info`).once('value')).val()
