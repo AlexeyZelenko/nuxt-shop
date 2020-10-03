@@ -56,7 +56,7 @@
       product() {
         let result = {}
         this.PRODUCTS.map((item) =>  {
-          if (item.article === +this.$route.query.product) {
+          if (item.id === this.$route.query.product) {
             result = item;
           }
         })

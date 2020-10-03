@@ -15,10 +15,10 @@
         <!--Отображение каталога-->
         <div class="v-catalog__list">
           <vCatalogItem
-            :key="product.id"
             :product_data="product"
             @productClick="productClick"
             v-for="product in filteredProducts"
+            :key="product.id"
           />
         </div>
       </div>

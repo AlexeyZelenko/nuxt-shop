@@ -76,7 +76,7 @@
         //     'userEntrance',
       ]),
       productClick(article) {
-        this.$router.push({name: 'product', query: {'product': article}})
+        this.$router.push({name: 'product', query: {'product': id}})
       },
       sortByCategories(category) {
         this.sortedProducts = [];

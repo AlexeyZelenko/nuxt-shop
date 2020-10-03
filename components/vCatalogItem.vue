@@ -56,11 +56,8 @@
     },
     methods: {
       productClick() {
-        this.$emit('productClick', this.product_data.article)
+        this.$emit('productClick', this.product_data.id)
       },
-      addToCart() {
-        this.$emit('addToCart', this.product_data);
-      }
     },
   }
 </script>
