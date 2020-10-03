@@ -77,6 +77,8 @@ export const actions = {
 
     const File = editProduct.File
     const promises = []
+    const promisesName = []
+
     if (File) {
       console.log('3',File)
       for (let i = 0; i < File.length; i++) {
@@ -88,22 +90,44 @@ export const actions = {
         let nameTime = +new Date()
 
 
-        const uploadTask = await this.$fireStorage.ref().child('assets/images/' + nameTime + '.jpg').put(File[i], metadata);
-        console.log('uploadTask', uploadTask)
-        promises.push(
-          uploadTask
-            .then(snapshot =>
-              snapshot.ref.getDownloadURL()
+        // Загрузить файл и метаданные в объект 'assets/images/***.jpg'
+        const storageRef  = await this.$fireStorage.ref().child('assets/images/' + nameTime)
+        try {
+          const snapshot = await storageRef.put(File[i], metadata)
+          alert('File uploaded.')
+        } catch (e) {
+          alert(e.message)
+        }
+        console.log('storageRef', storageRef)
 
-            )
-        )
+        try {
+          const url = await storageRef.getDownloadURL()
+          alert(`The file can be found here: ${url}`)
+          promises.push(
+            storageRef.getDownloadURL()
+              // .then(snapshot =>
+              //   snapshot.ref.getDownloadURL()
+              // )
+          )
+          promisesName.push(
+            nameTime
+          )
+          alert('!!!')
+        } catch (e) {
+          alert(e.message)
+        }
+
       }
     }
-    console.log(promises)
+
+    const NameImages = await Promise.all(promisesName)
+    console.log('NameImages',NameImages)
+    console.log('promises',promises)
     const URLs = await Promise.all(promises)
-    console.log('URLs', URLs)
     const ArrayOld = await editProduct.arrayImages
+    const NameImagesOld = await editProduct.NameImages
     const ArrayFile = [...URLs, ...ArrayOld]
+    const ArrayNameImages = [...NameImages, ...NameImagesOld]
     const id = await editProduct.id
 
     console.log('id1',id)
@@ -111,6 +135,7 @@ export const actions = {
       console.log('id2',id)
       await this.$fireStore.doc('products/' + id)
         .update({
+          NameImages: ArrayNameImages,
           video: editProduct.video,
           name: editProduct.name,
           id: editProduct.id,
