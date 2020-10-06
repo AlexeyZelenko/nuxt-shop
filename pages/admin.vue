@@ -383,7 +383,6 @@
       categories: [
         '',
         'Станки',
-        'Вибростанки',
         'Котлы',
         'Водонагреватели',
         'Бойлеры',
@@ -453,7 +452,6 @@
       },
       itemsCategories: [
         'Станки',
-        'Вибростанки',
         'Котлы',
         'Водонагреватели',
         'Бойлеры',
@@ -547,7 +545,7 @@
           showConfirmButton: false
         });
 
-        const createdAt = new Date()
+        const createdAt = Date.now()
         seen = false
         video = addProduct.video
         File = addProduct.File

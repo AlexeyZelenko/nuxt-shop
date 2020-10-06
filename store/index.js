@@ -326,7 +326,7 @@ export const actions = {
           return document.cartInfo
         })
       // Проверка администратора
-      if(['6XUeVk6rJKcsFvkgIRHcKhWqx523']
+      if(['6XUeVk6rJKcsFvkgIRHcKhWqx523', 'aB67CVm6SmTTAmQqL8Cj2Xpcl662']
         .some(elem => elem === `${uid}`)) {
 
         // Получение ТОКЕНА администратора

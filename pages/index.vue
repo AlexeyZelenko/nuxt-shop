@@ -46,9 +46,7 @@
     data() {
       return {
         categories: [
-          {name: 'Все', value: 'All'},
           {name: 'Станки', value: 'Machine_tools'},
-          {name: 'Вибростанки', value: 'Vibrating_tables'},
           {name: 'Котлы', value: 'Boilers'},
           {name: 'Водонагреватели', value: 'Water_heaters'},
           {name: 'Бойлеры', value: 'Boilers2'},
@@ -98,7 +96,7 @@
         if (this.sortedProducts.length) {
           return this.sortedProducts
         } else {
-          return this.PRODUCTS
+          return this.PRODUCTS.filter(item => item.category === 'Станки')
         }
       }
     },

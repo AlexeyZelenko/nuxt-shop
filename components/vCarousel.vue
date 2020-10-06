@@ -3,14 +3,16 @@
     <div class="v-carouselImage" :style="{ 'margin-left': '-' + (100 * currentSlideIndex) + '%' }">
       <v-carousel-item
         v-for="item in carousel_data"
-        :key="item.article"
+        :key="item.id"
         :item_data="item"
         :width="300"
       >
-        <!--				<p>{{item.name}}</p>-->
       </v-carousel-item>
     </div>
-    <div class="text-center" style="margin: 5px">
+    <div
+      v-if="carousel_data.length > 1"
+      class="text-center"
+      style="margin: 5px">
       <v-btn
         class="ma-2"
         tile

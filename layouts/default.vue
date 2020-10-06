@@ -5,9 +5,8 @@
       <template>
         <div id="header">
           <v-toolbar
-            dark
+            color="#ff9900"
             prominent
-            src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
           >
               <v-icon
                 style="margin: 10px"
@@ -15,9 +14,6 @@
               >
                 mdi-home
               </v-icon>
-
-
-            <v-toolbar-title>Теплосервис</v-toolbar-title>
 
             <v-spacer></v-spacer>
 
@@ -28,7 +24,7 @@
               class="ma-2"
               outlined
               small
-              style="color: white; z-index: 2">
+              style="color: white; z-index: 102">
               <v-icon>mdi-format-list-bulleted-square</v-icon>
             </v-btn>
 
@@ -37,7 +33,7 @@
               <v-btn
                 @click="signInWithGoogle"
                 rounded
-                style="background-color: darkgreen; color: white"
+                style="background-color: darkgreen; color: white; position: relative; z-index: 10000;"
                 v-if="!User_Entrance"
               >
                 Войти
@@ -46,13 +42,13 @@
                 @click="logout"
                 v-if="User_Entrance"
                 rounded
-                style="background-color: darkgreen; color: white"
+                style="background-color: darkgreen; color: white; z-index: 102"
               >
                 Выйти
               </v-btn>
             </div>
             <!--Отображение пользователя-->
-            <div style="margin: 5px">
+            <div style="margin: 5px; z-index: 102">
               <div
                 v-if="User_Entrance">
                 <slot>
@@ -69,6 +65,20 @@
               >{{getUserName}}
               </div>
             </div>
+          </v-toolbar>
+
+          <v-toolbar
+            color="#ff9900"
+            max-width="100%"
+            style="margin-top: -50px;"
+            >
+            <v-toolbar-title>
+              <img
+                style="margin-left: 10px;"
+                src="~/assets/s5_logo.png"
+                alt=""
+              >
+            </v-toolbar-title>
 
           </v-toolbar>
         </div>
