@@ -41,7 +41,7 @@
     components: {
       vCatalogItem: process.browser ? () => import('~/components/vCatalogItem.vue') : null,
       // vCatalogItem,
-      vSelect
+      vSelect,
     },
     data() {
       return {

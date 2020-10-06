@@ -18,19 +18,19 @@ module.exports = {
   /*
   ** Headers of the page
   */
-  title: 'nuxt-shop',
+  title: 'teploservis',
   head: {
-    titleTemplate: '%s | nuxt-shop',
+    titleTemplate: '%s | teploservis',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Nuxt.js project' }
+      { hid: 'description', name: 'description', content: 'teploservis68.com.ua' }
     ],
     plugins: [
       { src: '~/plugins/TiptapVuetify', mode: 'client' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/png', href: '/service.png' },
       // Iconfonts for Vuetify. You need to leave only which one you use
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons' },
       { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css' },
@@ -62,6 +62,7 @@ module.exports = {
     }
   },
   buildModules: [
+    'vue-social-sharing/nuxt',
     ['@nuxtjs/vuetify'],
       [
       'vue-sweetalert2/nuxt',

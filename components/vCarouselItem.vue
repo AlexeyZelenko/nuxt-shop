@@ -2,8 +2,7 @@
   <div class="v-carousel-item">
     <slot>
       <img
-        loading="lazy"
-        style="width: 300px"
+        style="width: 300px; margin: 0"
         :src="(item_data)" alt=""
       >
     </slot>

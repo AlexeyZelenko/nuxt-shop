@@ -81,6 +81,7 @@
             </v-toolbar-title>
 
           </v-toolbar>
+          <Share></Share>
         </div>
       </template>
   <!--    КОНТЕНТ-->
@@ -126,8 +127,12 @@
 </template>
 
 <script>
+  import Share from '~/components/ShareNetwork.vue'
   import {mapActions, mapGetters} from 'vuex'
   export default {
+    components: {
+      Share
+    },
     data: () => ({
       links: [
         { name: 'О нас', value: 'About'},
