@@ -1,8 +1,8 @@
 <template>
   <figure v-lazyload class="image__wrapper">
-<!--    <ImageSpinner-->
-<!--      class="image__spinner"-->
-<!--    />-->
+    <ImageSpinner
+      class="image__spinner"
+    />
     <img
       class="image__item"
       :data-url="source"
@@ -62,5 +62,9 @@
       opacity: 0;
       visibility: hidden;
     }
+
+
   }
+
+
 </style>

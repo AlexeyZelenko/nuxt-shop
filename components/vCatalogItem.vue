@@ -12,12 +12,11 @@
     <div
       v-if="product_data.arrayImages"
     >
-    <transition name="fade">
-      <ImageItem
-        class="v-catalog-item_image"
-        style="z-index: 7"
-        :source="product_data.arrayImages[0]"
-      />
+      <transition name="fade" >
+        <ImageItem
+          style="z-index: 7"
+          :source="product_data.arrayImages[0]"
+        />
 <!--      <img-->
 <!--        style="z-index: 7"-->
 <!--        class="v-catalog-item_image"-->
@@ -50,7 +49,6 @@
     name: "v-catalog-item",
     components: {
       ImageItem
-
     },
     data() {
       return {
@@ -100,10 +98,6 @@
     position: relative;
 
 
-    &_image {
-      width: 100px;
-      justify-content: center;
-    }
 
     &_top {
       text-align: center;
