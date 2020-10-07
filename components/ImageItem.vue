@@ -1,5 +1,8 @@
 <template>
-  <figure v-lazyload class="image__wrapper">
+  <figure
+    v-lazyload
+    class="image__wrapper"
+  >
     <ImageSpinner
       class="image__spinner"
     />
@@ -34,10 +37,12 @@
 <style scoped lang="scss">
   .image {
     &__wrapper {
+      min-width: 150px;
       display: flex;
       justify-content: center;
       align-items: center;
       border-radius: 4px;
+      margin-bottom: 30px;
 
       &.loaded {
         .image {

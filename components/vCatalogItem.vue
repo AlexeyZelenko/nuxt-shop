@@ -1,46 +1,81 @@
-<template>
+<!--<template>-->
+<!--  <div-->
+<!--    class="v-catalog-item"-->
+<!--    @click="productClick"-->
+<!--  >-->
+<!--    <div class="v-catalog-item_top">-->
+<!--      <h4>-->
+<!--        {{product_data.name}}-->
+<!--      </h4>-->
+<!--    </div>-->
+
+<!--    <div-->
+<!--      v-if="product_data.arrayImages"-->
+<!--    >-->
+<!--      <transition name="fade" >-->
+<!--        <ImageItem-->
+<!--          :source="product_data.arrayImages[0]"-->
+<!--        />-->
+<!--    </transition>-->
+
+<!--    </div>-->
+<!--    <p-->
+<!--      v-else-->
+<!--      class="emptyImage"-->
+<!--    >-->
+<!--			<span-->
+<!--        v-html="product_data.description"-->
+<!--      />-->
+<!--    </p>-->
+<!--    <div class="v-catalog-item_bottom">-->
+<!--      <v-btn-->
+<!--        depressed-->
+<!--        color="primary"-->
+<!--      >-->
+<!--        Инфо-->
+<!--      </v-btn>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</template>-->
+
+
+<template >
   <div
-    class="v-catalog-item"
     @click="productClick"
+    class="v-catalog-item"
   >
-    <div class="v-catalog-item_top">
-      <h4>
-        {{product_data.name}}
-      </h4>
-    </div>
+    <span
+      v-html="product_data.name"
+      style="min-height: 30%; overflow-wrap: break-word; margin-bottom: 10px"
+    ></span>
 
     <div
+      style="height: 30%; margin: 10px 0 50px"
       v-if="product_data.arrayImages"
     >
-      <transition name="fade" >
-        <ImageItem
-          style="z-index: 7"
-          :source="product_data.arrayImages[0]"
-        />
-<!--      <img-->
-<!--        style="z-index: 7"-->
-<!--        class="v-catalog-item_image"-->
-<!--        :src="product_data.arrayImages[0]"-->
-<!--        alt="">-->
-    </transition>
+      <ImageItem
+        :source="product_data.arrayImages[0]"
+      />
 
     </div>
-    <p
-      v-else
-      class="emptyImage"
+    <!--    <p-->
+    <!--      v-else-->
+    <!--      class="emptyImage"-->
+    <!--    >-->
+
+
+
+    <v-btn
+      style="margin: 5px 0 5px"
+      absolute
+      bottom
+      depressed
+      color="primary"
     >
-			<span
-        v-html="product_data.description"
-      />
-    </p>
-    <div class="v-catalog-item_bottom">
-      <button
-        class="v-catalog-item_show-info"
-      >
-        Инфо
-      </button>
-    </div>
+      Инфо
+    </v-btn>
   </div>
+
 </template>
 
 <script>
@@ -76,10 +111,6 @@
 </script>
 
 <style lang="scss">
-  *{
-    margin: 0;
-    padding: 0;
-  }
   h4 {
     padding: 5px;
   }
@@ -89,12 +120,12 @@
   }
 
   .v-catalog-item {
+    vertical-align: middle;
     flex-basis: 25%;
     box-shadow: 0 0 8px 0 #e0e0e0;
     padding: $padding*2;
     margin-bottom: $margin*2;
     z-index: 1;
-    text-align: center;
     position: relative;
 
 

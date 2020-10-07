@@ -2,7 +2,8 @@
   <div class="z-product-information">
 
     <h2
-      style="margin: 10px 0; text-align: center">{{product.name}}</h2>
+      style="margin: 10px 0; text-align: center">{{product.name}}
+    </h2>
 
     <template >
       <v-carousel hide-delimiters style="margin: 10px 0 10px">
@@ -15,11 +16,6 @@
       </v-carousel>
     </template>
 
-<!--    <v-carousel-->
-<!--      v-if="product.arrayImages"-->
-<!--      :carousel_data="product.arrayImages"-->
-<!--    />-->
-
     <div class="video"
       v-if="product.video"
       v-html="product.video"
@@ -29,28 +25,23 @@
     <p>Описание:</p>
     <p v-html="product.description"></p>
 
-<!--    <p>Артикль товара: {{product.article}}</p>-->
+    <p>Артикль товара: {{product.article}}</p>
 
     <p>Контактное лицо: {{product.name_contact}}</p>
     <p>Контакты: {{product.telephone_contact}}</p>
-
-
 
   </div>
 </template>
 
 <script>
   import {mapGetters, mapActions} from 'vuex'
-  // import vCarousel from '~/components/vCarousel.vue'
 
   export default {
     layout: 'back_catalog',
     name: "zProductInformation",
     data: () => ({
-      // dialog: false,
     }),
     components: {
-      // vCarousel,
     },
     methods: {
       ...mapActions([
@@ -84,10 +75,6 @@
     padding: $padding*2;
     margin-bottom: $margin*2;
     text-align: center;
-
-    &_image {
-      width: 300px;
-    }
 
     iframe {
       max-width: 100%;
