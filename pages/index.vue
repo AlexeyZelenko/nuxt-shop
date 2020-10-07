@@ -45,6 +45,7 @@
       // vCatalogItem,
       vSelect,
     },
+
     data() {
       return {
         isActive: false,
@@ -61,8 +62,6 @@
         ],
         selected: 'Категории',
         sortedProducts: [],
-        //     minPrice: 0,
-        //     maxPrice: 1000,
       }
     },
     methods: {

@@ -48,7 +48,7 @@
         class="elevation-1"
         disable-sort
         hide-default-footer
-        item-key="article"
+        item-key="id"
       >
 <!--        <template v-slot:item.name="{ item }">-->
 <!--          <v-chip-->
@@ -63,12 +63,12 @@
           style="height:190px;"
           v-slot:item.arrayImages="{ item }">
 
-          <img
-            :src="(item.arrayImages[0])"
-            alt=""
-            style="max-width: 100px; max-height: 100px; margin: 5px"
+          <ImageItem
             v-if="item.arrayImages"
-          >
+            class="v-catalog-item_image"
+            style="max-width: 100px; max-height: 100px; margin: 5px"
+            :source="item.arrayImages[0]"
+          />
         </template>
 
 
@@ -242,8 +242,8 @@
                       reverse-transition="fade-transition"
                       style="max-width: 400px; max-height: 600px"
                       transition="fade-transition"
-                      v-for="(item, article) in editedItem.arrayImages"
-                      :key="article"
+                      v-for="(item, id) in editedItem.arrayImages"
+                      :key="id"
                     >
                       <v-btn
                         @click="deleteFoto(editedItem, item)"
@@ -313,6 +313,7 @@
 
 <script>
   import {mapActions, mapGetters} from 'vuex'
+  import ImageItem from '~/components/ImageItem.vue'
   import Swal from 'sweetalert2'
   // import the component and the necessary extensions
   import {
@@ -345,7 +346,8 @@
     layout: 'admin',
     name: "zAdmin",
     components: {
-      TiptapVuetify
+      // TiptapVuetify,
+      ImageItem
     },
     data() {
       return {

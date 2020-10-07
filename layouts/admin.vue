@@ -49,18 +49,18 @@
         >
 
           <v-list-item
-            :to="{name: 'statistics'}"
+            nuxt-link :to="{name: 'statistics'}"
           >
             <v-list-item-title>Статистика</v-list-item-title>
           </v-list-item>
 
           <v-list-item
-            :to="{name: 'admin'}"
+            nuxt-link :to="{name: 'admin'}"
           >
             <v-list-item-title>Объявления</v-list-item-title>
           </v-list-item>
           <v-list-item
-            :to="{name: 'admin'}"
+            nuxt-link :to="{name: 'admin'}"
           >
             <v-list-item-title>Объявления</v-list-item-title>
           </v-list-item>

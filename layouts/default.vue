@@ -153,7 +153,6 @@
         }
       },
       adminPlusLogin() {
-        console.log(this.GET_ADMIN_ENTRANCE)
         if (this.GET_ADMIN_ENTRANCE) {
           this.$router.push('admin')
         } else {

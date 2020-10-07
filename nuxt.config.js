@@ -27,7 +27,8 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'teploservis68.com.ua' }
     ],
     plugins: [
-      { src: '~/plugins/TiptapVuetify', mode: 'client' }
+      { src: '~/plugins/TiptapVuetify', mode: 'client' },
+      { src: '~~/plugins/vue-lazy-load.js' }
     ],
     link: [
       { rel: 'image', type: 'image/png', href: '/service.png' },
@@ -60,6 +61,11 @@ module.exports = {
         })
       }
     }
+  },
+  splitChunks: {
+    layouts: true,
+    pages: true,
+    commons: true
   },
   buildModules: [
     'vue-social-sharing/nuxt',
