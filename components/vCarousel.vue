@@ -1,36 +1,40 @@
 <template>
-  <div class="wrapper">
-    <div class="v-carouselImage" :style="{ 'margin-left': '-' + (100 * currentSlideIndex) + '%' }">
-      <v-carousel-item
-        v-for="item in carousel_data"
-        :key="item.id"
-        :item_data="item"
-        :width="300"
-      >
-      </v-carousel-item>
+  <v-app>
+    <div class="wrapper">
+      <div class="v-carouselImage" :style="{ 'margin-left': '-' + (100 * currentSlideIndex) + '%' }">
+        <v-carousel-item
+          v-for="item in carousel_data"
+          :key="item.id"
+          :item_data="item"
+          :width="300"
+          reverse-transition="fade-transition"
+          transition="fade-transition"
+        >
+        </v-carousel-item>
+      </div>
+      <div
+        v-if="carousel_data.length > 1"
+        class="text-center">
+        <v-btn
+          class="ma-2"
+          tile
+          outlined
+          style="color: green"
+          @click="prevSlide">
+          <v-icon left>mdi-chevron-left</v-icon> Назад
+        </v-btn>
+        <v-btn
+          class="ma-2"
+          tile
+          outlined
+          style="color: green"
+          @click="nextSlide">
+          <v-icon left>mdi-chevron-right</v-icon> Вперед
+        </v-btn>
+      </div>
     </div>
-    <div
-      v-if="carousel_data.length > 1"
-      class="text-center"
-      style="margin: 5px">
-      <v-btn
-        class="ma-2"
-        tile
-        outlined
-        style="color: green"
-        @click="prevSlide">
-        <v-icon left>mdi-chevron-left</v-icon> Назад
-      </v-btn>
-      <v-btn
-        class="ma-2"
-        tile
-        outlined
-        style="color: green"
-        @click="nextSlide">
-        <v-icon left>mdi-chevron-right</v-icon> Вперед
-      </v-btn>
-    </div>
-  </div>
+  </v-app>
+
 </template>
 
 <script>

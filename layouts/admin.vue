@@ -41,14 +41,28 @@
       <v-list
         nav
         dense
+        style="background-color: #7f828b"
       >
         <v-list-item-group
           v-model="group"
           active-class="deep-purple--text text--accent-4"
         >
 
-          <v-list-item>
-            <v-list-item-title>Buzz</v-list-item-title>
+          <v-list-item
+            :to="{name: 'statistics'}"
+          >
+            <v-list-item-title>Статистика</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item
+            :to="{name: 'admin'}"
+          >
+            <v-list-item-title>Объявления</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            :to="{name: 'admin'}"
+          >
+            <v-list-item-title>Объявления</v-list-item-title>
           </v-list-item>
 
         </v-list-item-group>
@@ -73,7 +87,6 @@
     methods: {
       ...mapActions([
         'readFromFirestore'
-        //     'userEntrance',
       ]),
       productClick(article) {
         this.$router.push({name: 'product', query: {'product': id}})

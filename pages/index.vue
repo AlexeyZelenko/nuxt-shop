@@ -14,12 +14,14 @@
         </v-row>
         <!--Отображение каталога-->
         <div class="v-catalog__list">
+
           <vCatalogItem
             :product_data="product"
             @productClick="productClick"
             v-for="product in filteredProducts"
             :key="product.id"
           />
+
         </div>
       </div>
     </div>
@@ -45,6 +47,7 @@
     },
     data() {
       return {
+        isActive: false,
         categories: [
           {name: 'Станки', value: 'Machine_tools'},
           {name: 'Котлы', value: 'Boilers'},
@@ -68,8 +71,8 @@
         'userEntrance',
         'USER_ID_ACTIONS',
       ]),
-      productClick(article) {
-        this.$router.push({name: 'product', query: {'product': article}})
+      productClick(id) {
+        this.$router.push({name: 'product', query: {'product': id}})
       },
       sortByCategories(category) {
         this.sortedProducts = [];

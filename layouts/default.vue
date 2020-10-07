@@ -92,7 +92,7 @@
       <template id="footer">
         <div>
           <v-footer
-            color="primary lighten-1"
+            style="background-color: #f0b165"
             padless
             class="mx-auto"
             absolute
@@ -113,7 +113,8 @@
                 {{ link.name }}
               </v-btn>
               <v-col
-                class="primary lighten-2 py-4 text-center white--text"
+                style="background-color: #ff9900"
+                class=" py-4 text-center white--text"
                 cols="12"
               >
                 {{ new Date().getFullYear() }} — <strong>Теплосервис</strong>

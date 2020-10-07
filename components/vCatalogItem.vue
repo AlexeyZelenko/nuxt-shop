@@ -13,11 +13,16 @@
       v-if="product_data.arrayImages"
     >
     <transition name="fade">
-      <img
-        style="z-index: 7"
+      <ImageItem
         class="v-catalog-item_image"
-        :src="product_data.arrayImages[0]"
-        alt="">
+        style="z-index: 7"
+        :source="product_data.arrayImages[0]"
+      />
+<!--      <img-->
+<!--        style="z-index: 7"-->
+<!--        class="v-catalog-item_image"-->
+<!--        :src="product_data.arrayImages[0]"-->
+<!--        alt="">-->
     </transition>
 
     </div>
@@ -40,10 +45,16 @@
 </template>
 
 <script>
+  import ImageItem from '~/components/ImageItem.vue'
   export default {
     name: "v-catalog-item",
+    components: {
+      ImageItem
+
+    },
     data() {
       return {
+        isActive: false,
       }
     },
     props: {
@@ -55,6 +66,10 @@
       },
     },
     methods: {
+      lazyLoadImage(e){
+        let media = e.target.parentNode.querySelectorAll('[data-manual-lazy]');
+        [...media].forEach(m => this.$lazyLoad(m))
+      },
       productClick() {
         this.$emit('productClick', this.product_data.id)
       },

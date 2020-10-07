@@ -4,10 +4,21 @@
     <h2
       style="margin: 10px 0; text-align: center">{{product.name}}</h2>
 
-    <v-carousel
-      v-if="product.arrayImages"
-      :carousel_data="product.arrayImages"
-    />
+    <template >
+      <v-carousel hide-delimiters style="margin: 10px 0 10px">
+        <v-carousel-item
+          v-for="(item,i) in product.arrayImages"
+          :key="i"
+          :src=item
+          lazy-src="https://picsum.photos/id/11/100/60"
+        ></v-carousel-item>
+      </v-carousel>
+    </template>
+
+<!--    <v-carousel-->
+<!--      v-if="product.arrayImages"-->
+<!--      :carousel_data="product.arrayImages"-->
+<!--    />-->
 
     <div class="video"
       v-if="product.video"
@@ -30,7 +41,7 @@
 
 <script>
   import {mapGetters, mapActions} from 'vuex'
-  import vCarousel from '~/components/vCarousel.vue'
+  // import vCarousel from '~/components/vCarousel.vue'
 
   export default {
     layout: 'back_catalog',
@@ -39,7 +50,7 @@
       // dialog: false,
     }),
     components: {
-      vCarousel
+      // vCarousel,
     },
     methods: {
       ...mapActions([
