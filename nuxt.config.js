@@ -1,3 +1,7 @@
+const imageminMozjpeg = require('imagemin-mozjpeg')
+const ImageminPlugin = require('imagemin-webpack-plugin').default
+const isDev = process.env.NODE_ENV !== 'production'
+
 module.exports = {
   auth: {
     persistence: 'local', // default

@@ -8,7 +8,7 @@
       <v-row justify="center">
         <v-carousel
           hide-delimiters
-          style="margin: 10px auto 10px; max-width: 600px;"
+          style="margin: 10px auto 10px; max-width: 500px;"
         >
           <v-carousel-item
             v-for="(item,i) in product.arrayImages"

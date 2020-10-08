@@ -205,7 +205,6 @@
                     v-model="editedItem.price"
                   ></v-text-field>
                 </v-col>
-                <!--						Размер-->
                 <!--						КАТЕГОРИИ-->
                 <v-col cols="12">
                   <v-select
@@ -217,22 +216,14 @@
                     v-model="editedItem.category"
                   ></v-select>
                 </v-col>
-                <!--						ОТОБРАЖЕНИЕ-->
-<!--                <div class="check_box">-->
-<!--                  <v-checkbox-->
-<!--                    color="success"-->
-<!--                    hide-details-->
-<!--                    label="Отображать в каталоге"-->
-<!--                    v-model="editedItem.available"-->
-<!--                  ></v-checkbox>-->
-<!--                </div>-->
                 <!--ФОТО-->
                 <template v-if="editedItem.arrayImages.length > 0">
+
                   <v-carousel>
                     <v-carousel-item
                       :src="(item)"
                       reverse-transition="fade-transition"
-                      style="max-width: 400px; max-height: 600px"
+                      style="max-width: 400px; max-height: 600px; margin: 0 auto"
                       transition="fade-transition"
                       v-for="(item, id) in editedItem.arrayImages"
                       :key="id"
@@ -250,6 +241,7 @@
                       </v-btn>
                     </v-carousel-item>
                   </v-carousel>
+
                 </template>
                 <v-col cols="12">
                   <v-file-input
