@@ -3,6 +3,9 @@ const ImageminPlugin = require('imagemin-webpack-plugin').default
 const isDev = process.env.NODE_ENV !== 'production'
 
 module.exports = {
+  plugins: [
+    { src: '~~/plugins/vue-lazy-load.js' }
+  ],
   auth: {
     persistence: 'local', // default
     initialize: {
@@ -121,49 +124,16 @@ module.exports = {
     /*
     ** Run ESLint on save
     */
-    // extend (config, ctx) {
-    //   if (ctx.isDev && ctx.isClient) {
-    //     config.module.rules.push({
-    //       enforce: 'pre',
-    //       test: /\.(js|vue)$/,
-    //       loader: 'eslint-loader',
-    //       exclude: /(node_modules)/
-    //     })
-    //   }
-    //   const ORIGINAL_TEST = '/\\.(png|jpe?g|gif|svg|webp)$/i'
-    //   const imageMinPlugin = new ImageminPlugin({
-    //     pngquant: {
-    //       quality: '5-30',
-    //       speed: 7,
-    //       strip: true
-    //     },
-    //     jpegtran: {
-    //       progressive: true
-    //
-    //     },
-    //     gifsicle: {
-    //       interlaced: true
-    //     },
-    //     plugins: [
-    //       imageminMozjpeg({
-    //         quality: 70,
-    //         progressive: true
-    //       })
-    //
-    //     ]
-    //   })
-    //   if (!ctx.isDev) config.plugins.push(imageMinPlugin)
-    // }
-    extend(config, ctx) {
+    extend (config, ctx) {
+      if (ctx.isDev && ctx.isClient) {
+        config.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/
+        })
+      }
       const ORIGINAL_TEST = '/\\.(png|jpe?g|gif|svg|webp)$/i'
-      const vueSvgLoader = [
-        {
-          loader: 'vue-svg-loader',
-          options: {
-            svgo: false
-          }
-        }
-      ]
       const imageMinPlugin = new ImageminPlugin({
         pngquant: {
           quality: '5-30',
@@ -186,45 +156,78 @@ module.exports = {
         ]
       })
       if (!ctx.isDev) config.plugins.push(imageMinPlugin)
-
-      config.module.rules.forEach(rule => {
-        if (rule.test.toString() === ORIGINAL_TEST) {
-          rule.test = /\.(png|jpe?g|gif|webp)$/i
-          rule.use = [
-            {
-              loader: 'url-loader',
-              options: {
-                limit: 1000,
-                name: ctx.isDev ? '[path][name].[ext]' : 'img/[contenthash:7].[ext]'
-              }
-            }
-          ]
-        }
-      })
-//  Create the custom SVG rule
-      const svgRule = {
-        test: /\.svg$/,
-        oneOf: [
-          {
-            resourceQuery: /inline/,
-            use: vueSvgLoader
-          },
-          {
-            resourceQuery: /data/,
-            loader: 'url-loader'
-          },
-          {
-            resourceQuery: /raw/,
-            loader: 'raw-loader'
-          },
-          {
-            loader: 'file-loader' // By default, always use file-loader
-          }
-        ]
-      }
-
-      config.module.rules.push(svgRule) // Actually add the rule
     }
+//     extend(config, ctx) {
+//       const ORIGINAL_TEST = '/\\.(png|jpe?g|gif|svg|webp)$/i'
+//       const vueSvgLoader = [
+//         {
+//           loader: 'vue-svg-loader',
+//           options: {
+//             svgo: false
+//           }
+//         }
+//       ]
+//       const imageMinPlugin = new ImageminPlugin({
+//         pngquant: {
+//           quality: '5-30',
+//           speed: 7,
+//           strip: true
+//         },
+//         jpegtran: {
+//           progressive: true
+//
+//         },
+//         gifsicle: {
+//           interlaced: true
+//         },
+//         plugins: [
+//           imageminMozjpeg({
+//             quality: 70,
+//             progressive: true
+//           })
+//
+//         ]
+//       })
+//       if (!ctx.isDev) config.plugins.push(imageMinPlugin)
+//
+//       config.module.rules.forEach(rule => {
+//         if (rule.test.toString() === ORIGINAL_TEST) {
+//           rule.test = /\.(png|jpe?g|gif|webp)$/i
+//           rule.use = [
+//             {
+//               loader: 'url-loader',
+//               options: {
+//                 limit: 1000,
+//                 name: ctx.isDev ? '[path][name].[ext]' : 'img/[contenthash:7].[ext]'
+//               }
+//             }
+//           ]
+//         }
+//       })
+// //  Create the custom SVG rule
+//       const svgRule = {
+//         test: /\.svg$/,
+//         oneOf: [
+//           {
+//             resourceQuery: /inline/,
+//             use: vueSvgLoader
+//           },
+//           {
+//             resourceQuery: /data/,
+//             loader: 'url-loader'
+//           },
+//           {
+//             resourceQuery: /raw/,
+//             loader: 'raw-loader'
+//           },
+//           {
+//             loader: 'file-loader' // By default, always use file-loader
+//           }
+//         ]
+//       }
+//
+//       config.module.rules.push(svgRule) // Actually add the rule
+//     }
   },
   splitChunks: {
     layouts: true,

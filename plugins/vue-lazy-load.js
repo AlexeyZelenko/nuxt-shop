@@ -6,7 +6,7 @@ export default async (context, inject) => {
     preLoad: 0,
     error: 'https://via.placeholder.com/300',
     // eslint-disable-next-line
-    loading: require(`${'~~/assets/images/352.gif'}`),
+    loading: require(`${'~~/assets/images/832.svg'}`),
     attempt: 3,
     lazyComponent: true,
     observer: true,
