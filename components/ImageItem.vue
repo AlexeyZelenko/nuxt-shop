@@ -38,7 +38,7 @@
 <style scoped lang="scss">
   .image {
     &__wrapper {
-      width: 100px;
+      width: 130px;
       display: flex;
       justify-content: center;
       align-items: center;

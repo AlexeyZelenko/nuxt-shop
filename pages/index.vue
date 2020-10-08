@@ -52,9 +52,9 @@
         categories: [
           {name: 'Станки', value: 'Machine_tools'},
           {name: 'Котлы', value: 'Boilers'},
-          {name: 'Водонагреватели', value: 'Water_heaters'},
-          {name: 'Бойлеры', value: 'Boilers2'},
-          {name: 'Теплые полы', value: 'Warm_floor'},
+          // {name: 'Водонагреватели', value: 'Water_heaters'},
+          // {name: 'Бойлеры', value: 'Boilers2'},
+          // {name: 'Теплые полы', value: 'Warm_floor'},
           {name: 'Статьи', value: 'Articles'},
           {name: 'Услуги', value: 'Services'},
           {name: 'Контакты', value: 'Contacts'},
@@ -98,7 +98,8 @@
         if (this.sortedProducts.length) {
           return this.sortedProducts
         } else {
-          return this.PRODUCTS.filter(item => item.category === 'Станки')
+          const sortProducts = this.PRODUCTS.filter(item => item.category === 'Станки')
+          return sortProducts.sort((a, b) => a.sort > b.sort ? 1 : -1)
         }
       }
     },

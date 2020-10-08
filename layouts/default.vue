@@ -69,13 +69,12 @@
 
           <v-toolbar
             color="#ff9900"
-            max-width="100%"
             style="margin-top: -50px;"
             >
             <v-toolbar-title>
               <img
                 style="margin-left: 10px;"
-                src="~/assets/s5_logo.png"
+                src="~/assets/logo.png"
                 alt=""
               >
             </v-toolbar-title>
@@ -117,7 +116,7 @@
                 class=" py-4 text-center white--text"
                 cols="12"
               >
-                {{ new Date().getFullYear() }} — <strong>Теплосервис</strong>
+                {{ new Date().getFullYear() }} — Теплосервис
               </v-col>
             </v-row>
           </v-footer>

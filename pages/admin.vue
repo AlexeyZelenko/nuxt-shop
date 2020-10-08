@@ -50,14 +50,6 @@
         hide-default-footer
         item-key="id"
       >
-<!--        <template v-slot:item.name="{ item }">-->
-<!--          <v-chip-->
-<!--            color="blue"-->
-<!--            dark-->
-<!--          >-->
-<!--            {{ item.name }}-->
-<!--          </v-chip>-->
-<!--        </template>-->
 
         <template
           style="height:190px;"
@@ -206,7 +198,7 @@
                   <v-text-field
                     :rules="[v => (v !== Number.NaN) || 'Введите число!']"
                     label="Цена товара"
-                    placeholder="ОБЯЗАТЕЛЬНО"
+                    placeholder="не обязательно"
                     prepend-icon="mdi-pencil"
                     required
                     type="Number"
@@ -226,14 +218,14 @@
                   ></v-select>
                 </v-col>
                 <!--						ОТОБРАЖЕНИЕ-->
-                <div class="check_box">
-                  <v-checkbox
-                    color="success"
-                    hide-details
-                    label="Отображать в каталоге"
-                    v-model="editedItem.available"
-                  ></v-checkbox>
-                </div>
+<!--                <div class="check_box">-->
+<!--                  <v-checkbox-->
+<!--                    color="success"-->
+<!--                    hide-details-->
+<!--                    label="Отображать в каталоге"-->
+<!--                    v-model="editedItem.available"-->
+<!--                  ></v-checkbox>-->
+<!--                </div>-->
                 <!--ФОТО-->
                 <template v-if="editedItem.arrayImages.length > 0">
                   <v-carousel>
