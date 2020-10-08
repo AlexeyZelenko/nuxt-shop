@@ -1,79 +1,43 @@
-<!--<template>-->
-<!--  <div-->
-<!--    class="v-catalog-item"-->
-<!--    @click="productClick"-->
-<!--  >-->
-<!--    <div class="v-catalog-item_top">-->
-<!--      <h4>-->
-<!--        {{product_data.name}}-->
-<!--      </h4>-->
-<!--    </div>-->
-
-<!--    <div-->
-<!--      v-if="product_data.arrayImages"-->
-<!--    >-->
-<!--      <transition name="fade" >-->
-<!--        <ImageItem-->
-<!--          :source="product_data.arrayImages[0]"-->
-<!--        />-->
-<!--    </transition>-->
-
-<!--    </div>-->
-<!--    <p-->
-<!--      v-else-->
-<!--      class="emptyImage"-->
-<!--    >-->
-<!--			<span-->
-<!--        v-html="product_data.description"-->
-<!--      />-->
-<!--    </p>-->
-<!--    <div class="v-catalog-item_bottom">-->
-<!--      <v-btn-->
-<!--        depressed-->
-<!--        color="primary"-->
-<!--      >-->
-<!--        Инфо-->
-<!--      </v-btn>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</template>-->
-
 
 <template >
   <div
     @click="productClick"
     class="v-catalog-item"
   >
-    <span
-      v-html="product_data.name"
-      style="min-height: 30%; overflow-wrap: break-word; margin-bottom: 10px"
-    ></span>
+    <div
+      style="height: 50px; overflow-wrap: break-word; margin-bottom: 10px"
+    >
+      <span
+        v-html="product_data.name"
+
+      ></span>
+    </div>
 
     <div
-      style="height: 30%; margin: 10px 0 50px"
+      style="height: 100px; margin: 100px 0 100px"
       v-if="product_data.arrayImages"
     >
       <ImageItem
+        style="margin: 0 auto"
         :source="product_data.arrayImages[0]"
       />
 
     </div>
-    <!--    <p-->
-    <!--      v-else-->
-    <!--      class="emptyImage"-->
-    <!--    >-->
-
-
-
-    <v-btn
-      style="margin: 5px 0 5px"
-      absolute
-      bottom
-      depressed
-      color="primary"
+    <v-row
+      align="center"
+      justify="space-around"
     >
-      Инфо
-    </v-btn>
+      <v-btn
+        style="margin: 50px 0 5px"
+        absolute
+        bottom
+        depressed
+        color="primary"
+      >
+        Инфо
+      </v-btn>
+    </v-row>
+
   </div>
 
 </template>
@@ -120,6 +84,8 @@
   }
 
   .v-catalog-item {
+    min-width: 200px;
+    text-align: center;
     vertical-align: middle;
     flex-basis: 25%;
     box-shadow: 0 0 8px 0 #e0e0e0;

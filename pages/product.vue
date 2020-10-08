@@ -6,7 +6,10 @@
     </h2>
 
     <template >
-      <v-carousel hide-delimiters style="margin: 10px 0 10px">
+      <v-carousel
+        hide-delimiters
+        style="margin: 10px auto 10px; max-width: 600px;"
+      >
         <v-carousel-item
           v-for="(item,i) in product.arrayImages"
           :key="i"

@@ -8,6 +8,7 @@
     />
     <img
       class="image__item"
+      style="height: 100px"
       :data-url="source"
       alt="random image"
     >
@@ -37,7 +38,7 @@
 <style scoped lang="scss">
   .image {
     &__wrapper {
-      min-width: 150px;
+      width: 100px;
       display: flex;
       justify-content: center;
       align-items: center;
