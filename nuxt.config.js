@@ -3,9 +3,6 @@ const ImageminPlugin = require('imagemin-webpack-plugin').default
 const isDev = process.env.NODE_ENV !== 'production'
 
 module.exports = {
-  plugins: [
-    { src: '~~/plugins/vue-lazy-load.js' }
-  ],
   auth: {
     persistence: 'local', // default
     initialize: {
@@ -24,9 +21,6 @@ module.exports = {
   }),
   vuetify: {
     customVariables: ['~/assets/variables.scss']
-  },
-  router: {
-    prefetchLinks: false
   },
   /*
   ** Headers of the page
@@ -60,72 +54,12 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    filenames: {
-      app: ({ isDev }) => isDev ? '[name].js' : 'js/[contenthash].js',
-      chunk: ({ isDev }) => isDev ? '[name].js' : 'js/[contenthash].js',
-      css: ({ isDev }) => isDev ? '[name].css' : 'css/[contenthash].css',
-      img: ({ isDev }) => isDev ? '[path][name].[ext]' : 'img/[contenthash:7].[ext]',
-      font: ({ isDev }) => isDev ? '[path][name].[ext]' : 'fonts/[contenthash:7].[ext]',
-      video: ({ isDev }) => isDev ? '[path][name].[ext]' : 'videos/[contenthash:7].[ext]'
-    },
-    ...(!isDev && {
-      html: {
-        minify: {
-          collapseBooleanAttributes: true,
-          decodeEntities: true,
-          minifyCSS: true,
-          minifyJS: true,
-          processConditionalComments: true,
-          removeEmptyAttributes: true,
-          removeRedundantAttributes: true,
-          trimCustomFragments: true,
-          useShortDoctype: true
-        }
-      }
-    }),
-    ...(!isDev && {
-      extractCSS: {
-        ignoreOrder: true
-      }
-    }),
-    splitChunks: {
-      layouts: true,
-      pages: true,
-      commons: true
-    },
-    optimization: {
-      minimize: !isDev
-    },
-    transpile: ['vuetify/lib', 'tiptap-vuetify', 'vue-lazy-hydration', 'intersection-observer'],
-    postcss: {
-      plugins: {
-        ...(!isDev && {
-          cssnano: {
-            preset: ['advanced', {
-              autoprefixer: false,
-              cssDeclarationSorter: false,
-              zindex: false,
-              discardComments: {
-                removeAll: true
-              }
-            }]
-          }
-        })
-      },
-      ...(!isDev && {
-        preset: {
-          browsers: 'cover 99.5%',
-          autoprefixer: true
-        }
-      }),
-
-      order: 'cssnanoLast'
-    },
+    transpile: ['vuetify/lib', 'tiptap-vuetify'],
     /*
     ** Run ESLint on save
     */
-    extend (config, ctx) {
-      if (ctx.isDev && ctx.isClient) {
+    extend (config, { isDev, isClient }) {
+      if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
@@ -133,123 +67,14 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-      const ORIGINAL_TEST = '/\\.(png|jpe?g|gif|svg|webp)$/i'
-      const imageMinPlugin = new ImageminPlugin({
-        pngquant: {
-          quality: '5-30',
-          speed: 7,
-          strip: true
-        },
-        jpegtran: {
-          progressive: true
-
-        },
-        gifsicle: {
-          interlaced: true
-        },
-        plugins: [
-          imageminMozjpeg({
-            quality: 70,
-            progressive: true
-          })
-
-        ]
-      })
-      if (!ctx.isDev) config.plugins.push(imageMinPlugin)
     }
-//     extend(config, ctx) {
-//       const ORIGINAL_TEST = '/\\.(png|jpe?g|gif|svg|webp)$/i'
-//       const vueSvgLoader = [
-//         {
-//           loader: 'vue-svg-loader',
-//           options: {
-//             svgo: false
-//           }
-//         }
-//       ]
-//       const imageMinPlugin = new ImageminPlugin({
-//         pngquant: {
-//           quality: '5-30',
-//           speed: 7,
-//           strip: true
-//         },
-//         jpegtran: {
-//           progressive: true
-//
-//         },
-//         gifsicle: {
-//           interlaced: true
-//         },
-//         plugins: [
-//           imageminMozjpeg({
-//             quality: 70,
-//             progressive: true
-//           })
-//
-//         ]
-//       })
-//       if (!ctx.isDev) config.plugins.push(imageMinPlugin)
-//
-//       config.module.rules.forEach(rule => {
-//         if (rule.test.toString() === ORIGINAL_TEST) {
-//           rule.test = /\.(png|jpe?g|gif|webp)$/i
-//           rule.use = [
-//             {
-//               loader: 'url-loader',
-//               options: {
-//                 limit: 1000,
-//                 name: ctx.isDev ? '[path][name].[ext]' : 'img/[contenthash:7].[ext]'
-//               }
-//             }
-//           ]
-//         }
-//       })
-// //  Create the custom SVG rule
-//       const svgRule = {
-//         test: /\.svg$/,
-//         oneOf: [
-//           {
-//             resourceQuery: /inline/,
-//             use: vueSvgLoader
-//           },
-//           {
-//             resourceQuery: /data/,
-//             loader: 'url-loader'
-//           },
-//           {
-//             resourceQuery: /raw/,
-//             loader: 'raw-loader'
-//           },
-//           {
-//             loader: 'file-loader' // By default, always use file-loader
-//           }
-//         ]
-//       }
-//
-//       config.module.rules.push(svgRule) // Actually add the rule
-//     }
   },
   splitChunks: {
     layouts: true,
     pages: true,
     commons: true
   },
-  webfontloader: {
-    events: false,
-    google: {
-      families: ['Montserrat:400,500,600:cyrillic&display=swap']
-    },
-    timeout: 5000
-  },
-  styleResources: {
-    // scss: ['./assets/scss/global-variables.scss'], // alternative: scss
-    less: [],
-    stylus: []
-  },
   buildModules: [
-    'nuxt-trailingslash-module',
-    'nuxt-webfontloader',
-    '@nuxtjs/style-resources',
     'vue-social-sharing/nuxt',
     ['@nuxtjs/vuetify'],
       [
@@ -285,8 +110,5 @@ module.exports = {
         }
       },
     ]
-  ],
-  css: [
-    'normalize.css'
   ]
 }

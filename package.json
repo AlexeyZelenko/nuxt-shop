@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "intersection-observer": "^0.7.0",
-    "normalize.css": "8.0.1",
     "nuxt-trailingslash-module": "1.1.0",
     "nuxt-webfontloader": "^1.1.0",
     "vue-lazy-hydration": "^1.0.0-beta.12",

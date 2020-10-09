@@ -112,6 +112,10 @@ export const actions = {
       }
     }
 
+    const baseStyles = {
+      fontSize: editProduct.fontSize
+    }
+    baseStyles['background-color'] = editProduct['background-color']
     const NameImages = await Promise.all(promisesName)
     const URLs = await Promise.all(promises)
     const ArrayOld = await editProduct.arrayImages
@@ -121,6 +125,7 @@ export const actions = {
     try {
       await this.$fireStore.doc('products/' + editProduct.id)
         .update({
+          baseStyles: baseStyles,
           NameImages: ArrayNameImages,
           video: editProduct.video,
           name: editProduct.name,
@@ -272,6 +277,8 @@ export const actions = {
   },
   async signInWithGoogle({commit, dispatch}) {
     try {
+
+
       const provider = new this.$fireAuthObj.GoogleAuthProvider()
       await this.$fireAuthObj().signInWithPopup(provider)
       const uid = await dispatch('getUid')
@@ -361,7 +368,7 @@ export const actions = {
     const userEntrance = !!this.$fireAuthObj().currentUser
     const USER_ID = await dispatch('getUid')
     if(userEntrance) {
-      const adminEntrance =  await ["6XUeVk6rJKcsFvkgIRHcKhWqx523"].includes(USER_ID)
+      const adminEntrance =  await ["6XUeVk6rJKcsFvkgIRHcKhWqx523", "aB67CVm6SmTTAmQqL8Cj2Xpcl662"].includes(USER_ID)
       commit('ADMIN_ENTRANCE', adminEntrance)
     }
     commit('USER_ENTRANCE', userEntrance)
@@ -404,7 +411,7 @@ export const actions = {
     const USER_ID = await dispatch('getUid')
     const userEntrance =  !!this.$fireAuthObj().currentUser
     if(userEntrance) {
-      const adminEntrance =  await ["6XUeVk6rJKcsFvkgIRHcKhWqx523"].includes(USER_ID)
+      const adminEntrance =  await ["6XUeVk6rJKcsFvkgIRHcKhWqx523", "aB67CVm6SmTTAmQqL8Cj2Xpcl662"].includes(USER_ID)
       commit('ADMIN_ENTRANCE', adminEntrance)
     }
     commit('USER_ENTRANCE', userEntrance)

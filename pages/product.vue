@@ -14,7 +14,7 @@
             v-for="(item,i) in product.arrayImages"
             :key="i"
             :src=item
-            lazy-src="https://picsum.photos/id/11/100/60"
+            lazy-src="https://picsum.photos/id/279/100/60?grayscale&blur=2"
           >
           </v-carousel-item>
         </v-carousel>
@@ -27,8 +27,12 @@
     ></div>
 
     <p v-if="product.price">Цена: {{product.price}} грн</p>
+
     <p>Описание:</p>
-    <p v-html="product.description"></p>
+    <p
+      v-html="product.description"
+      :style="product.baseStyles"
+    ></p>
 
     <p>Контактное лицо: {{product.name_contact}}</p>
     <p>Контакты: {{product.telephone_contact}}</p>
@@ -44,8 +48,6 @@
     name: "zProductInformation",
     data: () => ({
     }),
-    components: {
-    },
     methods: {
       ...mapActions([
         'readFromFirestore'

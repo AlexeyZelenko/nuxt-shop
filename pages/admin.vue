@@ -171,6 +171,35 @@
                     v-model="editedItem.description"
                   ></v-textarea>
                 </v-col>
+<!--                Стиль Описания товара-->
+<!--                Цвет фона-->
+                <v-col cols="12">
+                  <v-row align="center">
+                    <v-col cols="12">
+                      <v-select
+                        v-model="editedItem['background-color']"
+                        :items="items"
+                        :menu-props="{ top: true, offsetY: true }"
+                        label="Цвет фона Описания"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                </v-col>
+<!--                Размер шрифта-->
+                <v-col cols="12">
+                  <v-row align="center">
+                    <v-col cols="12">
+                      <v-select
+                        :items="items2"
+                        :menu-props="{ top: true, offsetY: true }"
+                        label="Размер текста Описания"
+                        v-model="editedItem.fontSize"
+                        placeholder="Обязательно"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                </v-col>
+
 <!--Видео-->
                 <v-col cols="12">
                   <v-textarea
@@ -185,14 +214,7 @@
                     v-model="editedItem.video"
                   ></v-textarea>
                 </v-col>
-                <!--						АРТИКЛЬ-->
-                <v-col cols="12">
-                  <v-text-field
-                    placeholder="article"
-                    required
-                    v-model="editedItem.article"
-                  ></v-text-field>
-                </v-col>
+
                 <!--						ЦЕНА-->
                 <v-col cols="12">
                   <v-text-field
@@ -335,6 +357,8 @@
     },
     data() {
       return {
+        items: ['white', 'lime', 'green', 'orange', 'yellow', 'blue', 'cyan', 'indigo', 'pink', 'purple', 'teal', 'amber', 'grey'],
+        items2: ['12px', '15px', '18px', '20px'],
       // declare extensions you want to use
       extensions: [
         History,
@@ -388,7 +412,7 @@
         counter2: value => value.length <= 400 || 'Max 400 знаков',
       },
       rules2: [
-        value => !value || value.size < 5000000 || 'Avatar size should be less than 5 MB!',
+        value => !value || value.size < 500000 || 'Avatar size should be less than 500 KB!',
       ],
       search: '',
       delete: '',
@@ -397,6 +421,9 @@
       arrayImages: [],
       editedIndex: -1,
       editedItem: {
+        ['background-color']: {},
+        fontSize: '',
+        baseStyles: {},
         video: '',
         NameImages: [],
         File: [],
@@ -417,6 +444,9 @@
         seen: false
       },
       defaultItem: {
+        background_color: {},
+        fontSize: '',
+        baseStyles: {},
         video: '',
         seen: false,
         NameImages: [],
@@ -522,7 +552,7 @@
           console.log('Ошибка редактирования')
         }
       },
-      async addLocation(addProduct, seen, arrayImages, File, article, available, category, name, price, description, video) {
+      async addLocation(baseStyles, fontSize, addProduct, seen, arrayImages, File, article, available, category, name, price, description, video) {
 
         Swal.fire({
           title: "Идет загрузка...",
@@ -530,7 +560,6 @@
           imageUrl: "@/assets/images/352.gif",
           showConfirmButton: false
         });
-
         const createdAt = Date.now()
         seen = false
         video = addProduct.video
@@ -546,6 +575,10 @@
         const adress = 'Украина, Черкасская обл, Черкассы, Громова 142, 18018'
         const name_contact = 'Василий Станиславович'
         const telephone_contact = '+38(096)651-10-52,  Viber:+38(098)804-15-81,   +38(094)985-32-91,   (0472)50-12-91'
+        baseStyles = {
+          fontSize: addProduct.fontSize
+        }
+        baseStyles['background-color'] = addProduct.background_color
 
 // ЗАГРУЗКА ФОТО
         const promises = []
@@ -580,6 +613,7 @@
 
         let docRef = await this.$fireStore.collection('products').add({
           NameImages: NameImages,
+          baseStyles,
           seen,
           video,
           article,
