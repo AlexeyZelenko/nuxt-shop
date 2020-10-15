@@ -3,6 +3,7 @@
     <div class="z-product-information">
       <template>
         <v-btn
+          aria-label="Left Go"
           :to="{name: 'index'}"
           block
           style="background-color: green; color: whitesmoke; margin-bottom: 19px"
@@ -20,11 +21,12 @@
 </template>
 
 <script>
-  import Share from '~/components/ShareNetwork.vue'
+  // import Share from '~/components/ShareNetwork.vue'
 
   export default {
     components: {
-      Share
+      'Share': () => import('~/components/ShareNetwork.vue'),
+      // Share
     },
     data: () => ({})
   }

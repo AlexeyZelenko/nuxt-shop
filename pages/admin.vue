@@ -68,9 +68,6 @@
           <span v-html="item.description"/>
         </template>
 
-        <template v-slot:item.video="{ item }">
-          <span v-html="item.video"/>
-        </template>
 
         <template v-slot:item.actions="{ item }">
           <v-row justify="space-around">
@@ -488,7 +485,6 @@
         {text: 'Категория', value: 'category', width: "1%", align: 'left'},
         {align: 'left', sortable: false, text: 'Описание', value: 'description', width: "70%"},
         {text: 'Цена', value: 'price', width: "1%", align: 'left'},
-        {text: 'Видео', value: 'video', width: "1%", align: 'left'},
         {text: 'Редактировать/Удалить', value: 'actions', sortable: false, width: "1%", align: 'left'},
       ],
       locations: [],
@@ -647,7 +643,7 @@
           showConfirmButton: false,
           timer: 2000
         })
-        arrayImages = [];
+        // arrayImages = [];
         this.dialog = false
       },
       getColor(price) {
@@ -697,11 +693,6 @@
 
 <style lang="sass">
   @import '~vuetify/src/styles/styles.sass'
-  iframe
-    max-width: 100px
-    max-height: 100px
-    margin: 0 auto
-
 
   .z-table-button
     position: fixed

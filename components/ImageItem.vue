@@ -16,7 +16,8 @@
 </template>
 
 <script>
-  import ImageSpinner from "./ImageSpinner";
+
+  // import ImageSpinner from "./ImageSpinner";
   import LazyLoadDirective from "~/directives/LazyLoadDirective"
   export default {
     name: "ImageItem",
@@ -24,7 +25,8 @@
       lazyload: LazyLoadDirective
     },
     components: {
-      ImageSpinner
+      'ImageSpinner': () => import('~/components/ImageSpinner.vue'),
+      // ImageSpinner
     },
     props: {
       source: {

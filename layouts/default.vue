@@ -101,6 +101,7 @@
               no-gutters
             >
               <v-btn
+                aria-live="polite"
                 v-for="link in links"
                 :key="link.name"
                 color="white"
@@ -127,11 +128,12 @@
 </template>
 
 <script>
-  import Share from '~/components/ShareNetwork.vue'
+  // import Share from '~/components/ShareNetwork.vue'
   import {mapActions, mapGetters} from 'vuex'
   export default {
     components: {
-      Share
+      'Share': () => import('~/components/ShareNetwork.vue'),
+      // Share
     },
     data: () => ({
       links: [

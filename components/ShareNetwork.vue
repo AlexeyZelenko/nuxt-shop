@@ -3,6 +3,7 @@
     <div style="position: relative;">
       <v-fab-transition>
         <v-btn
+          aria-label="Share Social"
           :key="activeFab.icon"
           :color="activeFab.color"
           absolute

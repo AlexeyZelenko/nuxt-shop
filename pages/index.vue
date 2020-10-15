@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import vSelect from '~/components/vSelect.vue'
+  // import vSelect from '~/components/vSelect.vue'
   import {mapActions, mapGetters} from 'vuex'
 
   export default {
@@ -42,8 +42,9 @@
     },
     components: {
       vCatalogItem: process.browser ? () => import('~/components/vCatalogItem.vue') : null,
+      'vSelect': () => import('~/components/vSelect.vue'),
       // vCatalogItem,
-      vSelect,
+      // vSelect,
     },
 
     data() {
@@ -52,9 +53,6 @@
         categories: [
           {name: 'Станки', value: 'Machine_tools'},
           {name: 'Котлы', value: 'Boilers'},
-          // {name: 'Водонагреватели', value: 'Water_heaters'},
-          // {name: 'Бойлеры', value: 'Boilers2'},
-          // {name: 'Теплые полы', value: 'Warm_floor'},
           {name: 'Статьи', value: 'Articles'},
           {name: 'Услуги', value: 'Services'},
           {name: 'Контакты', value: 'Contacts'},

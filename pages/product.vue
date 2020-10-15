@@ -6,14 +6,18 @@
     <template>
       <v-row justify="center">
         <v-carousel
-          hide-delimiters
           style="margin: 10px auto 10px; max-width: 500px;"
+          progress
+          show-arrows-on-hover
+          reverse-transition="fade-transition"
+          transition="fade-transition"
         >
           <v-carousel-item
             v-for="(item,i) in product.arrayImages"
             :key="i"
             :src=item
-            lazy-src="https://picsum.photos/id/279/100/60?grayscale&blur=2"
+            lazy-src="https://picsum.photos/id/11/100/60"
+            class="grey lighten-2"
           >
           </v-carousel-item>
         </v-carousel>
@@ -30,7 +34,7 @@
     <p>Описание:</p>
     <p
       v-html="product.description"
-      :style="[{fontSize: product.fontSize}, {['background-color']: product.background_color}]"
+      :style="[{fontSize: product.fontSize}, {['background-color']: product.background_color||product['background-color']}]"
     ></p>
 
     <p>Контактное лицо: {{product.name_contact}}</p>

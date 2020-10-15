@@ -82,7 +82,7 @@ export const actions = {
       showConfirmButton: false
     });
 
-    await dispatch('AlertMessageLoading')
+    // await dispatch('AlertMessageLoading')
     const File = editProduct.File
     const promises = []
     const promisesName = []
@@ -127,19 +127,6 @@ export const actions = {
     const ArrayFile = [...URLs, ...ArrayOld]
     const ArrayNameImages = [...NameImages, ...NameImagesOld]
     try {
-
-      if(!editProduct.fontSize) {
-        await this.$fireStore.doc('products/' + editProduct.id)
-          .add({
-            fontSize: editProduct.fontSize,
-          })
-      }
-      if(!editProduct.background_color) {
-        await this.$fireStore.doc('products/' + editProduct.id)
-          .add({
-            background_color: editProduct.background_color,
-          })
-      }
 
       await this.$fireStore.doc('products/' + editProduct.id)
         .update({

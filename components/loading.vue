@@ -1,7 +1,11 @@
 <template>
-  <div v-if="loading" class="loading-page">
-    <img style="position:absolute; top: 50%; left: 0; margin-left: auto; margin-right: auto; right: 0; border: 0;"
-         src="@/assets/images/832.svg">
+  <div
+    v-if="loading"
+    class="loading-page"
+  >
+    <img
+       src="@/assets/images/832.svg"
+    >
 
   </div>
 </template>
@@ -21,6 +25,18 @@
     }
   }
 </script>
+
+<style scoped>
+  .img {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    right: 0;
+    border: 0;
+  }
+</style>
 
 <style scoped>
   .loading-page {
