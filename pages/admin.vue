@@ -357,6 +357,7 @@
     },
     data() {
       return {
+        products: [],
         items: ['white', 'lime', 'green', 'orange', 'yellow', 'blue', 'cyan', 'indigo', 'pink', 'purple', 'teal', 'amber', 'grey'],
         items2: ['12px', '15px', '18px', '20px'],
       // declare extensions you want to use
@@ -422,7 +423,7 @@
       editedIndex: -1,
       editedItem: {
         ['background-color']: {},
-        fontSize: '',
+        fontSize: null,
         baseStyles: {},
         video: '',
         NameImages: [],
@@ -444,7 +445,7 @@
         seen: false
       },
       defaultItem: {
-        background_color: {},
+        ['background-color']: {},
         fontSize: '',
         baseStyles: {},
         video: '',
@@ -458,12 +459,7 @@
         category: '',
         price: null,
         clothingSize: 42,
-        promotionalPrice: false,
-        clothingManufacturer: '',
-        VideoClothings: false,
-        BrandName: '',
         FotoClothes: '',
-        newClothes: true,
         arrayImages: []
       },
       itemsCategories: [
@@ -490,6 +486,7 @@
         {text: 'Категория', value: 'category', width: "1%", align: 'left'},
         {align: 'left', sortable: false, text: 'Описание', value: 'description', width: "70%"},
         {text: 'Цена', value: 'price', width: "1%", align: 'left'},
+        {text: 'Видео', value: 'video', width: "1%", align: 'left'},
         {text: 'Редактировать/Удалить', value: 'actions', sortable: false, width: "1%", align: 'left'},
       ],
       locations: [],
@@ -512,9 +509,14 @@
         editedItem.arrayImages = array
         editedItem.NameImages = arrayName
       },
+      initialize() {
+        this.products = this.PRODUCTS
+      },
       save() {
         if (this.editedIndex > -1) {
-          const editProduct = Object.assign(this.PRODUCTS[this.editedIndex], this.editedItem)
+          console.log(this.products[this.editedIndex])
+          const editProduct = Object.assign(this.products[this.editedIndex], this.editedItem)
+          console.log('1',editProduct)
           this.editThisProduct(editProduct)
         } else {
           const addProduct = this.editedItem
@@ -552,12 +554,12 @@
           console.log('Ошибка редактирования')
         }
       },
-      async addLocation(baseStyles, fontSize, addProduct, seen, arrayImages, File, article, available, category, name, price, description, video) {
-
+      async addLocation(addProduct, video, baseStyles, fontSize, seen, arrayImages, File, article, available, category, name, price, description,) {
+        console.log('Добавление...')
         Swal.fire({
           title: "Идет загрузка...",
           text: "",
-          imageUrl: "@/assets/images/352.gif",
+          imageUrl: "images/352.gif",
           showConfirmButton: false
         });
         const createdAt = Date.now()
@@ -578,7 +580,8 @@
         baseStyles = {
           fontSize: addProduct.fontSize
         }
-        baseStyles['background-color'] = addProduct.background_color
+        baseStyles['background-color'] = addProduct['background-color']
+
 
 // ЗАГРУЗКА ФОТО
         const promises = []
@@ -687,6 +690,7 @@
       source: String,
     },
     mounted() {
+      this.initialize()
       this.readFromFirestore()
     },
   }

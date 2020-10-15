@@ -66,14 +66,6 @@
                   </v-btn>
                 </v-card-action>
               </div>
-
-<!--              <v-avatar-->
-<!--                class="ma-3"-->
-<!--                size="125"-->
-<!--                tile-->
-<!--              >-->
-<!--                <v-img :src="item.src"></v-img>-->
-<!--              </v-avatar>-->
             </div>
           </v-card>
         </v-col>
@@ -110,6 +102,13 @@
           title: 'Поведение пользователей',
           artist: 'Обзор поведения пользователей',
           href: "https://analytics.google.com/analytics/web/#/p247599057/reports/dashboard?params=_u..nav%3Dga1-experimental%26_u..pageSize%3D25&r=behavior-overview"
+
+        },
+        {
+          color: '#754172',
+          title: 'Сжатие фото',
+          artist: 'Редактирование фото перед загрузкой',
+          href: "https://squoosh.app/index.html"
 
         },
       ],

@@ -73,6 +73,7 @@ export const actions = {
     await bindFirestoreRef('Products', ref, { wait: true })
   }),
   async editPRODUCT({dispatch}, editProduct) {
+    console.log(123)
 
     await dispatch('AlertMessageLoading')
     const File = editProduct.File
@@ -112,10 +113,13 @@ export const actions = {
       }
     }
 
+    console.log(baseStyles)
     const baseStyles = {
       fontSize: editProduct.fontSize
     }
+    console.log(baseStyles)
     baseStyles['background-color'] = editProduct['background-color']
+    console.log(baseStyles)
     const NameImages = await Promise.all(promisesName)
     const URLs = await Promise.all(promises)
     const ArrayOld = await editProduct.arrayImages
@@ -236,40 +240,6 @@ export const actions = {
     const ProductsAll = await Promise.all(promises)
     commit('FIREBASE_PRODUCTS', ProductsAll)
 
-
-    // this.$fireStore.collection("cities").where("capital", "==", true)
-    //   .get()
-    //   .then(function(querySnapshot) {
-    //     querySnapshot.forEach(function(doc) {
-    //       // doc.data() is never undefined for query doc snapshots
-    //       console.log(doc.id, " => ", doc.data());
-    //     });
-    //   })
-    //   .catch(function(error) {
-    //     console.log("Error getting documents: ", error);
-    //   });
-
-
-    // const productRef = this.$fireStore.collection('products').doc('stanki')
-    // const productRef = this.$fireStore.doc('products/stanki')
-    // try {
-    //   await productRef.set({
-    //     message: 'Nuxt-Fire with Firestore rocks!'
-    //   })
-    // } catch (e) {
-    //   alert(e)
-    //   return
-    // }
-    // alert('Success.')
-    // try {
-    //   const productDoc = await productRef.get()
-    //   console.log('productDoc.data()', productDoc.data())
-      // alert(productDoc.data())
-      // commit('LIST_USERS', userOnlain)
-    // } catch (e) {
-    //   alert(e)
-    //   return
-    // }
   },
   getUid() {
     const user = new this.$fireAuthObj().currentUser

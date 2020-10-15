@@ -1,6 +1,5 @@
 <template>
   <div class="z-product-information">
-
     <h2
       style="margin: 10px 0; text-align: center">{{product.name}}
     </h2>
