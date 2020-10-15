@@ -73,7 +73,14 @@ export const actions = {
     await bindFirestoreRef('Products', ref, { wait: true })
   }),
   async editPRODUCT({dispatch}, editProduct) {
-    console.log(123)
+    console.log('Редактирование...')
+
+    Swal.fire({
+      title: "Идет загрузка...",
+      text: "",
+      imageUrl: "352.gif",
+      showConfirmButton: false
+    });
 
     await dispatch('AlertMessageLoading')
     const File = editProduct.File
@@ -113,13 +120,6 @@ export const actions = {
       }
     }
 
-    console.log(baseStyles)
-    const baseStyles = {
-      fontSize: editProduct.fontSize
-    }
-    console.log(baseStyles)
-    baseStyles['background-color'] = editProduct['background-color']
-    console.log(baseStyles)
     const NameImages = await Promise.all(promisesName)
     const URLs = await Promise.all(promises)
     const ArrayOld = await editProduct.arrayImages
@@ -127,9 +127,24 @@ export const actions = {
     const ArrayFile = [...URLs, ...ArrayOld]
     const ArrayNameImages = [...NameImages, ...NameImagesOld]
     try {
+
+      if(!editProduct.fontSize) {
+        await this.$fireStore.doc('products/' + editProduct.id)
+          .add({
+            fontSize: editProduct.fontSize,
+          })
+      }
+      if(!editProduct.background_color) {
+        await this.$fireStore.doc('products/' + editProduct.id)
+          .add({
+            background_color: editProduct.background_color,
+          })
+      }
+
       await this.$fireStore.doc('products/' + editProduct.id)
         .update({
-          baseStyles: baseStyles,
+          fontSize: editProduct.fontSize,
+          background_color: editProduct.background_color,
           NameImages: ArrayNameImages,
           video: editProduct.video,
           name: editProduct.name,

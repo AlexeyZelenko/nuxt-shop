@@ -30,7 +30,7 @@
     <p>Описание:</p>
     <p
       v-html="product.description"
-      :style="product.baseStyles"
+      :style="[{fontSize: product.fontSize}, {['background-color']: product.background_color}]"
     ></p>
 
     <p>Контактное лицо: {{product.name_contact}}</p>

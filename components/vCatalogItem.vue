@@ -120,12 +120,6 @@
       outline: none;
       cursor: pointer;
     }
-
-    &_button {
-      bottom: 1px ;
-      position: absolute;
-    }
-
     .v_catalog_item_new {
       margin-top: -35px;
       position: relative;

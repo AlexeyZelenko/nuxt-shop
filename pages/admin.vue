@@ -68,6 +68,10 @@
           <span v-html="item.description"/>
         </template>
 
+        <template v-slot:item.video="{ item }">
+          <span v-html="item.video"/>
+        </template>
+
         <template v-slot:item.actions="{ item }">
           <v-row justify="space-around">
 
@@ -162,7 +166,7 @@
                   <v-textarea
                     auto-grow
                     filled
-                    label="Описание товара"
+                    label="ОПИСАНИЕ товара"
                     name="input-7-1"
                     outlined
                     placeholder="Опишите подробно товар"
@@ -177,10 +181,10 @@
                   <v-row align="center">
                     <v-col cols="12">
                       <v-select
-                        v-model="editedItem['background-color']"
+                        v-model="editedItem.background_color"
                         :items="items"
                         :menu-props="{ top: true, offsetY: true }"
-                        label="Цвет фона Описания"
+                        label="Цвет фона ОПИСАНИЯ"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -192,9 +196,9 @@
                       <v-select
                         :items="items2"
                         :menu-props="{ top: true, offsetY: true }"
-                        label="Размер текста Описания"
+                        label="Размер текста ОПИСАНИЯ"
                         v-model="editedItem.fontSize"
-                        placeholder="Обязательно"
+                        placeholder="Не обязательно"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -346,7 +350,7 @@
       return new Promise((resolve) => {
         setTimeout(function () {
           resolve({})
-        }, 1000)
+        }, 1500)
       })
     },
     layout: 'admin',
@@ -422,8 +426,8 @@
       arrayImages: [],
       editedIndex: -1,
       editedItem: {
-        ['background-color']: {},
-        fontSize: null,
+        background_color: '',
+        fontSize: '',
         baseStyles: {},
         video: '',
         NameImages: [],
@@ -445,9 +449,8 @@
         seen: false
       },
       defaultItem: {
-        ['background-color']: {},
+        background_color: '',
         fontSize: '',
-        baseStyles: {},
         video: '',
         seen: false,
         NameImages: [],
@@ -481,7 +484,6 @@
           sortable: false,
           width: "1%",
         },
-        {text: 'Артикль', value: 'article', width: "1%", align: 'left'},
         {text: 'Фото', value: 'arrayImages', width: "1%", align: 'left'},
         {text: 'Категория', value: 'category', width: "1%", align: 'left'},
         {align: 'left', sortable: false, text: 'Описание', value: 'description', width: "70%"},
@@ -515,8 +517,7 @@
       save() {
         if (this.editedIndex > -1) {
           console.log(this.products[this.editedIndex])
-          const editProduct = Object.assign(this.products[this.editedIndex], this.editedItem)
-          console.log('1',editProduct)
+          const editProduct = Object.assign(this.PRODUCTS[this.editedIndex], this.editedItem)
           this.editThisProduct(editProduct)
         } else {
           const addProduct = this.editedItem
@@ -554,33 +555,30 @@
           console.log('Ошибка редактирования')
         }
       },
-      async addLocation(addProduct, video, baseStyles, fontSize, seen, arrayImages, File, article, available, category, name, price, description,) {
+      async addLocation(addProduct) {
         console.log('Добавление...')
         Swal.fire({
           title: "Идет загрузка...",
           text: "",
-          imageUrl: "images/352.gif",
+          imageUrl: "352.gif",
           showConfirmButton: false
         });
         const createdAt = Date.now()
-        seen = false
-        video = addProduct.video
-        File = addProduct.File
-        article = addProduct.article
-        available = addProduct.available
-        category = addProduct.category
-        name = addProduct.name
-        price = addProduct.price
-        description = addProduct.description
-        arrayImages = addProduct.arrayImages
-        name = addProduct.name
+        const seen = false
+        const video = addProduct.video
+        const File = addProduct.File
+        const article = addProduct.article
+        const available = addProduct.available
+        const category = addProduct.category
+        const name = addProduct.name
+        const price = addProduct.price
+        const description = addProduct.description
+        const arrayImages = addProduct.arrayImages
         const adress = 'Украина, Черкасская обл, Черкассы, Громова 142, 18018'
         const name_contact = 'Василий Станиславович'
         const telephone_contact = '+38(096)651-10-52,  Viber:+38(098)804-15-81,   +38(094)985-32-91,   (0472)50-12-91'
-        baseStyles = {
-          fontSize: addProduct.fontSize
-        }
-        baseStyles['background-color'] = addProduct['background-color']
+        const fontSize = addProduct.fontSize
+        const background_color = addProduct.background_color
 
 
 // ЗАГРУЗКА ФОТО
@@ -616,7 +614,8 @@
 
         let docRef = await this.$fireStore.collection('products').add({
           NameImages: NameImages,
-          baseStyles,
+          fontSize,
+          background_color,
           seen,
           video,
           article,
@@ -698,6 +697,12 @@
 
 <style lang="sass">
   @import '~vuetify/src/styles/styles.sass'
+  iframe
+    max-width: 100px
+    max-height: 100px
+    margin: 0 auto
+
+
   .z-table-button
     position: fixed
     right: 10%
