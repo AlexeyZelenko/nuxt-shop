@@ -183,8 +183,13 @@
                     <v-col cols="12">
                       <v-select
                         v-model="editedItem.background_color"
-                        :items="items"
+                        :items="items3"
+                        item-text="name"
+                        item-value="value"
+                        :hint="`${editedItem.background_color.name}, ${editedItem.background_color.value}`"
                         :menu-props="{ top: true, offsetY: true }"
+                        persistent-hint
+                        return-object
                         label="Цвет фона ОПИСАНИЯ"
                       ></v-select>
                     </v-col>
@@ -356,6 +361,11 @@
     },
     data() {
       return {
+        // background_color: { name: 'синий', value: 'cyan' },
+        items3: [
+          { name: 'синий', value: 'cyan' },
+          { name: 'красный', value: 'red' },
+        ],
         products: [],
         items: ['white', 'lime', 'green', 'orange', 'yellow', 'blue', 'cyan', 'indigo', 'pink', 'purple', 'teal', 'amber', 'grey'],
         items2: ['12px', '15px', '18px', '20px'],

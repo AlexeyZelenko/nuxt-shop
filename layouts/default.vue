@@ -101,6 +101,7 @@
               no-gutters
             >
               <v-btn
+                v-for="link in links"
                 :key="link.name"
                 :to="link.value"
                 aria-live="polite"
@@ -108,7 +109,6 @@
                 color="white"
                 rounded
                 text
-                v-for="link in links"
               >
                 {{ link.name }}
               </v-btn>
