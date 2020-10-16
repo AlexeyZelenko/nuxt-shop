@@ -25,11 +25,19 @@
     </template>
 
     <div class="video"
-      v-if="product.video"
-      v-html="product.video"
+         v-if="product.video"
+         v-html="product.video"
     ></div>
 
-    <p v-if="product.price">Цена: {{product.price}} грн</p>
+    <template>
+      <v-chip
+        v-if="product.price"
+        :color="getColor(product.price)"
+        dark
+      >
+        Цена: {{product.price}} грн
+      </v-chip>
+    </template>
 
     <p>Описание:</p>
     <p
@@ -55,6 +63,14 @@
       ...mapActions([
         'readFromFirestore'
       ]),
+      getColor(price) {
+        if (price < 500) return 'red'
+        else if (price > 500 && price < 1000 ) return 'orange'
+        else if (price > 1000 && price < 2000 ) return 'cyan'
+        else if (price > 2000 && price < 3000 ) return 'purple'
+        else if (price > 3000) return 'blue'
+        else return 'green'
+      },
     },
     mounted() {
       this.readFromFirestore()

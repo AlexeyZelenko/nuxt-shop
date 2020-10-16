@@ -68,6 +68,16 @@
           <span v-html="item.description"/>
         </template>
 
+        <template v-slot:item.price="{ item }" >
+          <v-chip
+            v-if="item.price"
+            :color="getColor(item.price)"
+            dark
+          >
+            {{ item.price }}
+          </v-chip>
+        </template>
+
 
         <template v-slot:item.actions="{ item }">
           <v-row justify="space-around">
@@ -96,15 +106,9 @@
 
       </v-data-table>
     </v-card>
+
     <!--		ВСПЛЫВАЮЩАЯ ПАНЕЛЬ-->
     <div>
-<!--      <ClientOnly>-->
-<!--        <tiptap-vuetify-->
-<!--          :extensions="extensions"-->
-<!--          placeholder="Описание товара"-->
-<!--        />-->
-<!--      </ClientOnly>-->
-
       <v-dialog
         style="z-index: 100"
         v-model="dialog"
@@ -262,6 +266,21 @@
                       >
                         <v-icon dark>mdi-delete</v-icon>
                       </v-btn>
+
+<!--    Переместить фото в начало массива-->
+                      <template>
+                        <div class="text-center">
+                          <v-btn
+                            @click="FirstFoto(editedItem, item)"
+                            style="float: right; top: 1em;"
+                            rounded
+                            color="teal"
+                            dark
+                          >
+                            Сделать главной
+                          </v-btn>
+                        </div>
+                      </template>
                     </v-carousel-item>
                   </v-carousel>
 
@@ -320,27 +339,7 @@
 
 <script>
   import {mapActions, mapGetters} from 'vuex'
-  import ImageItem from '~/components/ImageItem.vue'
   import Swal from 'sweetalert2'
-  // import the component and the necessary extensions
-  import {
-    TiptapVuetify,
-    Heading,
-    Bold,
-    Italic,
-    Strike,
-    Underline,
-    Code,
-    Paragraph,
-    BulletList,
-    OrderedList,
-    ListItem,
-    Link,
-    Blockquote,
-    HardBreak,
-    HorizontalRule,
-    History
-  } from 'tiptap-vuetify'
 
   export default {
     asyncData () {
@@ -353,52 +352,17 @@
     layout: 'admin',
     name: "zAdmin",
     components: {
-      // TiptapVuetify,
-      ImageItem
+      'ImageItem': () => import('~/components/ImageItem.vue'),
     },
     data() {
       return {
         products: [],
         items: ['white', 'lime', 'green', 'orange', 'yellow', 'blue', 'cyan', 'indigo', 'pink', 'purple', 'teal', 'amber', 'grey'],
         items2: ['12px', '15px', '18px', '20px'],
-      // declare extensions you want to use
-      extensions: [
-        History,
-        Blockquote,
-        Link,
-        Underline,
-        Strike,
-        Italic,
-        ListItem,
-        BulletList,
-        OrderedList,
-        [
-          Heading,
-          {
-            options: {
-              levels: [1, 2, 3]
-            }
-          }
-        ],
-        Bold,
-        Link,
-        Code,
-        HorizontalRule,
-        Paragraph,
-        HardBreak
-      ],
-      // starting editor's content
-      content: `
-      <h1>Yay Headlines!</h1>
-      <p>All these <strong>cool tags</strong> are working now.</p>
-    `,
       categories: [
         '',
         'Станки',
         'Котлы',
-        'Водонагреватели',
-        'Бойлеры',
-        'Теплые полы',
         'Статьи',
         'Услуги',
         'Контакты',
@@ -406,7 +370,7 @@
       ],
       page: 1,
       pageCount: 0,
-      itemsPerPage: 15,
+      itemsPerPage: 10,
 
       rules: {
         required: value => !!value || 'Обязательно.',
@@ -465,9 +429,6 @@
       itemsCategories: [
         'Станки',
         'Котлы',
-        'Водонагреватели',
-        'Бойлеры',
-        'Теплые полы',
         'Статьи',
         'Услуги',
         'Контакты',
@@ -480,10 +441,11 @@
           align: 'left',
           sortable: false,
           width: "1%",
+          divider: true,
         },
         {text: 'Фото', value: 'arrayImages', width: "1%", align: 'left'},
         {text: 'Категория', value: 'category', width: "1%", align: 'left'},
-        {align: 'left', sortable: false, text: 'Описание', value: 'description', width: "70%"},
+        {text: 'Описание', align: 'left', sortable: false, value: 'description', width: "70%"},
         {text: 'Цена', value: 'price', width: "1%", align: 'left'},
         {text: 'Редактировать/Удалить', value: 'actions', sortable: false, width: "1%", align: 'left'},
       ],
@@ -507,12 +469,27 @@
         editedItem.arrayImages = array
         editedItem.NameImages = arrayName
       },
+
+      FirstFoto(editedItem, item) {
+        const array = editedItem.arrayImages
+        const arrayName = editedItem.NameImages
+
+
+
+        const index = array.indexOf(item);
+        if (index > -1) {
+          array.unshift(...array.splice(index,1));
+          arrayName.unshift(...arrayName.splice(index,1));
+        }
+        editedItem.arrayImages = array
+        editedItem.NameImages = arrayName
+      },
+
       initialize() {
         this.products = this.PRODUCTS
       },
       save() {
         if (this.editedIndex > -1) {
-          console.log(this.products[this.editedIndex])
           const editProduct = Object.assign(this.PRODUCTS[this.editedIndex], this.editedItem)
           this.editThisProduct(editProduct)
         } else {
@@ -531,7 +508,6 @@
       },
       editItem(item) {
         this.editedIndex = this.PRODUCTS.indexOf(item)
-        console.log('this.editedIndex', this.editedIndex)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
@@ -552,7 +528,6 @@
         }
       },
       async addLocation(addProduct) {
-        console.log('Добавление...')
         Swal.fire({
           title: "Идет загрузка...",
           text: "",
@@ -628,7 +603,6 @@
         });
         try {
           const docAdded = await docRef;
-          console.log(`${docAdded.id}`);
           await this.$fireStore.doc('products/' + `${docAdded.id}`).update({id: `${docAdded.id}`});
         } catch (err) {
           return err;
@@ -648,10 +622,10 @@
       },
       getColor(price) {
         if (price < 500) return 'red'
-        else if (price > 500) return 'orange'
-        else if (price > 1000) return 'cyan'
-        else if (price > 2000) return 'yellow'
-        else if (price > 3000) return 'grey'
+        else if (price > 500 && price < 1000 ) return 'orange'
+        else if (price > 1000 && price < 2000 ) return 'cyan'
+        else if (price > 2000 && price < 3000 ) return 'purple'
+        else if (price > 3000) return 'blue'
         else return 'green'
       },
       async deleteLocation(item) {
@@ -690,7 +664,6 @@
     },
   }
 </script>
-
 <style lang="sass">
   @import '~vuetify/src/styles/styles.sass'
 

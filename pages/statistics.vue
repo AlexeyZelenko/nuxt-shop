@@ -104,13 +104,6 @@
           href: "https://analytics.google.com/analytics/web/#/p247599057/reports/dashboard?params=_u..nav%3Dga1-experimental%26_u..pageSize%3D25&r=behavior-overview"
 
         },
-        {
-          color: '#754172',
-          title: 'Сжатие фото',
-          artist: 'Редактирование фото перед загрузкой',
-          href: "https://squoosh.app/index.html"
-
-        },
       ],
     }),
   }

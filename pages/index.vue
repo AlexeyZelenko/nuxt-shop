@@ -29,7 +29,6 @@
 </template>
 
 <script>
-  // import vSelect from '~/components/vSelect.vue'
   import {mapActions, mapGetters} from 'vuex'
 
   export default {
@@ -37,14 +36,12 @@
       return new Promise((resolve) => {
         setTimeout(function () {
           resolve({name: 'world'})
-        }, 1000)
+        }, 1300)
       })
     },
     components: {
       vCatalogItem: process.browser ? () => import('~/components/vCatalogItem.vue') : null,
       'vSelect': () => import('~/components/vSelect.vue'),
-      // vCatalogItem,
-      // vSelect,
     },
 
     data() {

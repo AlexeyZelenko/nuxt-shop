@@ -1,78 +1,60 @@
 <template>
   <v-app id="inspire">
-  <v-card
-    class="mx-auto overflow-hidden"
-    width="100%"
-  >
-
-    <v-system-bar color="deep-purple darken-3"></v-system-bar>
-
-    <v-app-bar
-      color="deep-purple accent-4"
-      dark
-      prominent
+    <v-card
+      class="mx-auto overflow-hidden"
+      width="100%"
     >
-      <v-btn
-        icon
-        :to="{name: 'index'}"
+      <v-app-bar
+        color="deep-purple accent-4"
+        dark
+        prominent
       >
-        <v-icon>mdi-arrow-left</v-icon>
-      </v-btn>
-
-      <v-toolbar-title>Администратор</v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
-
-      <v-btn
-        @click.stop="drawer = !drawer"
-        icon
-      >
-        <v-icon>mdi-dots-vertical</v-icon>
-
-      </v-btn>
-    </v-app-bar>
-
-    <v-navigation-drawer
-      v-model="drawer"
-      absolute
-      bottom
-      temporary
-    >
-      <v-list
-        nav
-        dense
-        style="background-color: #7f828b"
-      >
-        <v-list-item-group
-          v-model="group"
-          active-class="deep-purple--text text--accent-4"
+        <v-btn
+          :to="{name: 'index'}"
+          icon
         >
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
 
-          <v-list-item
-            nuxt-link :to="{name: 'statistics'}"
-          >
-            <v-list-item-title>Статистика</v-list-item-title>
-          </v-list-item>
+        <v-toolbar-title>Администратор</v-toolbar-title>
 
-          <v-list-item
-            nuxt-link :to="{name: 'admin'}"
-          >
-            <v-list-item-title>Объявления</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            nuxt-link :to="{name: 'admin'}"
-          >
-            <v-list-item-title>Объявления</v-list-item-title>
-          </v-list-item>
+        <v-spacer></v-spacer>
 
-        </v-list-item-group>
-      </v-list>
-    </v-navigation-drawer>
-  </v-card>
-    <v-app>
-      <nuxt />
-    </v-app>
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+
+      </v-app-bar>
+      <v-navigation-drawer
+        v-model="drawer"
+        absolute
+        temporary
+      >
+        <v-list
+          nav
+          dense
+        >
+          <v-list-item-group
+            active-class="deep-purple--text text--accent-4"
+            v-model="group"
+          >
+            <v-list-item
+              v-for="item in items"
+              :key="item.title"
+              :to="item.value"
+              link
+            >
+              <v-list-item-icon>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+
+          </v-list-item-group>
+        </v-list>
+      </v-navigation-drawer>
+      <v-card-text>
+        <nuxt/>
+      </v-card-text>
+    </v-card>
   </v-app>
 </template>
 
@@ -82,6 +64,11 @@
 
   export default {
     data: () => ({
+      items: [
+        { title: 'Статистика', icon: 'mdi-view-dashboard', value: 'statistics'},
+        { title: 'Объявления', icon: 'mdi-forum', value: 'admin' },
+        { title: 'Помощь', icon: 'mdi-gavel', value: 'Help' },
+      ],
       drawer: false,
       group: null,
     }),
@@ -103,7 +90,7 @@
       },
     },
     watch: {
-      group () {
+      group() {
         this.drawer = false
       },
     },

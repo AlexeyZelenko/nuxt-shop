@@ -73,7 +73,6 @@ export const actions = {
     await bindFirestoreRef('Products', ref, { wait: true })
   }),
   async editPRODUCT({dispatch}, editProduct) {
-    console.log('Редактирование...')
 
     Swal.fire({
       title: "Идет загрузка...",
@@ -200,7 +199,7 @@ export const actions = {
               const Ref = storageRef.child('assets/images/' + nameTime)
               Ref.delete().then(function () {
               }).catch(function (error) {
-                console.log('удаление фото с всем объявлением' + error)
+                console.log('удаление фото со всем объявлением' + error)
               })
             }
           }
@@ -230,8 +229,6 @@ export const actions = {
       .get()
       .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        // console.log(doc.id, " => ", doc.data());
         const data = doc.data()
 
         promises.push(
@@ -416,8 +413,3 @@ export const getters = {
 }
 
 export const strict = false
-
-
-
-
-

@@ -34,11 +34,10 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'teploservis68.com.ua' }
     ],
     plugins: [
-      { src: '~/plugins/TiptapVuetify', mode: 'client' },
       { src: '~~/plugins/vue-lazy-load.js' }
     ],
     link: [
-      { rel: 'image', type: 'image/png', href: '/service.png' },
+      { rel: 'image', type: 'image/png', href: 'service.png' },
       // Iconfonts for Vuetify. You need to leave only which one you use
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons' },
       { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css' },

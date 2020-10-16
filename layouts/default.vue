@@ -1,30 +1,30 @@
 <template id="headerMain">
   <v-app>
     <div>
-  <!--    ШАПКА-->
+      <!--    ШАПКА-->
       <template>
         <div id="header">
           <v-toolbar
             color="#ff9900"
             prominent
           >
-              <v-icon
-                style="margin: 10px"
-                @click="home"
-              >
-                mdi-home
-              </v-icon>
+            <v-icon
+              @click="home"
+              style="margin: 10px"
+            >
+              mdi-home
+            </v-icon>
 
             <v-spacer></v-spacer>
 
-<!--            Вход в Админку-->
+            <!--            Вход в Админку-->
             <v-btn
-              v-if="GET_ADMIN_ENTRANCE"
               @click="adminPlusLogin"
               class="ma-2"
               outlined
               small
-              style="color: white; z-index: 102">
+              style="color: white; z-index: 102"
+              v-if="GET_ADMIN_ENTRANCE">
               <v-icon>mdi-format-list-bulleted-square</v-icon>
             </v-btn>
 
@@ -40,9 +40,9 @@
               </v-btn>
               <v-btn
                 @click="logout"
-                v-if="User_Entrance"
                 rounded
                 style="background-color: darkgreen; color: white; z-index: 102"
+                v-if="User_Entrance"
               >
                 Выйти
               </v-btn>
@@ -70,12 +70,12 @@
           <v-toolbar
             color="#ff9900"
             style="margin-top: -50px;"
-            >
+          >
             <v-toolbar-title>
               <img
-                style="margin-left: 10px;"
-                src="~/assets/logo.png"
                 alt=""
+                src="~/assets/logo.png"
+                style="margin-left: 10px;"
               >
             </v-toolbar-title>
 
@@ -83,39 +83,39 @@
           <Share></Share>
         </div>
       </template>
-  <!--    КОНТЕНТ-->
+      <!--    КОНТЕНТ-->
       <div id="content">
         <nuxt/>
       </div>
-  <!--FOOTER-->
+      <!--FOOTER-->
       <template id="footer">
         <div>
           <v-footer
-            style="background-color: #f0b165"
-            padless
-            class="mx-auto"
             absolute
+            class="mx-auto"
+            padless
+            style="background-color: #f0b165"
           >
             <v-row
               justify="center"
               no-gutters
             >
               <v-btn
-                aria-live="polite"
-                v-for="link in links"
                 :key="link.name"
-                color="white"
-                text
-                rounded
-                class="my-2"
                 :to="link.value"
+                aria-live="polite"
+                class="my-2"
+                color="white"
+                rounded
+                text
+                v-for="link in links"
               >
                 {{ link.name }}
               </v-btn>
               <v-col
-                style="background-color: #ff9900"
                 class=" py-4 text-center white--text"
                 cols="12"
+                style="background-color: #ff9900"
               >
                 {{ new Date().getFullYear() }} — Теплосервис
               </v-col>
@@ -128,18 +128,17 @@
 </template>
 
 <script>
-  // import Share from '~/components/ShareNetwork.vue'
-  import {mapActions, mapGetters} from 'vuex'
+  import {mapGetters} from 'vuex'
+
   export default {
     components: {
       'Share': () => import('~/components/ShareNetwork.vue'),
-      // Share
     },
     data: () => ({
       links: [
-        { name: 'О нас', value: 'About'},
-        { name: 'Услуги', value: 'About'},
-        { name: 'Контакты', value: 'Contacts'},
+        {name: 'О нас', value: 'About'},
+        {name: 'Услуги', value: 'About'},
+        {name: 'Контакты', value: 'Contacts'},
       ],
     }),
     methods: {
@@ -181,14 +180,14 @@
 
 <style>
   #headerMain {
-    width:100%;
-    margin:0px auto;
-    z-index:0;
+    width: 100%;
+    margin: 0px auto;
+    z-index: 0;
   }
 
   #header {
     hight: 160px;
-    width:100%;
+    width: 100%;
     position: fixed;
     z-index: 99;
   }

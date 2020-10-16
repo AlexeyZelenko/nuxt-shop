@@ -1,4 +1,3 @@
-
 <template >
   <div
     @click="productClick"
@@ -9,12 +8,11 @@
     >
       <span
         v-html="product_data.name"
-
       ></span>
     </div>
 
     <div
-      style="height: 100px; margin: 100px 0 100px"
+      class="divImage"
       v-if="product_data.arrayImages"
     >
       <ImageItem
@@ -43,11 +41,10 @@
 </template>
 
 <script>
-  import ImageItem from '~/components/ImageItem.vue'
   export default {
     name: "v-catalog-item",
     components: {
-      ImageItem
+      'ImageItem': () => import('~/components/ImageItem.vue'),
     },
     data() {
       return {
@@ -63,10 +60,10 @@
       },
     },
     methods: {
-      lazyLoadImage(e){
-        let media = e.target.parentNode.querySelectorAll('[data-manual-lazy]');
-        [...media].forEach(m => this.$lazyLoad(m))
-      },
+      // lazyLoadImage(e){
+      //   let media = e.target.parentNode.querySelectorAll('[data-manual-lazy]');
+      //   [...media].forEach(m => this.$lazyLoad(m))
+      // },
       productClick() {
         this.$emit('productClick', this.product_data.id)
       },
@@ -75,12 +72,9 @@
 </script>
 
 <style lang="scss">
-  h4 {
-    padding: 5px;
-  }
-  .emptyImage {
-    width: 100px;
-    height: 300px;
+  .divImage {
+    height: 100px;
+    margin: 100px 0 100px;
   }
 
   .v-catalog-item {
@@ -120,16 +114,6 @@
       outline: none;
       cursor: pointer;
     }
-    .v_catalog_item_new {
-      margin-top: -35px;
-      position: relative;
-      text-align: center;
-      z-index: 12;
-      top: 45%;
-      width: 95%;
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-    }
+
   }
 </style>
