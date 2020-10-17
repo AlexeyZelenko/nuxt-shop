@@ -26,7 +26,6 @@ export const actions = {
 }
 export const getters = {
   count(state) {
-    console.log(state.countDocument)
     return state.countDocument.count
   },
 }
