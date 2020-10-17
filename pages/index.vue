@@ -14,14 +14,12 @@
         </v-row>
         <!--Отображение каталога-->
         <div class="v-catalog__list">
-
           <vCatalogItem
             :product_data="product"
             @productClick="productClick"
             v-for="product in filteredProducts"
             :key="product.id"
           />
-
         </div>
       </div>
     </div>
@@ -47,20 +45,11 @@
     data() {
       return {
         isActive: false,
-        categories: [
-          {name: 'Станки', value: 'Machine_tools'},
-          {name: 'Котлы', value: 'Boilers'},
-          {name: 'Статьи', value: 'Articles'},
-          {name: 'Услуги', value: 'Services'},
-          {name: 'Контакты', value: 'Contacts'},
-          {name: 'О нас', value: 'About'},
-        ],
-        selected: 'Категории',
-        sortedProducts: [],
       }
     },
     methods: {
       ...mapActions([
+        'bindCountDocument',
         'readFromFirestore',
         'userEntrance',
         'USER_ID_ACTIONS',
@@ -69,19 +58,24 @@
         this.$router.push({name: 'product', query: {'product': id}})
       },
       sortByCategories(category) {
-        this.sortedProducts = [];
-        this.PRODUCTS.map((item) => {
-          if (item.category === category.name) {
-            this.sortedProducts.push(item);
-          }
-        })
-        this.selected = category.name
+        this.$store.dispatch('categories/sortByCategories', category)
       },
+      // sortByCategories(category) {
+      //   const sortedProducts = [];
+      //   this.PRODUCTS.map((item) => {
+      //     if (item.category === category.name) {
+      //       sortedProducts.push(item);
+      //       this.$store.commit('categories/SORT_PRODUCTS', sortedProducts)
+      //     }
+      //   })
+      //   const selected = category.name
+      //   this.$store.commit('categories/SELECT_PRODUCTS', selected)
+      // },
     },
     mounted() {
       this.USER_ID_ACTIONS()
       this.userEntrance()
-      this.readFromFirestore()
+      this.bindCountDocument()
     },
     computed: {
       ...mapGetters([
@@ -89,6 +83,15 @@
         'User_Entrance',
         'USER_ID',
       ]),
+      categories() {
+        return this.$store.state.categories.categories
+      },
+      selected() {
+        return this.$store.state.categories.selected
+      },
+      sortedProducts() {
+        return this.$store.state.categories.sortedProducts
+      },
       filteredProducts() {
         if (this.sortedProducts.length) {
           return this.sortedProducts

@@ -455,7 +455,7 @@
     },
     methods: {
       ...mapActions([
-        'readFromFirestore'
+        'bindCountDocument'
       ]),
       deleteFoto(editedItem, item) {
         const array = editedItem.arrayImages
@@ -473,8 +473,6 @@
       FirstFoto(editedItem, item) {
         const array = editedItem.arrayImages
         const arrayName = editedItem.NameImages
-
-
 
         const index = array.indexOf(item);
         if (index > -1) {
@@ -514,7 +512,6 @@
       async editThisProduct(editProduct) {
         try {
           await this.$store.dispatch('editPRODUCT', editProduct)
-          this.readFromFirestore()
         } catch (e) {
           Swal.close()
           Swal.fire({
@@ -631,7 +628,6 @@
       async deleteLocation(item) {
         try {
           await this.$store.dispatch('deleteRRODUCT', item)
-          this.initialize()
         } catch (e) {
           console.log('Ошибка')
         }
@@ -660,7 +656,7 @@
     },
     mounted() {
       this.initialize()
-      this.readFromFirestore()
+      this.bindCountDocument()
     },
   }
 </script>

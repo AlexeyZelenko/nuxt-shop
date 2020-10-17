@@ -61,7 +61,7 @@
     }),
     methods: {
       ...mapActions([
-        'readFromFirestore'
+        'bindCountDocument'
       ]),
       getColor(price) {
         if (price < 500) return 'red'
@@ -73,7 +73,7 @@
       },
     },
     mounted() {
-      this.readFromFirestore()
+      this.bindCountDocument()
     },
     computed: {
       ...mapGetters([

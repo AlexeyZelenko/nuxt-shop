@@ -3,8 +3,8 @@ import Swal from 'sweetalert2'
 
 export default {
   ...vuexfireMutations,
-  FIREBASE_PRODUCTS: (state, data) => {
-    state.Products = data
+  FIREBASE_PRODUCTS2: (state, documents) => {
+    state.Products = documents
   },
   FIREBASE_MUTATIONS: (state, message) => {
     state.products = message

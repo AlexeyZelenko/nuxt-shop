@@ -12,5 +12,4 @@ export default () => ({
   Users: [],
   InfoUser: [],
   user: null,
-
 })

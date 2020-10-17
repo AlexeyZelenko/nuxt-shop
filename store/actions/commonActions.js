@@ -1,5 +1,5 @@
-import Swal from "sweetalert2";
 import { vuexfireMutations, firestoreAction } from 'vuexfire'
+import Swal from "sweetalert2";
 
 export default {
   AlertMessageLoading() {
@@ -8,10 +8,13 @@ export default {
       showConfirmButton: false,
     })
   },
-  bindCountDocument: firestoreAction(async function ({ bindFirestoreRef }) {
+  bindCountDocument: firestoreAction(async function ({ commit,bindFirestoreRef }) {
     const ref = this.$fireStore
       .collection('products')
-    await bindFirestoreRef('Products', ref, { wait: true })
+    await bindFirestoreRef('Products', ref, { wait: true }).then(documents => {
+      // commit('LAST_DOC', documents[documents.length - 1]);
+      commit('FIREBASE_PRODUCTS2', documents)
+    });
   }),
   async editPRODUCT({dispatch}, editProduct) {
 
@@ -22,8 +25,8 @@ export default {
       showConfirmButton: false
     });
 
-    // await dispatch('AlertMessageLoading')
-    const File = editProduct.File
+    await dispatch('AlertMessageLoading')
+    const File = await editProduct.File
     const promises = []
     const promisesName = []
 
@@ -68,6 +71,8 @@ export default {
     const ArrayNameImages = [...NameImages, ...NameImagesOld]
     try {
 
+      console.log(1)
+
       await this.$fireStore.doc('products/' + editProduct.id)
         .update({
           fontSize: editProduct.fontSize,
@@ -85,21 +90,27 @@ export default {
           adress: editProduct.adress,
           name_contact: editProduct.name_contact,
           telephone_contact: editProduct.telephone_contact,
-        })
-        .then(() => {
+        }).then(() => {
+
+          console.log(2)
 
           Swal.close()
+          console.log(3)
 
-          Swal.fire({
+         Swal.fire({
             position: 'top-end',
             type: 'success',
             title: 'Ваша работа была сохранена',
             showConfirmButton: false,
             timer: 1500
           })
+          console.log(4)
         })
+      console.log(5)
     }
+
     catch (err) {
+      console.log(6)
       Swal.close()
       Swal.fire({
         position: 'top-end',
@@ -112,10 +123,10 @@ export default {
     }
   },
   async deleteRRODUCT({}, item) {
-    Swal.fire({
+    await Swal.fire({
       title: 'Вы уверенны?',
       text: "Вы не сможете восстановить это!",
-      icon: 'warning',
+      type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
@@ -146,40 +157,32 @@ export default {
           }
 
           const id = item.id
-          this.$fireStore.collection("products").doc(`${id}`).delete().then(function() {
+          this.$fireStore
+            .collection("products")
+            .doc(`${id}`)
+            .delete()
+            .then(function() {
+
             console.log("Документ успешно удален!");
 
             Swal.close()
 
+            Swal.fire({
+                title: 'Удаленно!',
+                text: 'Ваш продукт удален.',
+                type: 'success'
+              })
           }).catch(function(error) {
             console.error("Ошибка при удалении документа: ", error);
           });
 
-          Swal.fire(
-            'Удаленно!',
-            'Ваш продукт удален.',
-            'success'
-          )
+          // Swal.fire(
+          //   'Удаленно!',
+          //   'Ваш продукт удален.',
+          //   'success'
+          // )
         }
-        window.location.reload()
       })
-  },
-  async readFromFirestore({commit}) {
-    const promises = []
-    await this.$fireStore.collection("products")
-      .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          const data = doc.data()
-
-          promises.push(
-            data
-          )
-        })
-      })
-    const ProductsAll = await Promise.all(promises)
-    commit('FIREBASE_PRODUCTS', ProductsAll)
-
   },
   async list_Users({commit}) {
     const user = this.$fireAuthObj().currentUser;

@@ -1,4 +1,3 @@
-// import { db } from '~/plugins/firebase.js'
 import { vuexfireMutations, firestoreAction } from 'vuexfire'
 import Swal from 'sweetalert2'
 
