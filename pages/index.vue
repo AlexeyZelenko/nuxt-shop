@@ -50,7 +50,6 @@
     methods: {
       ...mapActions([
         'bindCountDocument',
-        'readFromFirestore',
         'userEntrance',
         'USER_ID_ACTIONS',
       ]),
@@ -60,17 +59,6 @@
       sortByCategories(category) {
         this.$store.dispatch('categories/sortByCategories', category)
       },
-      // sortByCategories(category) {
-      //   const sortedProducts = [];
-      //   this.PRODUCTS.map((item) => {
-      //     if (item.category === category.name) {
-      //       sortedProducts.push(item);
-      //       this.$store.commit('categories/SORT_PRODUCTS', sortedProducts)
-      //     }
-      //   })
-      //   const selected = category.name
-      //   this.$store.commit('categories/SELECT_PRODUCTS', selected)
-      // },
     },
     mounted() {
       this.USER_ID_ACTIONS()

@@ -25,7 +25,7 @@ export default {
       showConfirmButton: false
     });
 
-    await dispatch('AlertMessageLoading')
+    // await dispatch('AlertMessageLoading')
     const File = await editProduct.File
     const promises = []
     const promisesName = []
@@ -70,9 +70,6 @@ export default {
     const ArrayFile = [...URLs, ...ArrayOld]
     const ArrayNameImages = [...NameImages, ...NameImagesOld]
     try {
-
-      console.log(1)
-
       await this.$fireStore.doc('products/' + editProduct.id)
         .update({
           fontSize: editProduct.fontSize,
@@ -92,10 +89,7 @@ export default {
           telephone_contact: editProduct.telephone_contact,
         }).then(() => {
 
-          console.log(2)
-
           Swal.close()
-          console.log(3)
 
          Swal.fire({
             position: 'top-end',
@@ -104,13 +98,9 @@ export default {
             showConfirmButton: false,
             timer: 1500
           })
-          console.log(4)
         })
-      console.log(5)
     }
-
     catch (err) {
-      console.log(6)
       Swal.close()
       Swal.fire({
         position: 'top-end',

@@ -58,7 +58,7 @@
           <ImageItem
             v-if="item.arrayImages"
             class="v-catalog-item_image"
-            style="max-width: 100px; max-height: 100px; margin: 5px"
+            style="max-width: 100px; max-height: 120px; margin: 5px"
             :source="item.arrayImages[0]"
           />
         </template>

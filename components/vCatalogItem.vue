@@ -73,7 +73,7 @@
 
 <style lang="scss">
   .divImage {
-    height: 100px;
+    height: 130px;
     margin: 100px 0 100px;
   }
 
