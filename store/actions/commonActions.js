@@ -128,7 +128,7 @@ export default {
           Swal.fire({
             title: "Идет загрузка...",
             text: "",
-            imageUrl: "@/assets/images/352.gif",
+            imageUrl: "352.gif",
             showConfirmButton: false
           });
 
