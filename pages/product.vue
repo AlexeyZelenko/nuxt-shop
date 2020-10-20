@@ -29,8 +29,9 @@
          v-html="product.video"
     ></div>
 
-    <template>
+    <template >
       <v-chip
+        style="margin: 20px"
         v-if="product.price"
         :color="getColor(product.price)"
         dark
@@ -42,6 +43,7 @@
     <p>Описание:</p>
     <p
       v-html="product.description"
+      class="descriptions"
       :style="[{fontSize: product.fontSize}, {['background-color']: product.background_color}]"
     ></p>
 
@@ -93,17 +95,23 @@
 </script>
 
 <style lang="scss">
+  .descriptions {
+    padding: 10px;
+    border-radius: 5px;
+  }
   .z-product-information {
     flex-basis: 25%;
     box-shadow: 0 0 8px 0 #e0e0e0;
     padding: $padding*2;
     margin-bottom: $margin*2;
     text-align: center;
+    border-radius: 5px;
 
     iframe {
       max-width: 100%;
       max-height: 400px;
       margin: 0 auto;
+      border-radius: 5px;
     }
   }
 </style>

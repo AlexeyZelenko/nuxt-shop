@@ -1,3 +1,5 @@
+import { vuexfireMutations, firestoreAction } from 'vuexfire'
+
 export const state = () => ({
   categories: [
     {name: 'Станки', value: 'Machine_tools'},
@@ -25,25 +27,33 @@ export const mutations = {
 }
 
 export const actions = {
-async readFromFirestore({commit}) {
-  const promises = []
-  await this.$fireStore.collection("products")
-    .get()
-    .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        const data = doc.data()
-        promises.push(
-          data
-        )
-      })
-    })
-  const ProductsAll = await Promise.all(promises)
-  commit('FIREBASE_PRODUCTS', ProductsAll)
-},
+bindCountDocument: firestoreAction(async function ({ commit,bindFirestoreRef }) {
+    const ref = this.$fireStore
+      .collection('products')
+    await bindFirestoreRef('Products', ref, { wait: true }).then(documents => {
+      // commit('LAST_DOC', documents[documents.length - 1]);
+      commit('FIREBASE_PRODUCTS', documents)
+    });
+  }),
+// async readFromFirestore({commit}) {
+//   const promises = []
+//   await this.$fireStore.collection("products")
+//     .get()
+//     .then(function(querySnapshot) {
+//       querySnapshot.forEach(function(doc) {
+//         const data = doc.data()
+//         promises.push(
+//           data
+//         )
+//       })
+//     })
+//   const ProductsAll = await Promise.all(promises)
+//   commit('FIREBASE_PRODUCTS', ProductsAll)
+// },
 
 async sortByCategories({commit, getters, dispatch}, category) {
 
-    await dispatch('readFromFirestore')
+    await dispatch('bindCountDocument')
 
     const PRODUCTS = await getters.getProducts
 

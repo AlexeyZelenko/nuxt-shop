@@ -38,7 +38,8 @@
       })
     },
     components: {
-      vCatalogItem: process.browser ? () => import('~/components/vCatalogItem.vue') : null,
+      // vCatalogItem: process.browser ? () => import('~/components/vCatalogItem.vue') : null,
+      'vCatalogItem': () => import('~/components/vCatalogItem.vue'),
       'vSelect': () => import('~/components/vSelect.vue'),
     },
 

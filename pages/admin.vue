@@ -55,12 +55,18 @@
           style="height:190px;"
           v-slot:item.arrayImages="{ item }">
 
-          <ImageItem
-            v-if="item.arrayImages"
-            class="v-catalog-item_image"
-            style="max-width: 100px; max-height: 120px; margin: 5px"
-            :source="item.arrayImages[0]"
-          />
+<!--          <ImageItem-->
+<!--            v-if="item.arrayImages"-->
+<!--            class="v-catalog-item_image"-->
+<!--            style="max-width: 100px; max-height: 120px; margin: 5px"-->
+<!--            :source="item.arrayImages[0]"-->
+<!--          />-->
+          <img
+            class="image__item"
+            style="max-width: 100px; max-height: 120px; margin: 5px; border-radius: 4px;"
+            :src="item.arrayImages[0]"
+            alt="random image"
+          >
         </template>
 
 
