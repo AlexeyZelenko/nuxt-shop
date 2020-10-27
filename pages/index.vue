@@ -14,12 +14,14 @@
         </v-row>
         <!--Отображение каталога-->
         <div class="v-catalog__list">
-          <vCatalogItem
-            :product_data="product"
-            @productClick="productClick"
-            v-for="product in filteredProducts"
-            :key="product.id"
-          />
+          <client-only  placeholder="Загрузка...">
+            <vCatalogItem
+              :product_data="product"
+              @productClick="productClick"
+              v-for="product in filteredProducts"
+              :key="product.id"
+            />
+          </client-only>
         </div>
       </div>
     </div>
