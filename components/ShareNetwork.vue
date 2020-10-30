@@ -26,10 +26,8 @@
         :style="{backgroundColor: network.color}"
         :url="`https://teploservis68.com.ua${path}`"
         :title="product"
-        :description="description"
-        :quote="`https://teploservis68.com.ua${path}
-        ------------------------------------------
-          ${description}`"
+        :description="`${description}`"
+        :quote="`${description}`"
         :hashtags="sharing.hashtags"
         :twitterUser="sharing.twitterUser"
       >
@@ -88,7 +86,7 @@
           // title: `${this.name}`,
           // description: `${this.description}`,
           quote: `https://teploservis68.com.ua${this.path}`,
-          hashtags: 'станки,котлы,рабица',
+          hashtags: '`${станки, котлы, рабица}`',
           twitterUser: 'youyuxi'
         },
         networks: [
