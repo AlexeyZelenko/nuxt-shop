@@ -1,5 +1,10 @@
 <template>
   <div class="z-product-information">
+    <Share
+      :path="this.$route.fullPath"
+      :product="product.name"
+      :description="product.description"
+    />
     <h2
       style="margin: 10px 0; text-align: center">{{product.name}}
     </h2>
@@ -48,6 +53,7 @@
     ></p>
 
     <p>Контактное лицо: {{product.name_contact}}</p>
+
     <p>Контакты: {{product.telephone_contact}}</p>
 
   </div>
@@ -59,6 +65,9 @@
   export default {
     layout: 'back_catalog',
     name: "zProductInformation",
+    components: {
+      'Share': () => import('~/components/ShareNetwork.vue'),
+    },
     data: () => ({
     }),
     methods: {

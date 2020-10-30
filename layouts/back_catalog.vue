@@ -11,7 +11,9 @@
           <v-icon dark left>mdi-arrow-left</v-icon>
           Каталог товаров
         </v-btn>
-        <Share></Share>
+<!--        <Share-->
+<!--        :path="this.$route.fullPath"-->
+<!--        />-->
       </template>
 
       <nuxt/>
@@ -21,12 +23,10 @@
 </template>
 
 <script>
-  // import Share from '~/components/ShareNetwork.vue'
 
   export default {
     components: {
-      'Share': () => import('~/components/ShareNetwork.vue'),
-      // Share
+      // 'Share': () => import('~/components/ShareNetwork.vue'),
     },
     data: () => ({})
   }
